@@ -7,5 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ratchanan Srirattanamet <peat@peat-network.xyz>",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "ts-for-gir": "git+https://github.com/peat-psuwit/ts-for-gjs.git#fix-nodegtk-index",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "node-gtk": "git+https://github.com/romgrk/node-gtk.git"
+  }
 }
