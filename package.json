@@ -1,0 +1,11 @@
+{
+  "name": "node-gst-webrtc",
+  "version": "0.0.0-dev",
+  "description": "Implement WebRTC API using GStreamer via node-gtk",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ratchanan Srirattanamet <peat@peat-network.xyz>",
+  "license": "ISC"
+}
