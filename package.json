@@ -14,6 +14,7 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "event-target-shim": "^5.0.1",
     "node-gtk": "git+https://github.com/romgrk/node-gtk.git",
     "tslib": "^2.0.1"
   }
