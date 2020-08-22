@@ -4,6 +4,6 @@ module.exports = {
   verbose: true,
   environments: ['node'],
   outdir: '@types',
-  modules: ['Gst-1.0'],
+  modules: ['Gst-1.0', 'GstWebRTC-1.0'],
   ignore: [],
 }
