@@ -52,7 +52,8 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
   }
 
   _handleNegotiationNeeded = () => {
-    // TODO: dispatch event
+    // There's nothing to be put in the event.
+    this.dispatchEvent<'negotiationneeded'>({ type: 'negotiationneeded' });
   }
 
   // FIXME: signature not verified yet.
