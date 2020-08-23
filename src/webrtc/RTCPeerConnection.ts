@@ -173,7 +173,23 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
   }
 
   get signalingState(): RTCSignalingState {
-    return 'closed';
+    const signalingState = getIntProperty(this._webrtcbin, 'signaling-state');
+
+    switch (signalingState) {
+      case GstWebRTC.WebRTCSignalingState.STABLE:
+      default:
+        return 'stable';
+      case GstWebRTC.WebRTCSignalingState.CLOSED:
+        return 'closed';
+      case GstWebRTC.WebRTCSignalingState.HAVE_LOCAL_OFFER:
+        return 'have-local-offer';
+      case GstWebRTC.WebRTCSignalingState.HAVE_REMOTE_OFFER:
+        return 'have-remote-offer';
+      case GstWebRTC.WebRTCSignalingState.HAVE_LOCAL_PRANSWER:
+        return 'have-local-pranswer';
+      case GstWebRTC.WebRTCSignalingState.HAVE_REMOTE_PRANSWER:
+        return 'have-remote-pranswer';
+    }
   }
 
   addIceCandidate(candidate: RTCIceCandidateInit | RTCIceCandidate): Promise<void> {
