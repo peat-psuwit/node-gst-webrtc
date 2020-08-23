@@ -1,7 +1,7 @@
 import { EventTarget as EventTargetShim, defineEventAttribute } from 'event-target-shim';
 
 import { getIntProperty } from './gobjectUtils';
-import { Gst, GstWebRTC, globalPipeline } from './gstUtils';
+import { Gst, GstWebRTC, globalPipeline, withGstPromise } from './gstUtils';
 import { GstRTCIceCandidate } from './RTCIceCandidate';
 
 type TEvents = {
@@ -186,16 +186,54 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
     throw new Error('Not implemented');
   }
 
-  createAnswer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit> {
-    return Promise.reject(new Error('Not implemented'));
+  _sdpTypeToString(type: GstWebRTC.WebRTCSDPType): RTCSdpType {
+    switch (type) {
+      case GstWebRTC.WebRTCSDPType.OFFER:
+      default:
+        return 'offer';
+      case GstWebRTC.WebRTCSDPType.PRANSWER:
+        return 'pranswer';
+      case GstWebRTC.WebRTCSDPType.ANSWER:
+        return 'answer';
+      case GstWebRTC.WebRTCSDPType.ROLLBACK:
+        return 'rollback';
+    }
+  }
+
+  async createOffer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit> {
+    // Currently webrtcbin doesn't use options, thus do nothing for now.
+    const structure = await withGstPromise((promise) => {
+      this._webrtcbin.emit('create-offer', null, promise);
+    });
+
+    const gvalue: GObject.Value = structure.getValue('offer');
+    const sdp: GstWebRTC.WebRTCSessionDescription = <any>gvalue.getObject();
+    gvalue.unset();
+
+    return {
+      sdp: sdp.sdp.asText(),
+      type: this._sdpTypeToString(sdp.type),
+    };
+  }
+
+  async createAnswer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit> {
+    // Currently webrtcbin doesn't use options, thus do nothing for now.
+    const structure = await withGstPromise((promise) => {
+      this._webrtcbin.emit('create-answer', null, promise);
+    });
+
+    const gvalue: GObject.Value = structure.getValue('answer');
+    const sdp: GstWebRTC.WebRTCSessionDescription = <any>gvalue.getObject();
+    gvalue.unset();
+
+    return {
+      sdp: sdp.sdp.asText(),
+      type: this._sdpTypeToString(sdp.type),
+    };
   }
 
   createDataChannel(label: string, dataChannelDict?: RTCDataChannelInit): RTCDataChannel {
     throw new Error('Not implemented');
-  }
-
-  createOffer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit> {
-    return Promise.reject(new Error('Not implemented'));
   }
 
   getConfiguration(): RTCConfiguration {
