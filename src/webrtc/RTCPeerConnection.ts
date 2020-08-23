@@ -1,6 +1,6 @@
 import { EventTarget as EventTargetShim, defineEventAttribute } from 'event-target-shim';
 
-import { getIntProperty } from './gobjectUtils';
+import { getIntProperty, getObjectProperty } from './gobjectUtils';
 import { Gst, GstWebRTC, globalPipeline, withGstPromise } from './gstUtils';
 import { GstRTCIceCandidate } from './RTCIceCandidate';
 import { GstRTCSessionDescription } from './RTCSessionDescription';
@@ -135,28 +135,33 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
     return null;
   }
 
+  _descriptionFromProp(prop: string) {
+    const sdp: GstWebRTC.WebRTCSessionDescription = <any>getObjectProperty(this._webrtcbin, prop);
+    return GstRTCSessionDescription.fromGstDesc(sdp);
+  }
+
   get localDescription() {
-    return null;
+    return this._descriptionFromProp('local-description');
   }
 
   get remoteDescription() {
-    return null;
+    return this._descriptionFromProp('remote-description');
   }
 
   get currentLocalDescription() {
-    return null;
+    return this._descriptionFromProp('current-local-description');
   }
 
   get currentRemoteDescription() {
-    return null;
+    return this._descriptionFromProp('current-remote-description');
   }
 
   get pendingLocalDescription() {
-    return null;
+    return this._descriptionFromProp('`pending-local-description`');
   }
 
   get pendingRemoteDescription() {
-    return null;
+    return this._descriptionFromProp('pending-remote-description');
   }
 
   get peerIdentity() {

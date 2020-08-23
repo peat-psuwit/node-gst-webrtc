@@ -22,3 +22,16 @@ export function getIntProperty(obj: GetPropertyable, prop: string) {
 
   return ret;
 }
+
+export function getObjectProperty(obj: GetPropertyable, prop: string) {
+  const gvalue = new GObject.Value();
+  // I'm not sure what's up with the typing.
+  // @ts-ignore
+  gvalue.init(GObject.TYPE_OBJECT);
+
+  obj.getv([prop], [gvalue]);
+  const ret = gvalue.getObject();
+  gvalue.unset();
+
+  return ret;
+}
