@@ -192,8 +192,15 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
     }
   }
 
-  addIceCandidate(candidate: RTCIceCandidateInit | RTCIceCandidate): Promise<void> {
-    return Promise.reject(new Error('Not implemented'));
+  async addIceCandidate(candidate: RTCIceCandidateInit | RTCIceCandidate): Promise<void> {
+    const {candidate: candidateStr, sdpMLineIndex} = candidate;
+    if (typeof candidateStr != 'string' || typeof sdpMLineIndex != 'number') {
+      return;
+    }
+
+    // 'add-ice-candidate' doesn't accept GstPromise, so nothing we can do to signal completion.
+    this._webrtcbin.emit('add-ice-candidate', sdpMLineIndex, candidateStr);
+    return;
   }
 
   addTrack(track: MediaStreamTrack, ...streams: MediaStream[]): RTCRtpSender {
