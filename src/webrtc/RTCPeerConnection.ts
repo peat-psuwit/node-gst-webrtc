@@ -3,6 +3,7 @@ import { EventTarget as EventTargetShim, defineEventAttribute } from 'event-targ
 import { getIntProperty } from './gobjectUtils';
 import { Gst, GstWebRTC, globalPipeline, withGstPromise } from './gstUtils';
 import { GstRTCIceCandidate } from './RTCIceCandidate';
+import { GstRTCSessionDescription } from './RTCSessionDescription';
 
 type TEvents = {
   connectionstatechange: Event;
@@ -186,20 +187,6 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
     throw new Error('Not implemented');
   }
 
-  _sdpTypeToString(type: GstWebRTC.WebRTCSDPType): RTCSdpType {
-    switch (type) {
-      case GstWebRTC.WebRTCSDPType.OFFER:
-      default:
-        return 'offer';
-      case GstWebRTC.WebRTCSDPType.PRANSWER:
-        return 'pranswer';
-      case GstWebRTC.WebRTCSDPType.ANSWER:
-        return 'answer';
-      case GstWebRTC.WebRTCSDPType.ROLLBACK:
-        return 'rollback';
-    }
-  }
-
   async createOffer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit> {
     // Currently webrtcbin doesn't use options, thus do nothing for now.
     const structure = await withGstPromise((promise) => {
@@ -210,10 +197,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
     const sdp: GstWebRTC.WebRTCSessionDescription = <any>gvalue.getObject();
     gvalue.unset();
 
-    return {
-      sdp: sdp.sdp.asText(),
-      type: this._sdpTypeToString(sdp.type),
-    };
+    return GstRTCSessionDescription.fromGstDesc(sdp);
   }
 
   async createAnswer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit> {
@@ -226,10 +210,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
     const sdp: GstWebRTC.WebRTCSessionDescription = <any>gvalue.getObject();
     gvalue.unset();
 
-    return {
-      sdp: sdp.sdp.asText(),
-      type: this._sdpTypeToString(sdp.type),
-    };
+    return GstRTCSessionDescription.fromGstDesc(sdp);
   }
 
   createDataChannel(label: string, dataChannelDict?: RTCDataChannelInit): RTCDataChannel {
@@ -272,12 +253,18 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
     throw new Error('Not implemented');
   }
 
-  setLocalDescription(description: RTCSessionDescriptionInit): Promise<void> {
-    return Promise.reject(new Error('Not implemented'));
+  async setLocalDescription(description: RTCSessionDescriptionInit): Promise<void> {
+    const gstDesc = new GstRTCSessionDescription(description).toGstDesc();
+    await withGstPromise((promise) => {
+      this._webrtcbin.emit('set-local-description', gstDesc, promise);
+    });
   }
 
-  setRemoteDescription(description: RTCSessionDescriptionInit): Promise<void> {
-    return Promise.reject(new Error('Not implemented'));
+  async setRemoteDescription(description: RTCSessionDescriptionInit): Promise<void> {
+    const gstDesc = new GstRTCSessionDescription(description).toGstDesc();
+    await withGstPromise((promise) => {
+      this._webrtcbin.emit('set-remote-description', gstDesc, promise);
+    });
   }
 }
 
