@@ -205,7 +205,10 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
   }
 
   close(): void {
-    throw new Error('Not implemented');
+    // webrtcbin doesn't have an explicit close(), but changing state to NULL
+    // should close the connection.
+    this._webrtcbin.setState(Gst.State.NULL);
+    // TODO: additional cleanup
   }
 
   async createOffer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit> {
