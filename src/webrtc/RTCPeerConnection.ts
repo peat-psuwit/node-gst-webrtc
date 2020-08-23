@@ -1,6 +1,7 @@
 import { EventTarget as EventTargetShim, defineEventAttribute } from 'event-target-shim';
 
-import { Gst, globalPipeline } from './gstUtils';
+import { getIntProperty } from './gobjectUtils';
+import { Gst, GstWebRTC, globalPipeline } from './gstUtils';
 import { GstRTCIceCandidate } from './RTCIceCandidate';
 
 type TEvents = {
@@ -67,15 +68,62 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
 
   // Stubs
   get connectionState(): RTCPeerConnectionState {
-    return 'new';
+    // node-gtk doesn't support non-introspected properties.
+    const connectionState = getIntProperty(this._webrtcbin, 'connection-state');
+
+    switch (connectionState) {
+      case GstWebRTC.WebRTCPeerConnectionState.NEW:
+      default:
+        return 'new';
+      case GstWebRTC.WebRTCPeerConnectionState.CONNECTING:
+        return 'connecting';
+      case GstWebRTC.WebRTCPeerConnectionState.CONNECTED:
+        return 'connected';
+      case GstWebRTC.WebRTCPeerConnectionState.DISCONNECTED:
+        return 'disconnected';
+      case GstWebRTC.WebRTCPeerConnectionState.FAILED:
+        return 'failed';
+      case GstWebRTC.WebRTCPeerConnectionState.CLOSED:
+        return 'closed';
+    }
   }
 
   get iceConnectionState(): RTCIceConnectionState {
-    return 'new';
+    // See above.
+    const iceConnectionState = getIntProperty(this._webrtcbin, 'ice-connection-state');
+
+    switch (iceConnectionState) {
+      case GstWebRTC.WebRTCICEConnectionState.NEW:
+      default:
+        return 'new';
+      case GstWebRTC.WebRTCICEConnectionState.CHECKING:
+        return 'checking';
+      case GstWebRTC.WebRTCICEConnectionState.CONNECTED:
+        return 'connected';
+      case GstWebRTC.WebRTCICEConnectionState.COMPLETED:
+        return 'completed';
+      case GstWebRTC.WebRTCICEConnectionState.FAILED:
+        return 'failed';
+      case GstWebRTC.WebRTCICEConnectionState.DISCONNECTED:
+        return 'disconnected';
+      case GstWebRTC.WebRTCICEConnectionState.CLOSED:
+        return 'closed';
+    }
   }
 
   get iceGatheringState(): RTCIceGatheringState {
-    return 'new';
+    // See above
+    const iceGatheringState = getIntProperty(this._webrtcbin, 'ice-gathering-state');
+
+    switch (iceGatheringState) {
+      case GstWebRTC.WebRTCICEGatheringState.NEW:
+      default:
+        return 'new';
+      case GstWebRTC.WebRTCICEGatheringState.GATHERING:
+        return 'gathering';
+      case GstWebRTC.WebRTCICEGatheringState.COMPLETE:
+        return 'complete';
+    }
   }
 
   get idpErrorInfo() {

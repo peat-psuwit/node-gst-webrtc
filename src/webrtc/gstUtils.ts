@@ -2,6 +2,7 @@ import * as gi from 'node-gtk';
 
 // For convenience
 export const Gst = gi.require('Gst', '1.0');
+export const GstWebRTC = gi.require('GstWebRTC', '1.0');
 
 export const globalPipeline = (() => {
   Gst.init(null);
