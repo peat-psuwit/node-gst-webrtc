@@ -357,7 +357,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
   }
 
   getConfiguration(): RTCConfiguration {
-    throw new Error('Not implemented');
+    return {...this._conf};
   }
 
   getIdentityAssertion(): Promise<string> {
