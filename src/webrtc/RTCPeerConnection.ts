@@ -4,6 +4,22 @@ import { Gst, GstWebRTC, globalPipeline, withGstPromise } from './gstUtils';
 import { GstRTCIceCandidate } from './RTCIceCandidate';
 import { GstRTCSessionDescription } from './RTCSessionDescription';
 
+// Specify options actually used, and thus will have defaults.
+interface GstRTCConfiguration extends RTCConfiguration {
+  iceServers: RTCIceServer[];
+}
+
+function fillConfigDefault(inConf: RTCConfiguration = {}): GstRTCConfiguration {
+  const defaultIceServer: RTCIceServer = {
+    urls: ['stun:stun.l.google.com:19302']
+  };
+
+  return {
+    ...inConf,
+    iceServers: (inConf.iceServers && inConf.iceServers.length > 0) ? inConf.iceServers : [defaultIceServer]
+  }
+}
+
 type TEvents = {
   connectionstatechange: Event;
   datachannel: RTCDataChannelEvent;
@@ -30,9 +46,23 @@ type TEventAttributes = {
   ontrack: RTCTrackEvent;
 };
 
+function validateHostPort(hostPort: string) {
+  const splitted = hostPort.split(':');
+
+  if (splitted.length == 1) {
+    return true;
+  } else if (splitted.length == 2) {
+    const port = splitted[1];
+    // port should consists of numbers only.
+    return /^[0-9]+$/.test(port);
+  } else {
+    return false;
+  }
+}
+
 class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /* mode */ 'standard'> implements RTCPeerConnection {
   _webrtcbin: Gst.Element;
-  _conf: RTCConfiguration;
+  _conf: GstRTCConfiguration;
 
   constructor(conf?: RTCConfiguration) {
     super();
@@ -42,7 +72,9 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
       throw new Error('webrtcbin is not installed!');
     }
     this._webrtcbin = bin;
-    this._conf = conf || {};
+    this._conf = fillConfigDefault(conf);
+
+    this._addIceServers();
 
     this._webrtcbin.connect('on-negotiation-needed', this._handleNegotiationNeeded);
     this._webrtcbin.connect('on-ice-candidate', this._handleIceCandidate);
@@ -50,6 +82,92 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
 
     globalPipeline.add(this._webrtcbin);
     this._webrtcbin.syncStateWithParent();
+  }
+
+  _addIceServers() {
+    const {iceServers} = this._conf;
+    let stunServerSet = false;
+    let turnServerSet = false;
+
+    for (const server of iceServers) {
+      // FIXME: spec seems to suggest that all URIs inside a server entry are used,
+      // however, I'm not sure if this (recursively add all URIs) is correct.
+
+      let urls: string[];
+      if (Array.isArray(server.urls)) {
+        if (server.urls.length == 0) {
+          throw new SyntaxError('Empty server URL entry.');
+        }
+        urls = server.urls;
+      } else {
+        urls = [server.urls];
+      }
+
+      for (const url of urls) {
+        // STUN & TURN URIs are unusual in that it doesn't contain '//'.
+        // However, GstWebRTCBin uses a normal URL so that username/password can
+        // be inserted. Thus, some magic is needed to transform between them.
+        // When parsed by URL class, host & port will instead be in `pathname`.
+        const urlParsed = new URL(url); // Throw if it can't parse URL.
+        const proto = urlParsed.protocol; // Contains ':'.
+        const hostPort = urlParsed.pathname;
+
+        // Catch URI error here so that WebRTCBin won't emit async error later.
+        if (!validateHostPort(hostPort)) {
+          throw new TypeError(`Invalid ICE server URI "${url}".`);
+        }
+
+        switch (proto) {
+          case 'stun:':
+          case 'stuns:': {
+            if (stunServerSet) {
+              console.warn('GstWebRTCBin does not support more than 1 STUN server. ' + 
+                           'The later server(s) will be ignored.');
+              continue;
+            }
+
+            const gstUrl = `${proto}//${hostPort}`;
+            (<any>this._webrtcbin).stunServer = gstUrl;
+            stunServerSet = true;
+            break;
+          }
+          case 'turn:':
+          case 'turns:': {
+            if (server.credentialType && server.credentialType !== 'password') {
+              throw new TypeError(`Unsupported TURN server credential type ${server.credentialType}`);
+            }
+            if (typeof server.username !== 'string' || typeof server.credential !== 'string') {
+              throw new TypeError(`TURN server credential for ${url} is omitted.`);
+            }
+
+            if (turnServerSet) {
+              console.warn("This version of Gst doesn't have 'add-turn-server' and " +
+                           "multiple TURN servers are passed in. " +
+                           "All later servers will be ignored.");
+              continue;
+            }
+
+            // Use URL object to ensure proper username/password escape.
+            let gstUrl = new URL(`${proto}//${hostPort}`);
+            gstUrl.username = server.username;
+            gstUrl.password = server.credential;
+            try {
+              this._webrtcbin.emit('add-turn-server', gstUrl.toString());
+            } catch (e) {
+              if (!e || typeof e.message !== 'string' || !e.message.startsWith('Invalid signal '))
+                throw e;
+              // This version of Gst doesn't have 'add-turn-server' yet. Fallback to the
+              // old method.
+              (<any>this._webrtcbin).turnServer = gstUrl.toString();
+              turnServerSet = true;
+            }
+            break;
+          }
+          default:
+            throw new TypeError(`Unsupported ICE server protocol ${proto}.`);
+        }
+      }
+    }
   }
 
   _handleNegotiationNeeded = () => {
