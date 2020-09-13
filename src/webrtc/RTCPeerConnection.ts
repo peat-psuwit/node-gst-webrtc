@@ -126,7 +126,9 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
   }
 
   _descriptionFromProp(prop: string) {
-    const sdp: GstWebRTC.WebRTCSessionDescription = (<any>this._webrtcbin)[prop]
+    const sdp: GstWebRTC.WebRTCSessionDescription | null = (<any>this._webrtcbin)[prop]
+    if (!sdp)
+      return null;
     return GstRTCSessionDescription.fromGstDesc(sdp);
   }
 
