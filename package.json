@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "event-target-shim": "^5.0.1",
-    "node-gtk": "git+https://github.com/romgrk/node-gtk.git",
+    "node-gtk": "git+https://github.com/peat-psuwit/node-gtk.git#non-introspected-property",
     "tslib": "^2.0.1"
   }
 }

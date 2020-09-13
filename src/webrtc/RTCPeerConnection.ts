@@ -1,6 +1,5 @@
 import { EventTarget as EventTargetShim, defineEventAttribute } from 'event-target-shim';
 
-import { getIntProperty, getObjectProperty } from './gobjectUtils';
 import { Gst, GstWebRTC, globalPipeline, withGstPromise } from './gstUtils';
 import { GstRTCIceCandidate } from './RTCIceCandidate';
 import { GstRTCSessionDescription } from './RTCSessionDescription';
@@ -69,10 +68,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
 
   // Stubs
   get connectionState(): RTCPeerConnectionState {
-    // node-gtk doesn't support non-introspected properties.
-    const connectionState = getIntProperty(this._webrtcbin, 'connection-state');
-
-    switch (connectionState) {
+    switch ((<any>this._webrtcbin).connectionState) {
       case GstWebRTC.WebRTCPeerConnectionState.NEW:
       default:
         return 'new';
@@ -90,10 +86,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
   }
 
   get iceConnectionState(): RTCIceConnectionState {
-    // See above.
-    const iceConnectionState = getIntProperty(this._webrtcbin, 'ice-connection-state');
-
-    switch (iceConnectionState) {
+    switch ((<any>this._webrtcbin).iceConnectionState) {
       case GstWebRTC.WebRTCICEConnectionState.NEW:
       default:
         return 'new';
@@ -113,10 +106,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
   }
 
   get iceGatheringState(): RTCIceGatheringState {
-    // See above
-    const iceGatheringState = getIntProperty(this._webrtcbin, 'ice-gathering-state');
-
-    switch (iceGatheringState) {
+    switch ((<any>this._webrtcbin).iceGatheringState) {
       case GstWebRTC.WebRTCICEGatheringState.NEW:
       default:
         return 'new';
@@ -136,32 +126,32 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
   }
 
   _descriptionFromProp(prop: string) {
-    const sdp: GstWebRTC.WebRTCSessionDescription = <any>getObjectProperty(this._webrtcbin, prop);
+    const sdp: GstWebRTC.WebRTCSessionDescription = (<any>this._webrtcbin)[prop]
     return GstRTCSessionDescription.fromGstDesc(sdp);
   }
 
   get localDescription() {
-    return this._descriptionFromProp('local-description');
+    return this._descriptionFromProp('localDescription');
   }
 
   get remoteDescription() {
-    return this._descriptionFromProp('remote-description');
+    return this._descriptionFromProp('remoteDescription');
   }
 
   get currentLocalDescription() {
-    return this._descriptionFromProp('current-local-description');
+    return this._descriptionFromProp('currentLocalDescription');
   }
 
   get currentRemoteDescription() {
-    return this._descriptionFromProp('current-remote-description');
+    return this._descriptionFromProp('currentRemoteDescription');
   }
 
   get pendingLocalDescription() {
-    return this._descriptionFromProp('`pending-local-description`');
+    return this._descriptionFromProp('`pendingLocalDescription`');
   }
 
   get pendingRemoteDescription() {
-    return this._descriptionFromProp('pending-remote-description');
+    return this._descriptionFromProp('pendingRemoteDescription');
   }
 
   get peerIdentity() {
@@ -173,9 +163,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /*
   }
 
   get signalingState(): RTCSignalingState {
-    const signalingState = getIntProperty(this._webrtcbin, 'signaling-state');
-
-    switch (signalingState) {
+    switch ((<any>this._webrtcbin).signalingState) {
       case GstWebRTC.WebRTCSignalingState.STABLE:
       default:
         return 'stable';
