@@ -14,7 +14,7 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "event-target-shim": "^5.0.1",
+    "event-target-shim": "^6.0.2",
     "node-gtk": "^0.7.0",
     "tslib": "^2.1.0"
   }

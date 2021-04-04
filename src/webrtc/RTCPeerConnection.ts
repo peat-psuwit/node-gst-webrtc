@@ -33,18 +33,6 @@ type TEvents = {
   track: RTCTrackEvent;
 };
 
-type TEventAttributes = {
-  onconnectionstatechange: Event;
-  ondatachannel: RTCDataChannelEvent;
-  onicecandidate: RTCPeerConnectionIceEvent;
-  onicecandidateerror: RTCPeerConnectionIceErrorEvent;
-  oniceconnectionstatechange: Event;
-  onicegatheringstatechange: Event;
-  onnegotiationneeded: Event;
-  onsignalingstatechange: Event;
-  onstatsended: RTCStatsEvent;
-  ontrack: RTCTrackEvent;
-};
 
 function validateHostPort(hostPort: string) {
   const splitted = hostPort.split(':');
@@ -60,7 +48,7 @@ function validateHostPort(hostPort: string) {
   }
 }
 
-class GstRTCPeerConnection extends EventTargetShim<TEvents, TEventAttributes, /* mode */ 'standard'> implements RTCPeerConnection {
+class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'> implements RTCPeerConnection {
   _webrtcbin: Gst.Element;
   _conf: GstRTCConfiguration;
 
