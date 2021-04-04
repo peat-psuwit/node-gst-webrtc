@@ -1,4 +1,4 @@
-import { EventTarget as EventTargetShim, defineEventAttribute } from 'event-target-shim';
+import { EventTarget as EventTargetShim, getEventAttributeValue, setEventAttributeValue } from 'event-target-shim';
 
 import { Gst, GstWebRTC, globalPipeline, withGstPromise } from './gstUtils';
 import { GstRTCIceCandidate } from './RTCIceCandidate';
@@ -393,19 +393,79 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
       this._webrtcbin.emit('set-remote-description', gstDesc, promise);
     });
   }
-}
 
-[
-  'connectionstatechange',
-  'datachannel',
-  'icecandidate',
-  'icecandidateerror',
-  'iceconnectionstatechange',
-  'icegatheringstatechange',
-  'negotiationneeded',
-  'signalingstatechange',
-  'statsended',
-  'track',
-].forEach((eventName) => { defineEventAttribute(GstRTCPeerConnection.prototype, eventName); })
+  // BEGIN generated event getters & setters; TEventTarget = RTCPeerConnection
+  get onconnectionstatechange(): EventTargetShim.CallbackFunction<RTCPeerConnection, Event> | null {
+    return getEventAttributeValue<RTCPeerConnection, Event>(this, 'connectionstatechange');
+  }
+  set onconnectionstatechange(value) {
+    setEventAttributeValue(this, 'connectionstatechange', value);
+  }
+
+  get ondatachannel(): EventTargetShim.CallbackFunction<RTCPeerConnection, RTCDataChannelEvent> | null {
+    return getEventAttributeValue<RTCPeerConnection, RTCDataChannelEvent>(this, 'datachannel');
+  }
+  set ondatachannel(value) {
+    setEventAttributeValue(this, 'datachannel', value);
+  }
+
+  get onicecandidate(): EventTargetShim.CallbackFunction<RTCPeerConnection, RTCPeerConnectionIceEvent> | null {
+    return getEventAttributeValue<RTCPeerConnection, RTCPeerConnectionIceEvent>(this, 'icecandidate');
+  }
+  set onicecandidate(value) {
+    setEventAttributeValue(this, 'icecandidate', value);
+  }
+
+  get onicecandidateerror(): EventTargetShim.CallbackFunction<RTCPeerConnection, RTCPeerConnectionIceErrorEvent> | null {
+    return getEventAttributeValue<RTCPeerConnection, RTCPeerConnectionIceErrorEvent>(this, 'icecandidateerror');
+  }
+  set onicecandidateerror(value) {
+    setEventAttributeValue(this, 'icecandidateerror', value);
+  }
+
+  get oniceconnectionstatechange(): EventTargetShim.CallbackFunction<RTCPeerConnection, Event> | null {
+    return getEventAttributeValue<RTCPeerConnection, Event>(this, 'iceconnectionstatechange');
+  }
+  set oniceconnectionstatechange(value) {
+    setEventAttributeValue(this, 'iceconnectionstatechange', value);
+  }
+
+  get onicegatheringstatechange(): EventTargetShim.CallbackFunction<RTCPeerConnection, Event> | null {
+    return getEventAttributeValue<RTCPeerConnection, Event>(this, 'icegatheringstatechange');
+  }
+  set onicegatheringstatechange(value) {
+    setEventAttributeValue(this, 'icegatheringstatechange', value);
+  }
+
+  get onnegotiationneeded(): EventTargetShim.CallbackFunction<RTCPeerConnection, Event> | null {
+    return getEventAttributeValue<RTCPeerConnection, Event>(this, 'negotiationneeded');
+  }
+  set onnegotiationneeded(value) {
+    setEventAttributeValue(this, 'negotiationneeded', value);
+  }
+
+  get onsignalingstatechange(): EventTargetShim.CallbackFunction<RTCPeerConnection, Event> | null {
+    return getEventAttributeValue<RTCPeerConnection, Event>(this, 'signalingstatechange');
+  }
+  set onsignalingstatechange(value) {
+    setEventAttributeValue(this, 'signalingstatechange', value);
+  }
+
+  get onstatsended(): EventTargetShim.CallbackFunction<RTCPeerConnection, RTCStatsEvent> | null {
+    return getEventAttributeValue<RTCPeerConnection, RTCStatsEvent>(this, 'statsended');
+  }
+  set onstatsended(value) {
+    setEventAttributeValue(this, 'statsended', value);
+  }
+
+  get ontrack(): EventTargetShim.CallbackFunction<RTCPeerConnection, RTCTrackEvent> | null {
+    return getEventAttributeValue<RTCPeerConnection, RTCTrackEvent>(this, 'track');
+  }
+  set ontrack(value) {
+    setEventAttributeValue(this, 'track', value);
+  }
+
+  // END generated event getters & setters
+}
 
 export default GstRTCPeerConnection;
