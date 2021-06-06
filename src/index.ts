@@ -1,10 +1,14 @@
+import os from 'os';
+
 import * as gi from 'node-gtk';
 
+const GLib = gi.require('GLib', '2.0');
 const Gst = gi.require('Gst', '1.0');
-const Gtk = gi.require('Gtk', '3.0');
 
 gi.startLoop();
 Gst.init(null);
+
+const loop = GLib.MainLoop.new(null, false)
 
 const pipeline = Gst.parseLaunch('videotestsrc ! videoconvert ! autovideosink');
 if (!pipeline) {
@@ -28,9 +32,8 @@ if (stateChange != Gst.StateChangeReturn.SUCCESS) {
   quit(1);
 }
 
-process.on('SIGINT', () => { quit(0) });
-process.on('SIGTERM', () => { quit(0) });
+GLib.unixSignalAdd(GLib.PRIORITY_DEFAULT, os.constants.signals.SIGINT, () => { quit(0); return false; });
+GLib.unixSignalAdd(GLib.PRIORITY_DEFAULT, os.constants.signals.SIGTERM, () => { quit(0); return false; });
+GLib.unixSignalAdd(GLib.PRIORITY_DEFAULT, os.constants.signals.SIGHUP, () => { quit(0); return false; });
 
-setTimeout(() => { /* nothing -- why is this needed? */ }, 0 /* ms */);
-
-Gtk.main();
+loop.run();
