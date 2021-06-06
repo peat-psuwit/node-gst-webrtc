@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "event-target-shim": "^6.0.2",
-    "node-gtk": "^0.7.0",
+    "node-gtk": "^0.9.0",
     "tslib": "^2.2.0"
   }
 }
