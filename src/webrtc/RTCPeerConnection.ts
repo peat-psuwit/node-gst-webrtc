@@ -29,7 +29,6 @@ type TEvents = {
   icegatheringstatechange: Event;
   negotiationneeded: Event;
   signalingstatechange: Event;
-  statsended: RTCStatsEvent;
   track: RTCTrackEvent;
 };
 
@@ -166,7 +165,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
   // FIXME: signature not verified yet.
   _handleIceCandidate = ($obj: Gst.Element, sdpMLineIndex: number, candidate: string) => {
     const candidateObj = new GstRTCIceCandidate({ sdpMLineIndex, candidate });
-    this.dispatchEvent<'icecandidate'>({ type: 'icecandidate', candidate: candidateObj, url: null });
+    this.dispatchEvent<'icecandidate'>({ type: 'icecandidate', candidate: candidateObj });
   }
 
   // libnice's document seems to say so.
@@ -372,6 +371,10 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
     throw new Error('Not implemented');
   }
 
+  restartIce(): void {
+    throw new Error('Not implemented');
+  }
+
   setConfiguration(configuration: RTCConfiguration): void {
     throw new Error('Not implemented');
   }
@@ -449,13 +452,6 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
   }
   set onsignalingstatechange(value) {
     setEventAttributeValue(this, 'signalingstatechange', value);
-  }
-
-  get onstatsended(): EventTargetShim.CallbackFunction<RTCPeerConnection, RTCStatsEvent> | null {
-    return getEventAttributeValue<RTCPeerConnection, RTCStatsEvent>(this, 'statsended');
-  }
-  set onstatsended(value) {
-    setEventAttributeValue(this, 'statsended', value);
   }
 
   get ontrack(): EventTargetShim.CallbackFunction<RTCPeerConnection, RTCTrackEvent> | null {
