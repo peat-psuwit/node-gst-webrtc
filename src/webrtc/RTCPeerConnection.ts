@@ -321,7 +321,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
     });
 
     const gvalue: GObject.Value = structure.getValue('offer');
-    const sdp: GstWebRTC.WebRTCSessionDescription = <any>gvalue.getObject();
+    const sdp: GstWebRTC.WebRTCSessionDescription = <any>gvalue.getBoxed();
     gvalue.unset();
 
     return GstRTCSessionDescription.fromGstDesc(sdp);
@@ -335,7 +335,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
     });
 
     const gvalue: GObject.Value = structure.getValue('answer');
-    const sdp: GstWebRTC.WebRTCSessionDescription = <any>gvalue.getObject();
+    const sdp: GstWebRTC.WebRTCSessionDescription = <any>gvalue.getBoxed();
     gvalue.unset();
 
     return GstRTCSessionDescription.fromGstDesc(sdp);
