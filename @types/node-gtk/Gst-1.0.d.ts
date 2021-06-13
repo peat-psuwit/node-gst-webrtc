@@ -236,6 +236,7 @@ export enum QueryType {
     CAPS,
     DRAIN,
     CONTEXT,
+    BITRATE,
 }
 export enum Rank {
     NONE,
@@ -558,6 +559,7 @@ export enum MessageType {
     STREAM_COLLECTION,
     STREAMS_SELECTED,
     REDIRECT,
+    DEVICE_CHANGED,
     ANY,
 }
 export enum MetaFlags {
@@ -721,6 +723,7 @@ export const ELEMENT_FACTORY_KLASS_DEPAYLOADER: string
 export const ELEMENT_FACTORY_KLASS_ENCODER: string
 export const ELEMENT_FACTORY_KLASS_ENCRYPTOR: string
 export const ELEMENT_FACTORY_KLASS_FORMATTER: string
+export const ELEMENT_FACTORY_KLASS_HARDWARE: string
 export const ELEMENT_FACTORY_KLASS_MEDIA_AUDIO: string
 export const ELEMENT_FACTORY_KLASS_MEDIA_IMAGE: string
 export const ELEMENT_FACTORY_KLASS_MEDIA_METADATA: string
@@ -761,13 +764,11 @@ export const ELEMENT_METADATA_DOC_URI: string
 export const ELEMENT_METADATA_ICON_NAME: string
 export const ELEMENT_METADATA_KLASS: string
 export const ELEMENT_METADATA_LONGNAME: string
-export const ERROR_SYSTEM: string
 export const EVENT_NUM_SHIFT: number
 export const EVENT_TYPE_BOTH: EventTypeFlags
 export const FLAG_SET_MASK_EXACT: number
 export const FORMAT_PERCENT_MAX: number
 export const FORMAT_PERCENT_SCALE: number
-export const FOURCC_FORMAT: string
 export const GROUP_ID_INVALID: number
 export const LICENSE_UNKNOWN: string
 export const LOCK_FLAG_READWRITE: LockFlags
@@ -781,13 +782,11 @@ export const PARAM_MUTABLE_PLAYING: number
 export const PARAM_MUTABLE_READY: number
 export const PARAM_USER_SHIFT: number
 export const PROTECTION_SYSTEM_ID_CAPS_FIELD: string
-export const PTR_FORMAT: string
+export const PROTECTION_UNSPECIFIED_SYSTEM_ID: string
 export const QUERY_NUM_SHIFT: number
 export const QUERY_TYPE_BOTH: QueryTypeFlags
 export const SECOND: ClockTimeDiff
-export const SEGMENT_FORMAT: string
 export const SEQNUM_INVALID: number
-export const STIME_FORMAT: string
 export const TAG_ALBUM: string
 export const TAG_ALBUM_ARTIST: string
 export const TAG_ALBUM_ARTIST_SORTNAME: string
@@ -873,7 +872,6 @@ export const TAG_TRACK_PEAK: string
 export const TAG_USER_RATING: string
 export const TAG_VERSION: string
 export const TAG_VIDEO_CODEC: string
-export const TIME_FORMAT: string
 export const TOC_REPEAT_COUNT_INFINITE: number
 export const URI_NO_PORT: number
 export const USECOND: ClockTimeDiff
@@ -990,8 +988,6 @@ export function tagIsFixed(tag: string): boolean
 export function tagListCopyValue(list: TagList, tag: string): [ /* returnType */ boolean, /* dest */ any ]
 export function tagMergeStringsWithComma(src: any): /* dest */ any
 export function tagMergeUseFirst(src: any): /* dest */ any
-export function tagRegister(name: string, flag: TagFlag, type: GObject.Type, nick: string, blurb: string, func?: TagMergeFunc | null): void
-export function tagRegisterStatic(name: string, flag: TagFlag, type: GObject.Type, nick: string, blurb: string, func?: TagMergeFunc | null): void
 export function tocEntryTypeGetNick(type: TocEntryType): string
 export function typeFindGetType(): GObject.Type
 export function typeFindRegister(plugin: Plugin | null, name: string, rank: number, func: TypeFindFunction, extensions: string | null, possibleCaps: Caps): boolean
@@ -1573,7 +1569,7 @@ export class Bin {
     getContext(contextType: string): Context
     getContextUnlocked(contextType: string): Context | null
     getContexts(): Context[]
-    getFactory(): ElementFactory
+    getFactory(): ElementFactory | null
     getMetadata(key: string): string
     getPadTemplate(name: string): PadTemplate | null
     getPadTemplateList(): PadTemplate[]
@@ -1980,7 +1976,7 @@ export class Bus {
     createWatch(): GLib.Source | null
     disableSyncMessageEmission(): void
     enableSyncMessageEmission(): void
-    getPollfd(fd: GLib.PollFD): void
+    getPollfd(): /* fd */ GLib.PollFD
     havePending(): boolean
     peek(): Message | null
     poll(events: MessageType, timeout: ClockTime): Message | null
@@ -2266,10 +2262,12 @@ export class Clock {
     constructor (config?: Clock_ConstructProps)
     _init (config?: Clock_ConstructProps): void
     static idCompareFunc(id1?: object | null, id2?: object | null): number
+    static idGetClock(id: ClockID): Clock | null
     static idGetTime(id: ClockID): ClockTime
     static idRef(id: ClockID): ClockID
     static idUnref(id: ClockID): void
     static idUnschedule(id: ClockID): void
+    static idUsesClock(id: ClockID, clock: Clock): boolean
     static idWait(id: ClockID): [ /* returnType */ ClockReturn, /* jitter */ ClockTimeDiff | null ]
     static idWaitAsync(id: ClockID, func: ClockCallback): ClockReturn
     static $gtype: GObject.Type
@@ -2770,6 +2768,7 @@ export class DeviceProvider {
     /* Methods of Gst.DeviceProvider */
     canMonitor(): boolean
     deviceAdd(device: Device): void
+    deviceChanged(device: Device, changedDevice: Device): void
     deviceRemove(device: Device): void
     getBus(): Bus
     getDevices(): Device[]
@@ -3178,7 +3177,7 @@ export class Element {
     getContext(contextType: string): Context
     getContextUnlocked(contextType: string): Context | null
     getContexts(): Context[]
-    getFactory(): ElementFactory
+    getFactory(): ElementFactory | null
     getMetadata(key: string): string
     getPadTemplate(name: string): PadTemplate | null
     getPadTemplateList(): PadTemplate[]
@@ -4070,9 +4069,9 @@ export class Pad {
     static name: string
     constructor (config?: Pad_ConstructProps)
     _init (config?: Pad_ConstructProps): void
-    static new(name: string | null, direction: PadDirection): Pad | null
-    static newFromStaticTemplate(templ: StaticPadTemplate, name: string): Pad | null
-    static newFromTemplate(templ: PadTemplate, name?: string | null): Pad | null
+    static new(name: string | null, direction: PadDirection): Pad
+    static newFromStaticTemplate(templ: StaticPadTemplate, name: string): Pad
+    static newFromTemplate(templ: PadTemplate, name?: string | null): Pad
     static linkGetName(ret: PadLinkReturn): string
     static $gtype: GObject.Type
 }
@@ -4363,7 +4362,7 @@ export class Pipeline {
     getContext(contextType: string): Context
     getContextUnlocked(contextType: string): Context | null
     getContexts(): Context[]
-    getFactory(): ElementFactory
+    getFactory(): ElementFactory | null
     getMetadata(key: string): string
     getPadTemplate(name: string): PadTemplate | null
     getPadTemplateList(): PadTemplate[]
@@ -6499,6 +6498,7 @@ export class Buffer {
     static new(): Buffer
     static newAllocate(allocator: Allocator | null, size: number, params?: AllocationParams | null): Buffer | null
     static newWrapped(data: any): Buffer
+    static newWrappedBytes(bytes: any): Buffer
     static newWrappedFull(flags: MemoryFlags, data: any, maxsize: number, offset: number, notify?: GLib.DestroyNotify | null): Buffer
     static getMaxMemory(): number
 }
@@ -6563,6 +6563,7 @@ export class Caps {
     appendStructure(structure: Structure): void
     appendStructureFull(structure: Structure, features?: CapsFeatures | null): void
     canIntersect(caps2: Caps): boolean
+    copy(): Caps
     copyNth(nth: number): Caps
     filterAndMapInPlace(func: CapsFilterMapFunc): void
     fixate(): Caps
@@ -6589,6 +6590,7 @@ export class Caps {
     normalize(): Caps
     removeStructure(idx: number): void
     setFeatures(index: number, features?: CapsFeatures | null): void
+    setFeaturesSimple(features?: CapsFeatures | null): void
     setValue(field: string, value: any): void
     simplify(): Caps
     stealStructure(index: number): Structure | null
@@ -6708,14 +6710,14 @@ export class DateTime {
     toIso8601String(): string | null
     unref(): void
     static name: string
-    static new(tzoffset: number, year: number, month: number, day: number, hour: number, minute: number, seconds: number): DateTime | null
+    static new(tzoffset: number, year: number, month: number, day: number, hour: number, minute: number, seconds: number): DateTime
     constructor(tzoffset: number, year: number, month: number, day: number, hour: number, minute: number, seconds: number)
-    static new(tzoffset: number, year: number, month: number, day: number, hour: number, minute: number, seconds: number): DateTime | null
+    static new(tzoffset: number, year: number, month: number, day: number, hour: number, minute: number, seconds: number): DateTime
     static newFromGDateTime(dt: GLib.DateTime): DateTime | null
     static newFromIso8601String(string: string): DateTime | null
     static newFromUnixEpochLocalTime(secs: number): DateTime
     static newFromUnixEpochUtc(secs: number): DateTime
-    static newLocalTime(year: number, month: number, day: number, hour: number, minute: number, seconds: number): DateTime | null
+    static newLocalTime(year: number, month: number, day: number, hour: number, minute: number, seconds: number): DateTime
     static newNowLocalTime(): DateTime
     static newNowUtc(): DateTime
     static newY(year: number): DateTime
@@ -6841,6 +6843,7 @@ export class Event {
     parseProtection(): [ /* systemId */ string | null, /* data */ Buffer | null, /* origin */ string | null ]
     parseQos(): [ /* type */ QOSType, /* proportion */ number, /* diff */ ClockTimeDiff, /* timestamp */ ClockTime ]
     parseSeek(): [ /* rate */ number, /* format */ Format, /* flags */ SeekFlags, /* startType */ SeekType, /* start */ number, /* stopType */ SeekType, /* stop */ number ]
+    parseSeekTrickmodeInterval(): /* interval */ ClockTime
     parseSegment(): /* segment */ Segment
     parseSegmentDone(): [ /* format */ Format | null, /* position */ number | null ]
     parseSelectStreams(): /* streams */ string[]
@@ -6856,6 +6859,7 @@ export class Event {
     parseTocSelect(): /* uid */ string | null
     setGroupId(groupId: number): void
     setRunningTimeOffset(offset: number): void
+    setSeekTrickmodeInterval(interval: ClockTime): void
     setSeqnum(seqnum: number): void
     setStream(stream: Stream): void
     setStreamFlags(flags: StreamFlags): void
@@ -6977,6 +6981,7 @@ export class Message {
     parseClockProvide(): [ /* clock */ Clock | null, /* ready */ boolean | null ]
     parseContextType(): [ /* returnType */ boolean, /* contextType */ string | null ]
     parseDeviceAdded(): /* device */ Device | null
+    parseDeviceChanged(): [ /* device */ Device | null, /* changedDevice */ Device | null ]
     parseDeviceRemoved(): /* device */ Device | null
     parseError(): [ /* gerror */ GLib.Error | null, /* debug */ string | null ]
     parseErrorDetails(): /* structure */ Structure
@@ -7025,6 +7030,7 @@ export class Message {
     static newClockProvide(src: Object | null, clock: Clock, ready: boolean): Message
     static newCustom(type: MessageType, src?: Object | null, structure?: Structure | null): Message | null
     static newDeviceAdded(src: Object, device: Device): Message
+    static newDeviceChanged(src: Object, device: Device, changedDevice: Device): Message
     static newDeviceRemoved(src: Object, device: Device): Message
     static newDurationChanged(src?: Object | null): Message
     static newElement(src: Object | null, structure: Structure): Message | null
@@ -7063,6 +7069,9 @@ export class Meta {
     /* Fields of Gst.Meta */
     flags: MetaFlags
     info: MetaInfo
+    /* Methods of Gst.Meta */
+    compareSeqnum(meta2: Meta): number
+    getSeqnum(): number
     static name: string
     static apiTypeGetTags(api: GObject.Type): string[]
     static apiTypeHasTag(api: GObject.Type, tag: GLib.Quark): boolean
@@ -7096,9 +7105,11 @@ export class MiniObject {
     dispose: MiniObjectDisposeFunction
     free: MiniObjectFreeFunction
     /* Methods of Gst.MiniObject */
+    addParent(parent: MiniObject): void
     getQdata(quark: GLib.Quark): object | null
     isWritable(): boolean
     lock(flags: LockFlags): boolean
+    removeParent(parent: MiniObject): void
     setQdata(quark: GLib.Quark, data: object | null, destroy: GLib.DestroyNotify): void
     stealQdata(quark: GLib.Quark): object | null
     unlock(flags: LockFlags): void
@@ -7211,10 +7222,12 @@ export class Poll {
     addFd(fd: PollFD): boolean
     fdCanRead(fd: PollFD): boolean
     fdCanWrite(fd: PollFD): boolean
+    fdCtlPri(fd: PollFD, active: boolean): boolean
     fdCtlRead(fd: PollFD, active: boolean): boolean
     fdCtlWrite(fd: PollFD, active: boolean): boolean
     fdHasClosed(fd: PollFD): boolean
     fdHasError(fd: PollFD): boolean
+    fdHasPri(fd: PollFD): boolean
     fdIgnored(fd: PollFD): void
     free(): void
     getReadGpollfd(fd: GLib.PollFD): void
@@ -7299,6 +7312,7 @@ export class Query {
     parseAcceptCaps(): /* caps */ Caps
     parseAcceptCapsResult(): /* result */ boolean | null
     parseAllocation(): [ /* caps */ Caps | null, /* needPool */ boolean | null ]
+    parseBitrate(): /* nominalBitrate */ number | null
     parseBufferingPercent(): [ /* busy */ boolean | null, /* percent */ number | null ]
     parseBufferingRange(): [ /* format */ Format | null, /* start */ number | null, /* stop */ number | null, /* estimatedTotal */ number | null ]
     parseBufferingStats(): [ /* mode */ BufferingMode | null, /* avgIn */ number | null, /* avgOut */ number | null, /* bufferingLeft */ number | null ]
@@ -7327,6 +7341,7 @@ export class Query {
     removeNthAllocationParam(index: number): void
     removeNthAllocationPool(index: number): void
     setAcceptCapsResult(result: boolean): void
+    setBitrate(nominalBitrate: number): void
     setBufferingPercent(busy: boolean, percent: number): void
     setBufferingRange(format: Format, start: number, stop: number, estimatedTotal: number): void
     setBufferingStats(mode: BufferingMode, avgIn: number, avgOut: number, bufferingLeft: number): void
@@ -7349,6 +7364,7 @@ export class Query {
     static name: string
     static newAcceptCaps(caps: Caps): Query
     static newAllocation(caps: Caps, needPool: boolean): Query
+    static newBitrate(): Query
     static newBuffering(format: Format): Query
     static newCaps(filter: Caps): Query
     static newContext(contextType: string): Query
@@ -7388,7 +7404,11 @@ export class Sample {
     getCaps(): Caps | null
     getInfo(): Structure | null
     getSegment(): Segment
+    setBuffer(buffer: Buffer): void
     setBufferList(bufferList: BufferList): void
+    setCaps(caps: Caps): void
+    setInfo(info: Structure): boolean
+    setSegment(segment: Segment): void
     static name: string
     static new(buffer?: Buffer | null, caps?: Caps | null, segment?: Segment | null, info?: Structure | null): Sample
     constructor(buffer?: Buffer | null, caps?: Caps | null, segment?: Segment | null, info?: Structure | null)

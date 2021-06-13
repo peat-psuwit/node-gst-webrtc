@@ -532,6 +532,17 @@ export enum UnicodeScript {
     NUSHU,
     SOYOMBO,
     ZANABAZAR_SQUARE,
+    DOGRA,
+    GUNJALA_GONDI,
+    HANIFI_ROHINGYA,
+    MAKASAR,
+    MEDEFAIDRIN,
+    OLD_SOGDIAN,
+    SOGDIAN,
+    ELYMAIC,
+    NANDINAGARI,
+    NYIAKENG_PUACHUE_HMONG,
+    WANCHO,
 }
 export enum UnicodeType {
     CONTROL,
@@ -615,6 +626,7 @@ export enum VariantParseError {
     UNKNOWN_KEYWORD,
     UNTERMINATED_STRING_CONSTANT,
     VALUE_EXPECTED,
+    RECURSION,
 }
 export enum AsciiType {
     ALNUM,
@@ -812,19 +824,15 @@ export const HAVE_ISO_VARARGS: number
 export const HOOK_FLAG_USER_SHIFT: number
 export const IEEE754_DOUBLE_BIAS: number
 export const IEEE754_FLOAT_BIAS: number
-export const KEY_FILE_DESKTOP_ACTION_GROUP_PREFIX: string
 export const KEY_FILE_DESKTOP_GROUP: string
 export const KEY_FILE_DESKTOP_KEY_ACTIONS: string
 export const KEY_FILE_DESKTOP_KEY_CATEGORIES: string
 export const KEY_FILE_DESKTOP_KEY_COMMENT: string
 export const KEY_FILE_DESKTOP_KEY_DBUS_ACTIVATABLE: string
 export const KEY_FILE_DESKTOP_KEY_EXEC: string
-export const KEY_FILE_DESKTOP_KEY_FULLNAME: string
 export const KEY_FILE_DESKTOP_KEY_GENERIC_NAME: string
-export const KEY_FILE_DESKTOP_KEY_GETTEXT_DOMAIN: string
 export const KEY_FILE_DESKTOP_KEY_HIDDEN: string
 export const KEY_FILE_DESKTOP_KEY_ICON: string
-export const KEY_FILE_DESKTOP_KEY_KEYWORDS: string
 export const KEY_FILE_DESKTOP_KEY_MIME_TYPE: string
 export const KEY_FILE_DESKTOP_KEY_NAME: string
 export const KEY_FILE_DESKTOP_KEY_NOT_SHOW_IN: string
@@ -892,6 +900,7 @@ export const SYSDEF_AF_UNIX: number
 export const SYSDEF_MSG_DONTROUTE: number
 export const SYSDEF_MSG_OOB: number
 export const SYSDEF_MSG_PEEK: number
+export const TEST_OPTION_ISOLATE_DIRS: string
 export const TIME_SPAN_DAY: number
 export const TIME_SPAN_HOUR: number
 export const TIME_SPAN_MILLISECOND: number
@@ -942,9 +951,20 @@ export function atomicPointerGet(atomic: object): object | null
 export function atomicPointerOr(atomic: object, val: number): number
 export function atomicPointerSet(atomic: object, newval?: object | null): void
 export function atomicPointerXor(atomic: object, val: number): number
+export function atomicRcBoxAcquire(memBlock: object): object
+export function atomicRcBoxAlloc(blockSize: number): object
+export function atomicRcBoxAlloc0(blockSize: number): object
+export function atomicRcBoxDup(blockSize: number, memBlock: object): object
+export function atomicRcBoxGetSize(memBlock: object): number
+export function atomicRcBoxRelease(memBlock: object): void
+export function atomicRcBoxReleaseFull(memBlock: object, clearFunc: DestroyNotify): void
+export function atomicRefCountCompare(arc: number, val: number): boolean
+export function atomicRefCountDec(arc: number): boolean
+export function atomicRefCountInc(arc: number): void
+export function atomicRefCountInit(arc: number): void
 export function base64Decode(text: string): any
 export function base64DecodeInplace(text: any): number
-export function base64Encode(data: any): string
+export function base64Encode(data: any | null): string
 export function base64EncodeClose(breakLines: boolean, state: number, save: number): [ /* returnType */ number, /* out */ any ]
 export function base64EncodeStep(in_: any, breakLines: boolean, state: number, save: number): [ /* returnType */ number, /* out */ any ]
 export function basename(fileName: string): string
@@ -961,7 +981,9 @@ export function byteArrayFree(array: any, freeSegment: boolean): number
 export function byteArrayFreeToBytes(array: any): Bytes
 export function byteArrayNew(): any
 export function byteArrayNewTake(data: any): any
+export function byteArraySteal(array: any): [ /* returnType */ number, /* len */ number | null ]
 export function byteArrayUnref(array: any): void
+export function canonicalizeFilename(filename: string, relativeTo?: string | null): string
 export function chdir(path: string): number
 export function checkVersion(requiredMajor: number, requiredMinor: number, requiredMicro: number): string
 export function checksumTypeGetLength(checksumType: ChecksumType): number
@@ -1027,25 +1049,28 @@ export function filenameFromUri(uri: string): [ /* returnType */ string, /* host
 export function filenameFromUtf8(utf8string: string, len: number): [ /* returnType */ string, /* bytesRead */ number | null, /* bytesWritten */ number | null ]
 export function filenameToUri(filename: string, hostname?: string | null): string
 export function filenameToUtf8(opsysstring: string, len: number): [ /* returnType */ string, /* bytesRead */ number | null, /* bytesWritten */ number | null ]
-export function findProgramInPath(program: string): string
+export function findProgramInPath(program: string): string | null
 export function formatSize(size: number): string
 export function formatSizeForDisplay(size: number): string
 export function formatSizeFull(size: number, flags: FormatSizeFlags): string
 export function free(mem?: object | null): void
-export function getApplicationName(): string
+export function getApplicationName(): string | null
 export function getCharset(): [ /* returnType */ boolean, /* charset */ string | null ]
 export function getCodeset(): string
+export function getConsoleCharset(): [ /* returnType */ boolean, /* charset */ string | null ]
 export function getCurrentDir(): string
 export function getCurrentTime(result: TimeVal): void
 export function getEnviron(): string[]
-export function getFilenameCharsets(charsets: string): boolean
+export function getFilenameCharsets(): [ /* returnType */ boolean, /* filenameCharsets */ string[] ]
 export function getHomeDir(): string
 export function getHostName(): string
 export function getLanguageNames(): string[]
+export function getLanguageNamesWithCategory(categoryName: string): string[]
 export function getLocaleVariants(locale: string): string[]
 export function getMonotonicTime(): number
 export function getNumProcessors(): number
-export function getPrgname(): string
+export function getOsInfo(keyName: string): string | null
+export function getPrgname(): string | null
 export function getRealName(): string
 export function getRealTime(): number
 export function getSystemConfigDirs(): string[]
@@ -1070,6 +1095,7 @@ export function hashTableReplace(hashTable: HashTable, key?: object | null, valu
 export function hashTableSize(hashTable: HashTable): number
 export function hashTableSteal(hashTable: HashTable, key?: object | null): boolean
 export function hashTableStealAll(hashTable: HashTable): void
+export function hashTableStealExtended(hashTable: HashTable, lookupKey?: object | null): [ /* returnType */ boolean, /* stolenKey */ object | null, /* stolenValue */ object | null ]
 export function hashTableUnref(hashTable: HashTable): void
 export function hookDestroy(hookList: HookList, hookId: number): boolean
 export function hookDestroyLink(hookList: HookList, hook: Hook): void
@@ -1158,8 +1184,25 @@ export function randomDoubleRange(begin: number, end: number): number
 export function randomInt(): number
 export function randomIntRange(begin: number, end: number): number
 export function randomSetSeed(seed: number): void
+export function rcBoxAcquire(memBlock: object): object
+export function rcBoxAlloc(blockSize: number): object
+export function rcBoxAlloc0(blockSize: number): object
+export function rcBoxDup(blockSize: number, memBlock: object): object
+export function rcBoxGetSize(memBlock: object): number
+export function rcBoxRelease(memBlock: object): void
+export function rcBoxReleaseFull(memBlock: object, clearFunc: DestroyNotify): void
 export function realloc(mem: object | null, nBytes: number): object | null
 export function reallocN(mem: object | null, nBlocks: number, nBlockBytes: number): object | null
+export function refCountCompare(rc: number, val: number): boolean
+export function refCountDec(rc: number): boolean
+export function refCountInc(rc: number): void
+export function refCountInit(rc: number): void
+export function refStringAcquire(str: string): string
+export function refStringLength(str: string): number
+export function refStringNew(str: string): string
+export function refStringNewIntern(str: string): string
+export function refStringNewLen(str: string, len: number): string
+export function refStringRelease(str: string): void
 export function regexCheckReplacement(replacement: string): [ /* returnType */ boolean, /* hasReferences */ boolean | null ]
 export function regexErrorQuark(): Quark
 export function regexEscapeNul(string: string, length: number): string
@@ -1199,6 +1242,7 @@ export function sourceRemoveByUserData(userData?: object | null): boolean
 export function sourceSetNameById(tag: number, name: string): void
 export function spacedPrimesClosest(num: number): number
 export function spawnAsync(workingDirectory: string | null, argv: string[], envp: string[] | null, flags: SpawnFlags, childSetup?: SpawnChildSetupFunc | null): [ /* returnType */ boolean, /* childPid */ Pid | null ]
+export function spawnAsyncWithFds(workingDirectory: string | null, argv: string[], envp: string[] | null, flags: SpawnFlags, childSetup: SpawnChildSetupFunc | null, stdinFd: number, stdoutFd: number, stderrFd: number): [ /* returnType */ boolean, /* childPid */ Pid | null ]
 export function spawnAsyncWithPipes(workingDirectory: string | null, argv: string[], envp: string[] | null, flags: SpawnFlags, childSetup?: SpawnChildSetupFunc | null): [ /* returnType */ boolean, /* childPid */ Pid | null, /* standardInput */ number | null, /* standardOutput */ number | null, /* standardError */ number | null ]
 export function spawnCheckExitStatus(exitStatus: number): boolean
 export function spawnClosePid(pid: Pid): void
@@ -1246,6 +1290,7 @@ export function strstrLen(haystack: string, haystackLen: number, needle: string)
 export function strtod(nptr: string): [ /* returnType */ number, /* endptr */ string | null ]
 export function strup(string: string): string
 export function strvContains(strv: string, str: string): boolean
+export function strvEqual(strv1: string, strv2: string): boolean
 export function strvGetType(): GObject.Type
 export function strvLength(strArray: string): number
 export function testAddDataFunc(testpath: string, testData: object | null, testFunc: TestDataFunc): void
@@ -1271,6 +1316,7 @@ export function testRunSuite(suite: TestSuite): number
 export function testSetNonfatalAssertions(): void
 export function testSkip(msg?: string | null): void
 export function testSubprocess(): boolean
+export function testSummary(summary: string): void
 export function testTimerElapsed(): number
 export function testTimerLast(): number
 export function testTimerStart(): void
@@ -1308,10 +1354,10 @@ export function ucs4ToUtf16(str: number, len: number): [ /* returnType */ number
 export function ucs4ToUtf8(str: number, len: number): [ /* returnType */ string, /* itemsRead */ number | null, /* itemsWritten */ number | null ]
 export function unicharBreakType(c: number): UnicodeBreakType
 export function unicharCombiningClass(uc: number): number
-export function unicharCompose(a: number, b: number, ch: number): boolean
-export function unicharDecompose(ch: number, a: number, b: number): boolean
+export function unicharCompose(a: number, b: number): [ /* returnType */ boolean, /* ch */ number ]
+export function unicharDecompose(ch: number): [ /* returnType */ boolean, /* a */ number, /* b */ number ]
 export function unicharDigitValue(c: number): number
-export function unicharFullyDecompose(ch: number, compat: boolean, result: number | null, resultLen: number): number
+export function unicharFullyDecompose(ch: number, compat: boolean, resultLen: number): [ /* returnType */ number, /* result */ number | null ]
 export function unicharGetMirrorChar(ch: number, mirroredCh: number): boolean
 export function unicharGetScript(ch: number): UnicodeScript
 export function unicharIsalnum(c: number): boolean
@@ -1345,6 +1391,7 @@ export function unicodeScriptToIso15924(script: UnicodeScript): number
 export function unixErrorQuark(): Quark
 export function unixFdAddFull(priority: number, fd: number, condition: IOCondition, function_: UnixFDSourceFunc): number
 export function unixFdSourceNew(fd: number, condition: IOCondition): Source
+export function unixGetPasswdEntry(userName: string): object | null
 export function unixOpenPipe(fds: number, flags: number): boolean
 export function unixSetFdNonblocking(fd: number, nonblock: boolean): boolean
 export function unixSignalAdd(priority: number, signum: number, handler: SourceFunc): number
@@ -1364,19 +1411,19 @@ export function utf8Collate(str1: string, str2: string): number
 export function utf8CollateKey(str: string, len: number): string
 export function utf8CollateKeyForFilename(str: string, len: number): string
 export function utf8FindNextChar(p: string, end?: string | null): string | null
-export function utf8FindPrevChar(str: string, p: string): string
+export function utf8FindPrevChar(str: string, p: string): string | null
 export function utf8GetChar(p: string): number
 export function utf8GetCharValidated(p: string, maxLen: number): number
 export function utf8MakeValid(str: string, len: number): string
-export function utf8Normalize(str: string, len: number, mode: NormalizeMode): string
+export function utf8Normalize(str: string, len: number, mode: NormalizeMode): string | null
 export function utf8OffsetToPointer(str: string, offset: number): string
 export function utf8PointerToOffset(str: string, pos: string): number
 export function utf8PrevChar(p: string): string
-export function utf8Strchr(p: string, len: number, c: number): string
+export function utf8Strchr(p: string, len: number, c: number): string | null
 export function utf8Strdown(str: string, len: number): string
 export function utf8Strlen(p: string, max: number): number
 export function utf8Strncpy(dest: string, src: string, n: number): string
-export function utf8Strrchr(p: string, len: number, c: number): string
+export function utf8Strrchr(p: string, len: number, c: number): string | null
 export function utf8Strreverse(str: string, len: number): string
 export function utf8Strup(str: string, len: number): string
 export function utf8Substring(str: string, startPos: number, endPos: number): string
@@ -1384,6 +1431,7 @@ export function utf8ToUcs4(str: string, len: number): [ /* returnType */ number,
 export function utf8ToUcs4Fast(str: string, len: number): [ /* returnType */ number, /* itemsWritten */ number | null ]
 export function utf8ToUtf16(str: string, len: number): [ /* returnType */ number, /* itemsRead */ number | null, /* itemsWritten */ number | null ]
 export function utf8Validate(str: any): [ /* returnType */ boolean, /* end */ string | null ]
+export function utf8ValidateLen(str: any): [ /* returnType */ boolean, /* end */ string | null ]
 export function uuidStringIsValid(str: string): boolean
 export function uuidStringRandom(): string
 export function variantGetGtype(): GObject.Type
@@ -1394,6 +1442,7 @@ export function variantParseErrorPrintContext(error: Error, sourceStr: string): 
 export function variantParseErrorQuark(): Quark
 export function variantParserGetErrorQuark(): Quark
 export function variantTypeChecked(arg0: string): VariantType
+export function variantTypeStringGetDepth(typeString: string): number
 export function variantTypeStringIsValid(typeString: string): boolean
 export function variantTypeStringScan(string: string, limit?: string | null): [ /* returnType */ boolean, /* endptr */ string | null ]
 export interface ChildWatchFunc {
@@ -1497,6 +1546,9 @@ export interface ScannerMsgFunc {
 }
 export interface SequenceIterCompareFunc {
     (a: SequenceIter, b: SequenceIter, data?: object | null): number
+}
+export interface SourceDisposeFunc {
+    (source: Source): void
 }
 export interface SourceDummyMarshal {
     (): void
@@ -1616,6 +1668,7 @@ export class ByteArray {
     static free(array: any, freeSegment: boolean): number
     static freeToBytes(array: any): Bytes
     static newTake(data: any): any
+    static steal(array: any): [ /* returnType */ number, /* len */ number | null ]
     static unref(array: any): void
 }
 export class Bytes {
@@ -1738,6 +1791,7 @@ export class DateTime {
     addYears(years: number): DateTime
     difference(begin: DateTime): TimeSpan
     format(format: string): string
+    formatIso8601(): string
     getDayOfMonth(): number
     getDayOfWeek(): number
     getDayOfYear(): number
@@ -1747,6 +1801,7 @@ export class DateTime {
     getMonth(): number
     getSecond(): number
     getSeconds(): number
+    getTimezone(): TimeZone
     getTimezoneAbbreviation(): string
     getUtcOffset(): TimeSpan
     getWeekNumberingYear(): number
@@ -1819,6 +1874,7 @@ export class HashTable {
     static size(hashTable: HashTable): number
     static steal(hashTable: HashTable, key?: object | null): boolean
     static stealAll(hashTable: HashTable): void
+    static stealExtended(hashTable: HashTable, lookupKey?: object | null): [ /* returnType */ boolean, /* stolenKey */ object | null, /* stolenValue */ object | null ]
     static unref(hashTable: HashTable): void
 }
 export class HashTableIter {
@@ -1833,7 +1889,7 @@ export class HashTableIter {
 }
 export class Hmac {
     /* Methods of GLib.Hmac */
-    getDigest(buffer: number, digestLen: number): void
+    getDigest(buffer: any): void
     getString(): string
     unref(): void
     update(data: any): void
@@ -2012,7 +2068,7 @@ export class MainContext {
     iteration(mayBlock: boolean): boolean
     pending(): boolean
     popThreadDefault(): void
-    prepare(priority: number): boolean
+    prepare(): [ /* returnType */ boolean, /* priority */ number | null ]
     pushThreadDefault(): void
     query(maxPriority: number): [ /* returnType */ number, /* timeout */ number, /* fds */ PollFD[] ]
     ref(): MainContext
@@ -2061,7 +2117,7 @@ export class MarkupParseContext {
     endParse(): boolean
     free(): void
     getElement(): string
-    getPosition(lineNumber?: number | null, charNumber?: number | null): void
+    getPosition(): [ /* lineNumber */ number | null, /* charNumber */ number | null ]
     getUserData(): object | null
     parse(text: string, textLen: number): boolean
     pop(): object | null
@@ -2143,7 +2199,7 @@ export class Once {
 export class OptionContext {
     /* Methods of GLib.OptionContext */
     addGroup(group: OptionGroup): void
-    addMainEntries(entries: OptionEntry, translationDomain?: string | null): void
+    addMainEntries(entries: OptionEntry[], translationDomain?: string | null): void
     free(): void
     getDescription(): string
     getHelp(mainHelp: boolean, group?: OptionGroup | null): string
@@ -2177,7 +2233,7 @@ export class OptionEntry {
 }
 export class OptionGroup {
     /* Methods of GLib.OptionGroup */
-    addEntries(entries: OptionEntry): void
+    addEntries(entries: OptionEntry[]): void
     free(): void
     ref(): OptionGroup
     setTranslateFunc(func?: TranslateFunc | null): void
@@ -2222,6 +2278,7 @@ export class Queue {
     length: number
     /* Methods of GLib.Queue */
     clear(): void
+    clearFull(freeFunc?: DestroyNotify | null): void
     free(): void
     freeFull(freeFunc: DestroyNotify): void
     getLength(): number
@@ -2541,7 +2598,6 @@ export class TestLogMsg {
     nStrings: number
     strings: string
     nNums: number
-    nums: number
     /* Methods of GLib.TestLogMsg */
     free(): void
     static name: string
@@ -2599,6 +2655,7 @@ export class TimeZone {
     adjustTime(type: TimeType, time: number): number
     findInterval(type: TimeType, time: number): number
     getAbbreviation(interval: number): string
+    getIdentifier(): string
     getOffset(interval: number): number
     isDst(interval: number): boolean
     ref(): TimeZone
@@ -2608,6 +2665,7 @@ export class TimeZone {
     constructor(identifier?: string | null)
     static new(identifier?: string | null): TimeZone
     static newLocal(): TimeZone
+    static newOffset(seconds: number): TimeZone
     static newUtc(): TimeZone
 }
 export class Timer {
@@ -2615,6 +2673,7 @@ export class Timer {
     continue(): void
     destroy(): void
     elapsed(microseconds: number): number
+    isActive(): boolean
     reset(): void
     start(): void
     stop(): void
@@ -2635,7 +2694,7 @@ export class Tree {
     height(): number
     insert(key?: object | null, value?: object | null): void
     lookup(key?: object | null): object | null
-    lookupExtended(lookupKey?: object | null, origKey?: object | null, value?: object | null): boolean
+    lookupExtended(lookupKey?: object | null): [ /* returnType */ boolean, /* origKey */ object | null, /* value */ object | null ]
     nnodes(): number
     remove(key?: object | null): boolean
     replace(key?: object | null, value?: object | null): void
@@ -2793,6 +2852,7 @@ export class VariantType {
     static newMaybe(element: VariantType): VariantType
     static newTuple(items: VariantType[]): VariantType
     static checked(arg0: string): VariantType
+    static stringGetDepth(typeString: string): number
     static stringIsValid(typeString: string): boolean
     static stringScan(string: string, limit?: string | null): [ /* returnType */ boolean, /* endptr */ string | null ]
 }
@@ -2834,9 +2894,14 @@ export class TokenValue {
 }
 type DateDay = number
 type DateYear = number
+type MainContextPusher = void
 type MutexLocker = void
 type Pid = number
 type Quark = number
+type RWLockReaderLocker = void
+type RWLockWriterLocker = void
+type RecMutexLocker = void
+type RefString = number
 type Strv = string
 type Time = number
 type TimeSpan = number

@@ -11,6 +11,12 @@
 
 declare namespace GstWebRTC {
 
+export enum WebRTCBundlePolicy {
+    NONE,
+    BALANCED,
+    MAX_COMPAT,
+    MAX_BUNDLE,
+}
 export enum WebRTCDTLSSetup {
     NONE,
     ACTPASS,
@@ -23,6 +29,13 @@ export enum WebRTCDTLSTransportState {
     FAILED,
     CONNECTING,
     CONNECTED,
+}
+export enum WebRTCDataChannelState {
+    NEW,
+    CONNECTING,
+    OPEN,
+    CLOSING,
+    CLOSED,
 }
 export enum WebRTCFECType {
     NONE,
@@ -50,6 +63,10 @@ export enum WebRTCICERole {
     CONTROLLED,
     CONTROLLING,
 }
+export enum WebRTCICETransportPolicy {
+    ALL,
+    RELAY,
+}
 export enum WebRTCPeerConnectionState {
     NEW,
     CONNECTING,
@@ -58,12 +75,24 @@ export enum WebRTCPeerConnectionState {
     FAILED,
     CLOSED,
 }
+export enum WebRTCPriorityType {
+    VERY_LOW,
+    LOW,
+    MEDIUM,
+    HIGH,
+}
 export enum WebRTCRTPTransceiverDirection {
     NONE,
     INACTIVE,
     SENDONLY,
     RECVONLY,
     SENDRECV,
+}
+export enum WebRTCSCTPTransportState {
+    NEW,
+    CONNECTING,
+    CONNECTED,
+    CLOSED,
 }
 export enum WebRTCSDPType {
     OFFER,

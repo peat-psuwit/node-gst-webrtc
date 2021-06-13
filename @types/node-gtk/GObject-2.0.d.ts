@@ -80,7 +80,6 @@ export const TYPE_RESERVED_BSE_LAST: number
 export const TYPE_RESERVED_GLIB_FIRST: number
 export const TYPE_RESERVED_GLIB_LAST: number
 export const TYPE_RESERVED_USER_FIRST: number
-export const VALUE_COLLECT_FORMAT_MAX_LENGTH: number
 export const VALUE_NOCOPY_CONTENTS: number
 export function boxedCopy(boxedType: Type, srcBoxed: object): object
 export function boxedFree(boxedType: Type, boxed: object): void
@@ -107,6 +106,7 @@ export function cclosureMarshalVOIDULONG(closure: Closure, returnValue: Value, n
 export function cclosureMarshalVOIDVARIANT(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
 export function cclosureMarshalVOIDVOID(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
 export function cclosureMarshalGeneric(closure: Closure, returnGvalue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
+export function clearSignalHandler(handlerIdPtr: number, instance: Object): void
 export function enumCompleteTypeInfo(gEnumType: Type, constValues: EnumValue): /* info */ TypeInfo
 export function enumGetValue(enumClass: EnumClass, value: number): EnumValue
 export function enumGetValueByName(enumClass: EnumClass, name: string): EnumValue
@@ -526,7 +526,6 @@ export class Object {
     static name: string
     constructor (config?: Object_ConstructProps)
     _init (config?: Object_ConstructProps): void
-    static new(objectType: Type, names: string[], values: Value[]): Object
     static newv(objectType: Type, parameters: Parameter[]): Object
     static compatControl(what: number, data?: object | null): number
     static interfaceFindProperty(gIface: TypeInterface, propertyName: string): ParamSpec
@@ -1659,12 +1658,6 @@ export class WeakRef {
     static name: string
 }
 export class TypeCValue {
-    /* Fields of GObject.TypeCValue */
-    vInt: number
-    vLong: number
-    vInt64: number
-    vDouble: number
-    vPointer: object
     static name: string
 }
 export class _Value__data__union {

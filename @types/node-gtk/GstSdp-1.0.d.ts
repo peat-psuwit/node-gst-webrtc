@@ -19,6 +19,7 @@ export enum MIKEYEncAlg {
     NULL,
     AES_CM_128,
     AES_KW_128,
+    AES_GCM_128,
 }
 export enum MIKEYKVType {
     NULL,
@@ -73,6 +74,7 @@ export enum MIKEYSecSRTP {
     SRTP_AUTH,
     AUTH_TAG_LEN,
     SRTP_PREFIX_LEN,
+    AEAD_AUTH_TAG_LEN,
 }
 export enum MIKEYTSType {
     NTP_UTC,
@@ -106,6 +108,7 @@ export function sdpMediaNew(): [ /* returnType */ SDPResult, /* media */ SDPMedi
 export function sdpMediaSetMediaFromCaps(caps: Gst.Caps, media: SDPMedia): SDPResult
 export function sdpMessageAsUri(scheme: string, msg: SDPMessage): string
 export function sdpMessageNew(): [ /* returnType */ SDPResult, /* msg */ SDPMessage ]
+export function sdpMessageNewFromText(text: string): [ /* returnType */ SDPResult, /* msg */ SDPMessage ]
 export function sdpMessageParseBuffer(data: any, msg: SDPMessage): SDPResult
 export function sdpMessageParseUri(uri: string, msg: SDPMessage): SDPResult
 export class MIKEYDecryptInfo {
@@ -426,6 +429,7 @@ export class SDPMessage {
     zonesLen(): number
     static name: string
     static asUri(scheme: string, msg: SDPMessage): string
+    static newFromText(text: string): [ /* returnType */ SDPResult, /* msg */ SDPMessage ]
     static parseBuffer(data: any, msg: SDPMessage): SDPResult
     static parseUri(uri: string, msg: SDPMessage): SDPResult
 }
