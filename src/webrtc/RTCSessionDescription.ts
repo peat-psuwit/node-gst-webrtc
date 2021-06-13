@@ -47,11 +47,10 @@ export class GstRTCSessionDescription implements RTCSessionDescription {
   }
 
   toGstDesc() {
-    const [ret, sdp] = GstSdp.sdpMessageNew();
-    if (ret != GstSdp.SDPResult.OK) {
-      throw new Error('sdpMessageNew() fails (WTF?)');
+    const [ret, sdp] = GstSDP_.sdpMessageNewFromText(this.sdp);
+    if (ret != GstSDP_.SDPResult.OK) {
+      throw new Error('sdpMessageNewFromText()');
     }
-    GstSdp.SDPMessage.parseBuffer(this.sdp, sdp);
 
     return GstWebRTC.WebRTCSessionDescription.new(
       GstRTCSessionDescription.sdpTypeFromString(this.type),
