@@ -315,8 +315,9 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
 
   async createOffer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit> {
     // Currently webrtcbin doesn't use options, thus do nothing for now.
+    const opts = Gst.Structure.newEmpty('offer-options');
     const structure = await withGstPromise((promise) => {
-      this._webrtcbin.emit('create-offer', null, promise);
+      this._webrtcbin.emit('create-offer', opts, promise);
     });
 
     const gvalue: GObject.Value = structure.getValue('offer');
@@ -328,8 +329,9 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
 
   async createAnswer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit> {
     // Currently webrtcbin doesn't use options, thus do nothing for now.
+    const opts = Gst.Structure.newEmpty('offer-options');
     const structure = await withGstPromise((promise) => {
-      this._webrtcbin.emit('create-answer', null, promise);
+      this._webrtcbin.emit('create-answer', opts, promise);
     });
 
     const gvalue: GObject.Value = structure.getValue('answer');
