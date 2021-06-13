@@ -1,4 +1,7 @@
-import { GstWebRTC, GstSDP } from './gstUtils';
+import * as gi from 'node-gtk';
+
+const GstWebRTC = gi.require('GstWebRTC', '1.0');
+const GstSDP_ = gi.require('GstSdp', '1.0');
 
 export class GstRTCSessionDescription implements RTCSessionDescription {
   readonly sdp: string;
