@@ -34,7 +34,7 @@ while (i < linesInput.length) {
     if (line == '};') {
         break;
     } else {
-        const regexp = /^ *([a-zA-Z0-9]+): ([a-zA-Z0-9]+);$/;
+        const regexp = /^ *"?([a-zA-Z0-9]+)"?: ([a-zA-Z0-9]+);$/;
         const matchResult = line.match(regexp);
 
         if (!matchResult) {
