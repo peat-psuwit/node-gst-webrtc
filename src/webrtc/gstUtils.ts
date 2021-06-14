@@ -1,6 +1,8 @@
 import * as gi from 'node-gtk';
 
 // For convenience
+export const GLib = gi.require('GLib', '2.0');
+export const GObject = gi.require('GObject', '2.0');
 export const Gst = gi.require('Gst', '1.0');
 export const GstWebRTC = gi.require('GstWebRTC', '1.0');
 export const GstSDP = gi.require('GstSdp', '1.0');
