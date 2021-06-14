@@ -1,8 +1,16 @@
 import { EventTarget as EventTargetShim, getEventAttributeValue, setEventAttributeValue } from 'event-target-shim';
 
-import { Gst, GstWebRTC, globalPipeline, withGstPromise } from './gstUtils';
+import {
+  GObject,
+  Gst,
+  GstWebRTC,
+  globalPipeline,
+  withGstPromise
+} from './gstUtils';
 import { GstRTCIceCandidate } from './RTCIceCandidate';
 import { GstRTCSessionDescription } from './RTCSessionDescription';
+
+import GstRTCDataChannel from './RTCDataChannel';
 
 // Specify options actually used, and thus will have defaults.
 interface GstRTCConfiguration extends RTCConfiguration {
@@ -51,6 +59,15 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
   _webrtcbin: Gst.Element;
   _conf: GstRTCConfiguration;
 
+  // We need a Map here because if e.g. the 'on-data-channel' signal comes up
+  // after createDataChannel() is called, we want to make sure that we put
+  // the same JS wrapper as the one created in createDataChannel() in the event.
+  // I've considered WeakMap, but it won't help us release the backing object
+  // sooner at all, as the JS wrapper need to hold the backing object, and if
+  // the wrapper is reachable via the WeakMap, so does the backing object and
+  // then WeakMap won't consider GC the wrapper.
+  _dataChannels: Map<GObject.Object, GstRTCDataChannel> = new Map();
+
   constructor(conf?: RTCConfiguration) {
     super();
 
@@ -65,6 +82,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
 
     this._webrtcbin.connect('on-negotiation-needed', this._handleNegotiationNeeded);
     this._webrtcbin.connect('on-ice-candidate', this._handleIceCandidate);
+    this._webrtcbin.connect('on-data-channel', this._handleDataChannel);
     // TODO: connect to more signals
 
     globalPipeline.add(this._webrtcbin);
@@ -155,6 +173,17 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
         }
       }
     }
+  }
+
+  _handleDataChannel = ($obj: Gst.Element, gstdatachannel: GObject.Object) => {
+    let jsdatachannel = this._dataChannels.get(gstdatachannel);
+
+    if (!jsdatachannel) {
+      jsdatachannel = new GstRTCDataChannel(gstdatachannel);
+      this._dataChannels.set(gstdatachannel, jsdatachannel);
+    }
+
+    this.dispatchEvent({ type: 'datachannel', channel: jsdatachannel });
   }
 
   _handleNegotiationNeeded = () => {
@@ -341,8 +370,97 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
     return GstRTCSessionDescription.fromGstDesc(sdp);
   }
 
-  createDataChannel(label: string, dataChannelDict?: RTCDataChannelInit): RTCDataChannel {
-    throw new Error('Not implemented');
+  createDataChannel(label: string, options: RTCDataChannelInit = {}): RTCDataChannel {
+    // https://w3c.github.io/webrtc-pc/#dom-peerconnection-createdatachannel
+
+    // Conditions checked here are also checked inside webrtcbin's signal handler, but
+    // it doesn't set any error state except return null. To be able to distinguish
+    // each kind of errors, check them manually here.
+
+    if (this.signalingState === 'closed') {
+      // Note: spac calls for InvalidStateError, which seems to be unavailable
+      throw new Error('A data channel cannot be created while the connection is closed.');
+    }
+
+    if ((new TextEncoder().encode(label)).length > 65535)
+      throw new TypeError('The label is too long.');
+
+    const gstOpts = Gst.Structure.newEmpty('data-channel-opts');
+
+    // GstStructure.setValue() take GValue...
+    const gValue = new GObject.Value();
+
+    if (typeof options.ordered === 'boolean') {
+      gValue.init((<any>GObject).TYPE_BOOLEAN);
+      gValue.setBoolean(options.ordered);
+      gstOpts.setValue('ordered', gValue);
+      gValue.unset();
+    }
+
+    if (typeof options.maxPacketLifeTime === 'number') {
+      if (typeof options.maxRetransmits === 'number'){
+        throw new TypeError('maxPacketLifeTime and maxRetransmits must not be set at the same time.');
+      }
+
+      gValue.init((<any>GObject).TYPE_INT);
+      gValue.setInt(options.maxPacketLifeTime);
+      gstOpts.setValue('max-packet-lifetime', gValue);
+      gValue.unset();
+    }
+
+    if (typeof options.maxRetransmits === 'number') {
+      gValue.init((<any>GObject).TYPE_INT);
+      gValue.setInt(options.maxRetransmits);
+      gstOpts.setValue('max-retransmits', gValue);
+      gValue.unset();
+    }
+
+    if (typeof options.protocol === 'string') {
+      if (new TextEncoder().encode(options.protocol).length > 65535) {
+        throw new TypeError('options.protocol is too long.');
+      }
+
+      gValue.init((<any>GObject).TYPE_STRING);
+      gValue.setString(options.protocol);
+      gstOpts.setValue('protocol', gValue);
+      gValue.unset();
+    }
+
+    if (typeof options.negotiated === 'boolean') {
+      if (options.negotiated && typeof options.id !== 'number') {
+        throw new TypeError('Negotiated data channel requires an id.');
+      }
+
+      gValue.init((<any>GObject).TYPE_BOOLEAN);
+      gValue.setBoolean(options.negotiated);
+      gstOpts.setValue('negotiated', gValue);
+      gValue.unset();
+    }
+
+    if (typeof options.id === 'number') {
+      if (options.id >= 65535) {
+        throw new TypeError('options.id is too high.');
+      }
+
+      gValue.init((<any>GObject).TYPE_INT);
+      gValue.setInt(options.id);
+      gstOpts.setValue('id', gValue);
+      gValue.unset();
+    }
+
+    // FIXME: remove the cast when the emit's signature is fixed.
+    const gstdatachannel: GObject.Object | null = <any>this._webrtcbin.emit('create-data-channel', label, gstOpts);
+    if (!gstdatachannel) {
+      // At this point, it's likely that the error are related to channel's id.
+      // But webrtcbin reports error to warning log only, so there's no way we
+      // can know for sure what's the problem.
+      throw new Error('Cannot create the backing GstWebRTCDataChannel.');
+    }
+
+    const jsdatachannel = new GstRTCDataChannel(gstdatachannel);
+    this._dataChannels.set(gstdatachannel, jsdatachannel);
+
+    return jsdatachannel;
   }
 
   getConfiguration(): RTCConfiguration {
