@@ -7,10 +7,10 @@ import {
   globalPipeline,
   withGstPromise
 } from './gstUtils';
-import { GstRTCIceCandidate } from './RTCIceCandidate';
-import { GstRTCSessionDescription } from './RTCSessionDescription';
 
 import GstRTCDataChannel from './RTCDataChannel';
+import GstRTCIceCandidate from './RTCIceCandidate';
+import GstRTCSessionDescription from './RTCSessionDescription';
 
 // Specify options actually used, and thus will have defaults.
 interface GstRTCConfiguration extends RTCConfiguration {

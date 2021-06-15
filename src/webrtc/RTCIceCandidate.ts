@@ -1,4 +1,4 @@
-export class GstRTCIceCandidate implements RTCIceCandidate {
+class GstRTCIceCandidate implements RTCIceCandidate {
   readonly candidate: string;
   readonly sdpMLineIndex: number | null;
   readonly sdpMid: string | null;
@@ -31,3 +31,5 @@ export class GstRTCIceCandidate implements RTCIceCandidate {
   get tcpType(): RTCIceTcpCandidateType | null { return null; }
   get type(): RTCIceCandidateType | null { return null; }
 }
+
+export default GstRTCIceCandidate;
