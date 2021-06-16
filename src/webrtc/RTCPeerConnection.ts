@@ -59,8 +59,8 @@ function validateHostPort(hostPort: string) {
 }
 
 class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'> implements RTCPeerConnection {
-  _webrtcbin: Gst.Element;
-  _conf: GstRTCConfiguration;
+  private _webrtcbin: Gst.Element;
+  private _conf: GstRTCConfiguration;
 
   // We need a Map here because if e.g. the 'on-data-channel' signal comes up
   // after createDataChannel() is called, we want to make sure that we put
@@ -69,7 +69,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
   // sooner at all, as the JS wrapper need to hold the backing object, and if
   // the wrapper is reachable via the WeakMap, so does the backing object and
   // then WeakMap won't consider GC the wrapper.
-  _dataChannels: Map<GObject.Object, GstRTCDataChannel> = new Map();
+  private _dataChannels: Map<GObject.Object, GstRTCDataChannel> = new Map();
 
   constructor(conf?: RTCConfiguration | null) {
     super();
@@ -92,7 +92,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
     this._webrtcbin.syncStateWithParent();
   }
 
-  _addIceServers() {
+  private _addIceServers() {
     const {iceServers} = this._conf;
     let stunServerSet = false;
     let turnServerSet = false;
@@ -178,7 +178,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
     }
   }
 
-  _handleDataChannel = (gstdatachannel: GObject.Object) => {
+  private _handleDataChannel = (gstdatachannel: GObject.Object) => {
     let jsdatachannel = this._dataChannels.get(gstdatachannel);
 
     if (!jsdatachannel) {
@@ -189,12 +189,12 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
     this.dispatchEvent({ type: 'datachannel', channel: jsdatachannel });
   }
 
-  _handleNegotiationNeeded = () => {
+  private _handleNegotiationNeeded = () => {
     // There's nothing to be put in the event.
     this.dispatchEvent<'negotiationneeded'>({ type: 'negotiationneeded' });
   }
 
-  _handleIceCandidate = (sdpMLineIndex: number, candidate: string) => {
+  private _handleIceCandidate = (sdpMLineIndex: number, candidate: string) => {
     const candidateObj = new GstRTCIceCandidate({ sdpMLineIndex, candidate });
     this.dispatchEvent<'icecandidate'>({ type: 'icecandidate', candidate: candidateObj });
   }

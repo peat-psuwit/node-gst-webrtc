@@ -18,8 +18,8 @@ type TEvents = {
 
 class GstRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> implements RTCDataChannel {
   // There's no GIR definition for GstWebRTCDataChannel, for some reason.
-  _gstdatachannel: GObject.Object;
-  _binaryType: 'blob' | 'arraybuffer' = 'blob';
+  private _gstdatachannel: GObject.Object;
+  private _binaryType: 'blob' | 'arraybuffer' = 'blob';
 
   constructor(gstdatachannel: GObject.Object) {
     super();
@@ -33,15 +33,15 @@ class GstRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
     gstdatachannel.connect('on-open', this._handleOpen);
   }
 
-  _handleBufferedAmountLow = () => {
+  private _handleBufferedAmountLow = () => {
     this.dispatchEvent({ type: 'bufferedamountlow' });
   }
 
-  _handleClose = () => {
+  private _handleClose = () => {
     this.dispatchEvent({ type: 'close' });
   }
 
-  _handleError = (error: GLib.Error) => {
+  private _handleError = (error: GLib.Error) => {
     // Well, we receive errors in terms of GError, which can report a variety
     // of errors. I don't have a good way to translate this to proper RTCError,
     // so let's just dispatch a generic error. Also, we don't really want to
@@ -55,7 +55,7 @@ class GstRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
   }
 
   // MessageEvent is a bit complicated, so I have a helper function.
-  _dispatchMessageEvent(data: string | ArrayBufferLike) {
+  private _dispatchMessageEvent(data: string | ArrayBufferLike) {
     this.dispatchEvent({
       type: 'message',
       data: data,
@@ -66,7 +66,7 @@ class GstRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
     });
   }
 
-  _handleMessageData = (data: GLib.Bytes) => {
+  private _handleMessageData = (data: GLib.Bytes) => {
     if (this._binaryType == 'blob') {
       throw new Error("We cannot creat a blob in NodeJS!");
     }
@@ -75,11 +75,11 @@ class GstRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
     this._dispatchMessageEvent(arrayView.buffer);
   }
 
-  _handleMessageString = (data: string) => {
+  private _handleMessageString = (data: string) => {
     this._dispatchMessageEvent(data);
   }
 
-  _handleOpen = () => {
+  private _handleOpen = () => {
     this.dispatchEvent({ type: 'open' });
   }
 
