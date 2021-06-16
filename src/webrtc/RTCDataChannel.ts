@@ -160,7 +160,7 @@ class GstRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
 
   send(data: string | Blob | ArrayBuffer | ArrayBufferView) {
     if (typeof data === 'string') {
-      return (<any>this._gstdatachannel).sendString(data);
+      return this._gstdatachannel.emit('send-string', data);
     }
 
     let arrayBuffer: ArrayBuffer;
@@ -176,11 +176,11 @@ class GstRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
     const arrayView = new Uint8Array(arrayBuffer);
 
     const gbytes = new GLib.Bytes(arrayView);
-    (<any>this._gstdatachannel).sendData(gbytes);
+    this._gstdatachannel.emit('send-data', gbytes);
   }
 
   close() {
-    (<any>this._gstdatachannel).close();
+    this._gstdatachannel.emit('close');
   }
 
   // BEGIN generated event getters & setters; TEventTarget = RTCDataChannel
