@@ -17,10 +17,13 @@ interface GstRTCConfiguration extends RTCConfiguration {
   iceServers: RTCIceServer[];
 }
 
-function fillConfigDefault(inConf: RTCConfiguration = {}): GstRTCConfiguration {
+function fillConfigDefault(inConf?: RTCConfiguration | null): GstRTCConfiguration {
   const defaultIceServer: RTCIceServer = {
     urls: ['stun:stun.l.google.com:19302']
   };
+
+  if (!inConf)
+    inConf = {};
 
   return {
     ...inConf,
@@ -68,7 +71,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
   // then WeakMap won't consider GC the wrapper.
   _dataChannels: Map<GObject.Object, GstRTCDataChannel> = new Map();
 
-  constructor(conf?: RTCConfiguration) {
+  constructor(conf?: RTCConfiguration | null) {
     super();
 
     const bin = Gst.ElementFactory.make('webrtcbin');
