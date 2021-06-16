@@ -178,7 +178,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
     }
   }
 
-  _handleDataChannel = ($obj: Gst.Element, gstdatachannel: GObject.Object) => {
+  _handleDataChannel = (gstdatachannel: GObject.Object) => {
     let jsdatachannel = this._dataChannels.get(gstdatachannel);
 
     if (!jsdatachannel) {
@@ -194,8 +194,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
     this.dispatchEvent<'negotiationneeded'>({ type: 'negotiationneeded' });
   }
 
-  // FIXME: signature not verified yet.
-  _handleIceCandidate = ($obj: Gst.Element, sdpMLineIndex: number, candidate: string) => {
+  _handleIceCandidate = (sdpMLineIndex: number, candidate: string) => {
     const candidateObj = new GstRTCIceCandidate({ sdpMLineIndex, candidate });
     this.dispatchEvent<'icecandidate'>({ type: 'icecandidate', candidate: candidateObj });
   }

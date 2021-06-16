@@ -41,7 +41,7 @@ class GstRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
     this.dispatchEvent({ type: 'close' });
   }
 
-  _handleError = ($obj: GObject.Object, error: GLib.Error) => {
+  _handleError = (error: GLib.Error) => {
     // Well, we receive errors in terms of GError, which can report a variety
     // of errors. I don't have a good way to translate this to proper RTCError,
     // so let's just dispatch a generic error. Also, we don't really want to
@@ -66,7 +66,7 @@ class GstRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
     });
   }
 
-  _handleMessageData = ($obj: GObject.Object, data: GLib.Bytes) => {
+  _handleMessageData = (data: GLib.Bytes) => {
     if (this._binaryType == 'blob') {
       throw new Error("We cannot creat a blob in NodeJS!");
     }
@@ -75,7 +75,7 @@ class GstRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
     this._dispatchMessageEvent(arrayView.buffer);
   }
 
-  _handleMessageString = ($obj: GObject.Object, data: string) => {
+  _handleMessageString = (data: string) => {
     this._dispatchMessageEvent(data);
   }
 
