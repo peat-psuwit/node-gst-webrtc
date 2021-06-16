@@ -183,10 +183,8 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
   private _handleDataChannel = (gstdatachannel: GObject.Object) => {
     let jsdatachannel = this._dataChannels.get(gstdatachannel);
 
-    if (!jsdatachannel) {
-      jsdatachannel = new GstRTCDataChannel(gstdatachannel);
-      this._dataChannels.set(gstdatachannel, jsdatachannel);
-    }
+    if (!jsdatachannel)
+      jsdatachannel = this._createJsDataChannel(gstdatachannel);
 
     this.dispatchEvent({ type: 'datachannel', channel: jsdatachannel });
   }
@@ -384,6 +382,19 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
     return GstRTCSessionDescription.fromGstDesc(sdp);
   }
 
+  private _createJsDataChannel(gstdatachannel: GObject.Object) {
+    const jsdatachannel = new GstRTCDataChannel(gstdatachannel);
+    this._dataChannels.set(gstdatachannel, jsdatachannel);
+
+    // We want to know when it's closed, so that we can drop its reference
+    // from our map.
+    jsdatachannel.addEventListener('close', () => {
+      this._dataChannels.delete(gstdatachannel);
+    });
+
+    return jsdatachannel;
+  }
+
   createDataChannel(label: string, options: RTCDataChannelInit = {}): RTCDataChannel {
     // https://w3c.github.io/webrtc-pc/#dom-peerconnection-createdatachannel
 
@@ -471,10 +482,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
       throw new Error('Cannot create the backing GstWebRTCDataChannel.');
     }
 
-    const jsdatachannel = new GstRTCDataChannel(gstdatachannel);
-    this._dataChannels.set(gstdatachannel, jsdatachannel);
-
-    return jsdatachannel;
+    return this._createJsDataChannel(gstdatachannel);
   }
 
   getConfiguration(): RTCConfiguration {
