@@ -204,12 +204,6 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
 
   // Stubs
   get connectionState(): RTCPeerConnectionState {
-    // https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/close
-    // Once [close()] returns, the signaling state as returned by RTCPeerConnection.
-    // signalingState is 'closed'.
-    if (this._closedRequested)
-      return 'closed';
-
     switch ((<any>this._webrtcbin).connectionState) {
       case GstWebRTC.WebRTCPeerConnectionState.NEW:
       default:
@@ -307,6 +301,12 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
   }
 
   get signalingState(): RTCSignalingState {
+    // https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/close
+    // Once [close()] returns, the signaling state as returned by RTCPeerConnection.
+    // signalingState is 'closed'.
+    if (this._closedRequested)
+      return 'closed';
+
     switch ((<any>this._webrtcbin).signalingState) {
       case GstWebRTC.WebRTCSignalingState.STABLE:
       default:
