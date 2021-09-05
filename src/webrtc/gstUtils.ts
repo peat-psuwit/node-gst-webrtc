@@ -14,21 +14,31 @@ export const globalPipeline = (() => {
   return pipeline;
 })();
 
+// Node-gtk doesn't handle circular reference well, and GstPromise doesn't have
+// a way to change the changeFunc, so we have to create a change function that
+// doesn't capture the GstPromise itself in a closure to prevent circular reference.
+function getGstPromiseChangeFuncForResolveReject(
+  resolve: (s: Gst.Structure) => void,
+  reject: (reason: any) => void,
+) {
+  return function changeFunc (gstPromise: Gst.Promise) {
+    switch (gstPromise.wait()) {
+      case Gst.PromiseResult.EXPIRED:
+        reject(new Error('GstPromise is expired.'));
+        break;
+      case Gst.PromiseResult.INTERRUPTED:
+        reject(new Error('GstPromise is interrupted.'));
+        break;
+      case Gst.PromiseResult.REPLIED:
+        resolve(gstPromise.getReply());
+    }
+  }
+}
+
 export function withGstPromise(f: (p: Gst.Promise) => void): Promise<Gst.Structure> {
   return new Promise<Gst.Structure>((resolve, reject) => {
-    const gstPromise = Gst.Promise.newWithChangeFunc(() => {
-      switch (gstPromise.wait()) {
-        case Gst.PromiseResult.EXPIRED:
-          reject(new Error('GstPromise is expired.'));
-          break;
-        case Gst.PromiseResult.INTERRUPTED:
-          reject(new Error('GstPromise is interrupted.'));
-          break;
-        case Gst.PromiseResult.REPLIED:
-          resolve(gstPromise.getReply());
-      }
-    });
-
+    const gstPromise = Gst.Promise.newWithChangeFunc(
+      getGstPromiseChangeFuncForResolveReject(resolve, reject));
     f(gstPromise);
   });
 }
