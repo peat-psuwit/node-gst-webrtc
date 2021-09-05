@@ -346,12 +346,12 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
   close(): void {
     this._closedRequested = true;
 
-    GLib.idleAdd(GLib.PRIORITY_DEFAULT, () => {
+    setTimeout(() => {
       globalPipeline.remove(this._webrtcbin);
       this._webrtcbin.setState(Gst.State.NULL);
 
       return false;
-    });
+    }, 0 /* ms */);
   }
 
   async createOffer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit> {
