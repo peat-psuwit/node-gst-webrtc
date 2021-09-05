@@ -20,25 +20,36 @@ class GstRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
   // There's no GIR definition for GstWebRTCDataChannel, for some reason.
   private _gstdatachannel: GObject.Object;
   private _binaryType: 'blob' | 'arraybuffer' = 'blob';
+  private _glibConnectIds: number[];
 
   constructor(gstdatachannel: GObject.Object) {
     super();
 
     this._gstdatachannel = gstdatachannel;
-    gstdatachannel.connect('on-buffered-amount-low', this._handleBufferedAmountLow);
-    gstdatachannel.connect('on-close', this._handleClose);
-    gstdatachannel.connect('on-error', this._handleError);
-    gstdatachannel.connect('on-message-data', this._handleMessageData);
-    gstdatachannel.connect('on-message-string', this._handleMessageString);
-    gstdatachannel.connect('on-open', this._handleOpen);
+    this._glibConnectIds = [
+      gstdatachannel.connect('on-buffered-amount-low', this._handleBufferedAmountLow),
+      gstdatachannel.connect('on-close', this._handleClose),
+      gstdatachannel.connect('on-error', this._handleError),
+      gstdatachannel.connect('on-message-data', this._handleMessageData),
+      gstdatachannel.connect('on-message-string', this._handleMessageString),
+      gstdatachannel.connect('on-open', this._handleOpen),
+    ]
   }
 
   private _handleBufferedAmountLow = () => {
     this.dispatchEvent({ type: 'bufferedamountlow' });
   }
 
+  _disconnectGlibSignals() {
+    for (let id of this._glibConnectIds) {
+      this._gstdatachannel.disconnect(id);
+    }
+  }
+
   private _handleClose = () => {
     this.dispatchEvent({ type: 'close' });
+
+    this._disconnectGlibSignals();
   }
 
   private _handleError = (error: GLib.Error) => {

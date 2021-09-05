@@ -63,6 +63,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
   private _webrtcbin: Gst.Element;
   private _conf: GstRTCConfiguration;
   private _closedRequested = false;
+  private _glibConnectIds: number[];
 
   // We need a Map here because if e.g. the 'on-data-channel' signal comes up
   // after createDataChannel() is called, we want to make sure that we put
@@ -85,9 +86,11 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
 
     this._addIceServers();
 
-    this._webrtcbin.connect('on-negotiation-needed', this._handleNegotiationNeeded);
-    this._webrtcbin.connect('on-ice-candidate', this._handleIceCandidate);
-    this._webrtcbin.connect('on-data-channel', this._handleDataChannel);
+    this._glibConnectIds = [
+      this._webrtcbin.connect('on-negotiation-needed', this._handleNegotiationNeeded),
+      this._webrtcbin.connect('on-ice-candidate', this._handleIceCandidate),
+      this._webrtcbin.connect('on-data-channel', this._handleDataChannel),
+    ];
     // TODO: connect to more signals
 
     globalPipeline.add(this._webrtcbin);
@@ -349,6 +352,17 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
     setTimeout(() => {
       globalPipeline.remove(this._webrtcbin);
       this._webrtcbin.setState(Gst.State.NULL);
+
+      for (let [, ch] of this._dataChannels) {
+        ch._disconnectGlibSignals();
+      }
+      this._dataChannels.clear();
+
+      // node-gtk doesn't handle cyclic reference well, so we have to break
+      // the cycle for it.
+      for (let id of this._glibConnectIds) {
+        this._webrtcbin.disconnect(id);
+      }
 
       return false;
     }, 0 /* ms */);
