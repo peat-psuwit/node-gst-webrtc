@@ -63,6 +63,7 @@ function newRound() {
       process.exit(0);
     } else if (number > 64) {
       console.log('Please enter a number lower or equal than 64.');
+      newRound();
     } else {
       console.log(`Going to send ${number} megs of data over WebRTC.`);
       createConnection(number)
