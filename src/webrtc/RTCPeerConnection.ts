@@ -7,7 +7,7 @@ import {
   GstWebRTC,
   globalPipeline,
   withGstPromise
-} from './gstUtils';
+} from '../gstUtils';
 
 import GstRTCDataChannel from './RTCDataChannel';
 import GstRTCIceCandidate from './RTCIceCandidate';

@@ -6,7 +6,7 @@ import {
 
 import {
   GLib, GObject, GstWebRTC,
-} from './gstUtils';
+} from '../gstUtils';
 
 type TEvents = {
   "bufferedamountlow": Event;
