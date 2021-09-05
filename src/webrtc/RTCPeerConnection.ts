@@ -388,9 +388,11 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
 
     // We want to know when it's closed, so that we can drop its reference
     // from our map.
-    jsdatachannel.addEventListener('close', () => {
+    const closeHandler = () => {
       this._dataChannels.delete(gstdatachannel);
-    });
+      jsdatachannel.removeEventListener('close', closeHandler);
+    }
+    jsdatachannel.addEventListener('close', closeHandler);
 
     return jsdatachannel;
   }
