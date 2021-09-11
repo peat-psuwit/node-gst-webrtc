@@ -3,7 +3,7 @@ import * as gi from 'node-gtk';
 const GstWebRTC = gi.require('GstWebRTC', '1.0');
 const GstSDP_ = gi.require('GstSdp', '1.0');
 
-class GstRTCSessionDescription implements RTCSessionDescription {
+class NgwRTCSessionDescription implements RTCSessionDescription {
   readonly sdp: string;
   readonly type: RTCSdpType;
 
@@ -40,9 +40,9 @@ class GstRTCSessionDescription implements RTCSessionDescription {
   }
 
   static fromGstDesc(desc: GstWebRTC.WebRTCSessionDescription) {
-    return new GstRTCSessionDescription({
+    return new NgwRTCSessionDescription({
       sdp: desc.sdp.asText(),
-      type: GstRTCSessionDescription.sdpTypeToString(desc.type),
+      type: NgwRTCSessionDescription.sdpTypeToString(desc.type),
     });
   }
 
@@ -53,7 +53,7 @@ class GstRTCSessionDescription implements RTCSessionDescription {
     }
 
     return GstWebRTC.WebRTCSessionDescription.new(
-      GstRTCSessionDescription.sdpTypeFromString(this.type),
+      NgwRTCSessionDescription.sdpTypeFromString(this.type),
       sdp
     );
   }
@@ -66,4 +66,4 @@ class GstRTCSessionDescription implements RTCSessionDescription {
   }
 }
 
-export default GstRTCSessionDescription
+export default NgwRTCSessionDescription

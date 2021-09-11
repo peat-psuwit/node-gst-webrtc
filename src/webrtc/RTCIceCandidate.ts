@@ -1,4 +1,4 @@
-class GstRTCIceCandidate implements RTCIceCandidate {
+class NgwRTCIceCandidate implements RTCIceCandidate {
   readonly candidate: string;
   readonly sdpMLineIndex: number | null;
   readonly sdpMid: string | null;
@@ -32,4 +32,4 @@ class GstRTCIceCandidate implements RTCIceCandidate {
   get type(): RTCIceCandidateType | null { return null; }
 }
 
-export default GstRTCIceCandidate;
+export default NgwRTCIceCandidate;

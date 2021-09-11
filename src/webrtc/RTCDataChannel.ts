@@ -16,7 +16,7 @@ type TEvents = {
   "open": Event;
 };
 
-class GstRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> implements RTCDataChannel {
+class NgwRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> implements RTCDataChannel {
   // There's no GIR definition for GstWebRTCDataChannel, for some reason.
   private _gstdatachannel: GObject.Object;
   private _binaryType: 'blob' | 'arraybuffer' = 'blob';
@@ -233,4 +233,4 @@ class GstRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
   // END generated event getters & setters
 }
 
-export default GstRTCDataChannel;
+export default NgwRTCDataChannel;

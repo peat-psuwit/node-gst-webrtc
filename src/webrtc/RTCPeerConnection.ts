@@ -9,16 +9,16 @@ import {
   withGstPromise
 } from '../gstUtils';
 
-import GstRTCDataChannel from './RTCDataChannel';
-import GstRTCIceCandidate from './RTCIceCandidate';
-import GstRTCSessionDescription from './RTCSessionDescription';
+import NgwRTCDataChannel from './RTCDataChannel';
+import NgwRTCIceCandidate from './RTCIceCandidate';
+import NgwRTCSessionDescription from './RTCSessionDescription';
 
 // Specify options actually used, and thus will have defaults.
-interface GstRTCConfiguration extends RTCConfiguration {
+interface NgwRTCConfiguration extends RTCConfiguration {
   iceServers: RTCIceServer[];
 }
 
-function fillConfigDefault(inConf?: RTCConfiguration | null): GstRTCConfiguration {
+function fillConfigDefault(inConf?: RTCConfiguration | null): NgwRTCConfiguration {
   const defaultIceServer: RTCIceServer = {
     urls: ['stun:stun.l.google.com:19302']
   };
@@ -59,9 +59,9 @@ function validateHostPort(hostPort: string) {
   }
 }
 
-class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'> implements RTCPeerConnection {
+class NgwRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'> implements RTCPeerConnection {
   private _webrtcbin: Gst.Element;
-  private _conf: GstRTCConfiguration;
+  private _conf: NgwRTCConfiguration;
   private _closedRequested = false;
   private _glibConnectIds: number[];
 
@@ -72,7 +72,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
   // sooner at all, as the JS wrapper need to hold the backing object, and if
   // the wrapper is reachable via the WeakMap, so does the backing object and
   // then WeakMap won't consider GC the wrapper.
-  private _dataChannels: Map<GObject.Object, GstRTCDataChannel> = new Map();
+  private _dataChannels: Map<GObject.Object, NgwRTCDataChannel> = new Map();
 
   constructor(conf?: RTCConfiguration | null) {
     super();
@@ -198,7 +198,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
   }
 
   private _handleIceCandidate = (sdpMLineIndex: number, candidate: string) => {
-    const candidateObj = new GstRTCIceCandidate({ sdpMLineIndex, candidate });
+    const candidateObj = new NgwRTCIceCandidate({ sdpMLineIndex, candidate });
     this.dispatchEvent<'icecandidate'>({ type: 'icecandidate', candidate: candidateObj });
   }
 
@@ -268,7 +268,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
     const sdp: GstWebRTC.WebRTCSessionDescription | null = (<any>this._webrtcbin)[prop]
     if (!sdp)
       return null;
-    return GstRTCSessionDescription.fromGstDesc(sdp);
+    return NgwRTCSessionDescription.fromGstDesc(sdp);
   }
 
   get localDescription() {
@@ -379,7 +379,7 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
     const sdp: GstWebRTC.WebRTCSessionDescription = <any>gvalue.getBoxed();
     gvalue.unset();
 
-    return GstRTCSessionDescription.fromGstDesc(sdp);
+    return NgwRTCSessionDescription.fromGstDesc(sdp);
   }
 
   async createAnswer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit> {
@@ -393,11 +393,11 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
     const sdp: GstWebRTC.WebRTCSessionDescription = <any>gvalue.getBoxed();
     gvalue.unset();
 
-    return GstRTCSessionDescription.fromGstDesc(sdp);
+    return NgwRTCSessionDescription.fromGstDesc(sdp);
   }
 
   private _createJsDataChannel(gstdatachannel: GObject.Object) {
-    const jsdatachannel = new GstRTCDataChannel(gstdatachannel);
+    const jsdatachannel = new NgwRTCDataChannel(gstdatachannel);
     this._dataChannels.set(gstdatachannel, jsdatachannel);
 
     // We want to know when it's closed, so that we can drop its reference
@@ -542,14 +542,14 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
   }
 
   async setLocalDescription(description: RTCSessionDescriptionInit): Promise<void> {
-    const gstDesc = new GstRTCSessionDescription(description).toGstDesc();
+    const gstDesc = new NgwRTCSessionDescription(description).toGstDesc();
     await withGstPromise((promise) => {
       this._webrtcbin.emit('set-local-description', gstDesc, promise);
     });
   }
 
   async setRemoteDescription(description: RTCSessionDescriptionInit): Promise<void> {
-    const gstDesc = new GstRTCSessionDescription(description).toGstDesc();
+    const gstDesc = new NgwRTCSessionDescription(description).toGstDesc();
     await withGstPromise((promise) => {
       this._webrtcbin.emit('set-remote-description', gstDesc, promise);
     });
@@ -622,4 +622,4 @@ class GstRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
   // END generated event getters & setters
 }
 
-export default GstRTCPeerConnection;
+export default NgwRTCPeerConnection;
