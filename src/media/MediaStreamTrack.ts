@@ -19,7 +19,8 @@ export default class NgwMediaStreamTrack
                 implements MediaStreamTrack
 {
   private _enabled: boolean;
-  private _ended: boolean;
+  // For the benefit of MediaStream.
+  _ended: boolean;
 
   private _input: NgwMediaStreamTrackInput;
 
