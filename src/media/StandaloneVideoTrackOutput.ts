@@ -26,8 +26,6 @@ class StandaloneVideoTrackOutput implements NgwMediaStreamTrackOutput {
       throw new Error("Where is my queue's pad?");
     this._sinkPad = Gst.GhostPad.new('sink', queueSinkPad);
     this._bin.addPad(this._sinkPad);
-
-    globalPipeline.add(this._bin);
   }
 
   get track() {
