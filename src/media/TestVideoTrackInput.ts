@@ -2,16 +2,19 @@ import { Gst } from '../gstUtils';
 
 import NgwBaseTrackInput from './BaseTrackInput';
 
+let idCounter = 0;
+
 class NgwTestVideoTrackInput extends NgwBaseTrackInput {
   readonly kind: 'video';
   readonly label: string;
 
   constructor() {
-    const source = Gst.ElementFactory.make('videotestsrc');
+    const name = `TestVideoTrackInput${idCounter++}`;
+    const source = Gst.ElementFactory.make('videotestsrc', `${name}_videotestsrc`);
     if (!source)
       throw new Error("Can't make videotestsrc. Broken Gst installation?");
 
-    super(source);
+    super(source, name);
 
     this.kind = 'video';
     this.label = 'videotestsrc Gstreamer element';

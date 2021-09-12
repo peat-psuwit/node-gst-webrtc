@@ -23,8 +23,10 @@ abstract class NgwBaseTrackInput<TSource extends Gst.Element = Gst.Element>
   protected _source: TSource;
   protected _tee: Gst.Element;
 
-  constructor(source: TSource) {
-    const tee = Gst.ElementFactory.make('tee');
+  protected _name: string;
+
+  constructor(source: TSource, name: string) {
+    const tee = Gst.ElementFactory.make('tee', `${name}_tee`);
     if (!tee)
       throw new Error("Can't create tee element. Broken Gst installation?");
 
@@ -41,6 +43,7 @@ abstract class NgwBaseTrackInput<TSource extends Gst.Element = Gst.Element>
 
     this._source = source;
     this._tee = tee;
+    this._name = name;
   }
 
   get muted() {

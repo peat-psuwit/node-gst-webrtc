@@ -4,12 +4,16 @@ import NgwMediaStreamTrack, {
   NgwMediaStreamTrackOutput,
 } from './MediaStreamTrack';
 
+let idCounter = 0;
+
 /* Display 'video' MediaStreamTrack using autovideosink. */
 
 class StandaloneVideoTrackOutput implements NgwMediaStreamTrackOutput {
   private _track: NgwMediaStreamTrack | null = null;
   private _bin: Gst.Bin;
   private _sinkPad: Gst.Pad;
+
+  private _name = `StandaloneVideoTrackOutput${idCounter++}`;
 
   constructor() {
     const bin = Gst.parseBinFromDescription(
@@ -20,6 +24,7 @@ class StandaloneVideoTrackOutput implements NgwMediaStreamTrackOutput {
     }
 
     this._bin = <Gst.Bin>bin;
+    this._bin.name = `${this._name}_sinkBin`;
 
     const queueSinkPad = this._bin.findUnlinkedPad(Gst.PadDirection.SINK);
     if (!queueSinkPad)

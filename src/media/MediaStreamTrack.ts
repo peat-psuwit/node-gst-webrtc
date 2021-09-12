@@ -34,6 +34,7 @@ export default class NgwMediaStreamTrack
   private _outputsAndPads: Map<NgwMediaStreamTrackOutput, Gst.Pad> = new Map();
 
   readonly id = GLib.uuidStringRandom();
+  private _name = `MediaStreamTrack_${this.id.substr(0, 8)}`;
 
   constructor(input: NgwMediaStreamTrackInput);
   constructor(otherTrack: NgwMediaStreamTrack, cookie: typeof CLONE_COOKIE);
@@ -57,8 +58,8 @@ export default class NgwMediaStreamTrack
       this._input = inputOrTrack;
     }
 
-    const queue = Gst.ElementFactory.make('queue');
-    const tee = Gst.ElementFactory.make('tee');
+    const queue = Gst.ElementFactory.make('queue', `${this._name}_queue`);
+    const tee = Gst.ElementFactory.make('tee', `${this._name}_tee`);
 
     if (!queue || !tee)
       throw new Error("Can't make necessary elements. Broken Gst installation?");
