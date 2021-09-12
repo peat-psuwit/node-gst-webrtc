@@ -67,10 +67,10 @@ export default class NgwMediaStreamTrack
     // This simplify things.
     (<any>tee).allowNotLinked = true;
 
-    queue.link(tee);
-
     globalPipeline.add(queue);
     globalPipeline.add(tee);
+
+    queue.link(tee);
 
     queue.syncStateWithParent();
     tee.syncStateWithParent();

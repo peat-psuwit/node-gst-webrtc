@@ -59,12 +59,13 @@ class StandaloneVideoTrackOutput implements NgwMediaStreamTrackOutput {
     }
 
     if (track) {
-      track.connect(this);
-    }
+      if (!wasConnected)
+        globalPipeline.add(this._bin);
 
-    if (track && !wasConnected) {
-      globalPipeline.add(this._bin);
-      this._bin.syncStateWithParent();
+      track.connect(this);
+
+      if (!wasConnected)
+        this._bin.syncStateWithParent();
     }
   }
 
