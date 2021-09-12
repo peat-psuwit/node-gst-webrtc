@@ -4,7 +4,11 @@ import {
     setEventAttributeValue
 } from 'event-target-shim';
 
-import { GLib } from '../gstUtils';
+import {
+  GLib,
+  Gst,
+  globalPipeline,
+} from '../gstUtils';
 
 type TEvents = {
     "ended": Event;
@@ -23,6 +27,11 @@ export default class NgwMediaStreamTrack
   _ended: boolean;
 
   private _input: NgwMediaStreamTrackInput;
+
+  private _queue: Gst.Element;
+  private _tee: Gst.Element;
+
+  private _outputsAndPads: Map<NgwMediaStreamTrackOutput, Gst.Pad> = new Map();
 
   readonly id = GLib.uuidStringRandom();
 
@@ -47,6 +56,28 @@ export default class NgwMediaStreamTrack
 
       this._input = inputOrTrack;
     }
+
+    const queue = Gst.ElementFactory.make('queue');
+    const tee = Gst.ElementFactory.make('tee');
+
+    if (!queue || !tee)
+      throw new Error("Can't make necessary elements. Broken Gst installation?");
+
+    // This simplify things.
+    (<any>tee).allowNotLinked = true;
+
+    queue.link(tee);
+
+    globalPipeline.add(queue);
+    globalPipeline.add(tee);
+
+    queue.syncStateWithParent();
+    tee.syncStateWithParent();
+
+    this._queue = queue;
+    this._tee = tee;
+
+    this._input.connect(this);
   }
 
   get kind() {
@@ -133,12 +164,59 @@ export default class NgwMediaStreamTrack
   }
 
   // END generated event getters & setters
+
+  // Following is interface for inputs.
+  getSinkPad(): Gst.Pad {
+    // We're sure this pad exists within 'queue'.
+    return <Gst.Pad>this._queue.getStaticPad('sink');
+  }
+
+  // Following is interface for outputs.
+  connect(output: NgwMediaStreamTrackOutput) {
+    const srcPad = this._tee.getRequestPad('src_%u');
+    if (!srcPad)
+      throw new Error('Request new pad failed. What the hell?');
+
+    const sinkPad = output.getSinkPad();
+
+    srcPad.link(sinkPad);
+
+    this._outputsAndPads.set(output, srcPad);
+  }
+
+  disconnect(output: NgwMediaStreamTrackOutput) {
+    let srcPad = this._outputsAndPads.get(output);
+    if (!srcPad) {
+      // TODO: is this necessary?
+      console.warn('NgwBaseTrackInput: disconnect a non-connecting output?');
+      return;
+    }
+
+    // Block the pad, to avoid unneccessary error.
+    // TODO: is this needed, given we already set allowNotLinked?
+    srcPad.addProbe(
+      Gst.PadProbeType.BLOCK_DOWNSTREAM,
+      () => { return Gst.PadProbeReturn.OK; });
+
+    const sinkPad = output.getSinkPad();
+    srcPad.unlink(sinkPad);
+
+    this._tee.releaseRequestPad(srcPad);
+    this._outputsAndPads.delete(output);
+  }
 }
 
 export interface NgwMediaStreamTrackInput {
-  readonly kind: string;
+  readonly kind: 'audio' | 'video';
   readonly label: string;
   readonly muted: boolean;
+
+  connect(track: NgwMediaStreamTrack): void;
+  disconnect(track: NgwMediaStreamTrack): void;
+}
+
+export interface NgwMediaStreamTrackOutput {
+  getSinkPad(): Gst.Pad;
 }
 
 class OverconstrainedError extends Error {
