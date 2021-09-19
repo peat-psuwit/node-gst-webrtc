@@ -14,6 +14,8 @@ class NgwTestVideoTrackInput extends NgwBaseTrackInput {
     if (!source)
       throw new Error("Can't make videotestsrc. Broken Gst installation?");
 
+    (<any>source).isLive = true;
+
     super(source, name);
 
     this.kind = 'video';
