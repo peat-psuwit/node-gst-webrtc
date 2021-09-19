@@ -25,6 +25,7 @@ export default class NgwMediaStreamTrack
   private _enabled: boolean;
   // For the benefit of MediaStream.
   _ended: boolean;
+  private _contentHint = '';
 
   private _input: NgwMediaStreamTrackInput;
 
@@ -87,6 +88,16 @@ export default class NgwMediaStreamTrack
 
   get label() {
     return this._input.label;
+  }
+
+  get contentHint() {
+    return this._contentHint;
+  }
+
+  set contentHint(contentHint: string) {
+    // TODO: maybe do the validation on the value.
+    this._contentHint = contentHint;
+    // TODO: maybe do some applicable adjustment.
   }
 
   get enabled() {
