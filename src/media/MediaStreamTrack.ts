@@ -207,8 +207,8 @@ export default class NgwMediaStreamTrack
     // Block the pad, to avoid unneccessary error.
     // TODO: is this needed, given we already set allowNotLinked?
     srcPad.addProbe(
-      Gst.PadProbeType.BLOCK_DOWNSTREAM,
-      () => { return Gst.PadProbeReturn.OK; });
+      Gst.PadProbeType.DATA_DOWNSTREAM,
+      () => { return Gst.PadProbeReturn.DROP; });
 
     const sinkPad = output.getSinkPad();
     srcPad.unlink(sinkPad);

@@ -82,8 +82,8 @@ abstract class NgwBaseTrackInput<TSource extends Gst.Element = Gst.Element>
     // Block the pad, to avoid unneccessary error.
     // TODO: is this needed, given we already set allowNotLinked?
     srcPad.addProbe(
-      Gst.PadProbeType.BLOCK_DOWNSTREAM,
-      () => { return Gst.PadProbeReturn.OK; });
+      Gst.PadProbeType.DATA_DOWNSTREAM,
+      () => { return Gst.PadProbeReturn.DROP; });
 
     const sinkPad = track.getSinkPad();
     srcPad.unlink(sinkPad);
