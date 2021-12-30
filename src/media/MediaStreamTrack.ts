@@ -10,6 +10,8 @@ import {
   globalPipeline,
 } from '../gstUtils';
 
+import NgwTeeMultiplexer from './TeeMultiplexer';
+
 type TEvents = {
     "ended": Event;
     "mute": Event;
@@ -30,9 +32,7 @@ export default class NgwMediaStreamTrack
   private _input: NgwMediaStreamTrackInput;
 
   private _queue: Gst.Element;
-  private _tee: Gst.Element;
-
-  private _outputsAndPads: Map<NgwMediaStreamTrackOutput, Gst.Pad> = new Map();
+  private _teeMux: NgwTeeMultiplexer;
 
   readonly id = GLib.uuidStringRandom();
   private _name = `MediaStreamTrack_${this.id.substr(0, 8)}`;
@@ -60,24 +60,15 @@ export default class NgwMediaStreamTrack
     }
 
     const queue = Gst.ElementFactory.make('queue', `${this._name}_queue`);
-    const tee = Gst.ElementFactory.make('tee', `${this._name}_tee`);
 
-    if (!queue || !tee)
+    if (!queue)
       throw new Error("Can't make necessary elements. Broken Gst installation?");
 
-    // This simplify things.
-    (<any>tee).allowNotLinked = true;
-
     globalPipeline.add(queue);
-    globalPipeline.add(tee);
-
-    queue.link(tee);
-
     queue.syncStateWithParent();
-    tee.syncStateWithParent();
-
     this._queue = queue;
-    this._tee = tee;
+
+    this._teeMux = new NgwTeeMultiplexer(globalPipeline, queue, `${this._name}_tee`);
 
     this._input.connect(this);
   }
@@ -185,36 +176,17 @@ export default class NgwMediaStreamTrack
 
   // Following is interface for outputs.
   connect(output: NgwMediaStreamTrackOutput) {
-    const srcPad = this._tee.getRequestPad('src_%u');
-    if (!srcPad)
-      throw new Error('Request new pad failed. What the hell?');
-
     const sinkPad = output.getSinkPad();
-
-    srcPad.link(sinkPad);
-
-    this._outputsAndPads.set(output, srcPad);
+    this._teeMux.addPeer(sinkPad);
   }
 
   disconnect(output: NgwMediaStreamTrackOutput) {
-    let srcPad = this._outputsAndPads.get(output);
-    if (!srcPad) {
+    const sinkPad = output.getSinkPad();
+    if (!this._teeMux.removePeer(sinkPad)) {
       // TODO: is this necessary?
       console.warn('NgwBaseTrackInput: disconnect a non-connecting output?');
       return;
     }
-
-    // Block the pad, to avoid unneccessary error.
-    // TODO: is this needed, given we already set allowNotLinked?
-    srcPad.addProbe(
-      Gst.PadProbeType.DATA_DOWNSTREAM,
-      () => { return Gst.PadProbeReturn.DROP; });
-
-    const sinkPad = output.getSinkPad();
-    srcPad.unlink(sinkPad);
-
-    this._tee.releaseRequestPad(srcPad);
-    this._outputsAndPads.delete(output);
   }
 }
 
