@@ -8,13 +8,14 @@ class NgwTestVideoTrackInput extends NgwBaseTrackInput {
   readonly kind: 'video';
   readonly label: string;
 
-  constructor() {
+  constructor(pattern: number = 0 /* smpte */) {
     const name = `TestVideoTrackInput${idCounter++}`;
     const source = Gst.ElementFactory.make('videotestsrc', `${name}_videotestsrc`);
     if (!source)
       throw new Error("Can't make videotestsrc. Broken Gst installation?");
 
     (<any>source).isLive = true;
+    (<any>source).pattern = pattern;
 
     super(source, name);
 

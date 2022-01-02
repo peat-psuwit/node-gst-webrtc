@@ -17,8 +17,11 @@ Gst.init(null);
 
 const loop = GLib.MainLoop.new(null, false);
 
-let trackInput = new TestVideoTrackInput();
+let trackInput = new TestVideoTrackInput(0 /* pattern = ball */);
 let track = new MediaStreamTrack(trackInput);
+
+let trackInput2 = new TestVideoTrackInput(18 /* pattern = smpte */);
+let track2 = new MediaStreamTrack(trackInput2);
 
 let trackOutput = new StandaloneVideoTrackOutput();
 trackOutput.track = track;
@@ -31,6 +34,10 @@ globalThis.trackInput = trackInput;
 globalThis.track = track;
 // @ts-ignore
 globalThis.trackOutput = trackOutput;
+// @ts-ignore
+globalThis.trackInput2 = trackInput2;
+// @ts-ignore
+globalThis.track2 = track2;
 // @ts-ignore
 globalThis.globalPipeline = globalPipeline;
 
@@ -50,5 +57,18 @@ GLib.unixSignalAdd(GLib.PRIORITY_DEFAULT, os.constants.signals.SIGHUP, () => { q
 
 // This allows debugger to break from time to time.
 setTimeout(() => {}, 1000);
+
+function next() {
+  trackOutput.track =
+    trackOutput.track == track ? track2
+    : trackOutput.track == track2 ? null
+    : track;
+  console.log('Next!');
+}
+
+//@ts-ignore
+globalThis.next = next;
+
+setInterval(next, 2000);
 
 loop.run();
