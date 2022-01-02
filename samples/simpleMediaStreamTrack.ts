@@ -6,7 +6,6 @@ const GLib = gi.require('GLib', '2.0');
 const Gst = gi.require('Gst', '1.0');
 
 // TODO: expose public interfaces. Well, not all of them.
-import { globalPipeline } from '../src/gstUtils';
 
 import MediaStreamTrack from '../src/media/MediaStreamTrack';
 import TestVideoTrackInput from '../src/media/TestVideoTrackInput';
@@ -38,16 +37,10 @@ globalThis.trackOutput = trackOutput;
 globalThis.trackInput2 = trackInput2;
 // @ts-ignore
 globalThis.track2 = track2;
-// @ts-ignore
-globalThis.globalPipeline = globalPipeline;
 
 function quit(ret: number) {
   console.log('Quitting...');
 
-  Gst.debugBinToDotFile(globalPipeline, Gst.DebugGraphDetails.ALL, 'simpleTrack_quit');
-
-  globalPipeline.setState(Gst.State.NULL);
-  globalPipeline.getState(Gst.SECOND);
   process.exit(ret);
 }
 

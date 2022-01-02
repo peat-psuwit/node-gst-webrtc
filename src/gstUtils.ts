@@ -7,12 +7,8 @@ export const Gst = gi.require('Gst', '1.0');
 export const GstWebRTC = gi.require('GstWebRTC', '1.0');
 export const GstSDP = gi.require('GstSdp', '1.0');
 
-export const globalPipeline = (() => {
-  Gst.init(null);
-  const pipeline = Gst.Pipeline.new('webrtc-global-pipeline');
-  pipeline.setState(Gst.State.PLAYING);
-  return pipeline;
-})();
+// Coutersy initialization
+Gst.init(null);
 
 // We need this because node-gtk exposes guint64 as a double, but it can't handle
 // UINT64_MAX.
