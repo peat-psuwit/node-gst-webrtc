@@ -1,4 +1,4 @@
-import { Gst, globalPipeline } from '../gstUtils';
+import { Gst, GST_CLOCK_TIME_NONE } from '../gstUtils';
 
 import NgwTeeMultiplexer from './TeeMultiplexer';
 import NgwMediaStreamTrack, {
@@ -21,19 +21,30 @@ abstract class NgwBaseTrackInput<TSource extends Gst.Element = Gst.Element>
 
   private _tracks: Set<NgwMediaStreamTrack> = new Set();
 
+  protected _pipeline: Gst.Pipeline;
+
   protected _source: TSource;
   protected _teeMux: NgwTeeMultiplexer;
 
   protected _name: string;
 
-  constructor(source: TSource, name: string) {
-    globalPipeline.add(source);
-    source.syncStateWithParent();
-    
+  private _usageCount = 0;
 
+  constructor(source: TSource, name: string) {
+    const pipeline = new Gst.Pipeline();
+    pipeline.name = name;
+
+    pipeline.add(source);
+    this._teeMux = new NgwTeeMultiplexer(pipeline, source, `${name}_tee`);
+
+    // Make sure to have the same clock.
+    pipeline.useClock(Gst.SystemClock.obtain());
+    // Keep the pipeline ready, until something connects to it.
+    pipeline.setState(Gst.State.READY);
+
+    this._pipeline = pipeline;
     this._source = source;
     this._name = name;
-    this._teeMux = new NgwTeeMultiplexer(globalPipeline, source, `${name}_tee`);
   }
 
   get muted() {
@@ -62,6 +73,45 @@ abstract class NgwBaseTrackInput<TSource extends Gst.Element = Gst.Element>
     }
 
     this._teeMux.removePeer(track.getSinkPad());
+  }
+
+  getPipeline() {
+    return this._pipeline;
+  }
+
+  // Called when one of the tracks has a client
+  start() {
+    this._usageCount++;
+
+    if (this._usageCount != 1) {
+      // We're already running.
+      return;
+    }
+
+    /*
+     * Make sure that everything runs on the same base time.
+     * Theoretically, we can distribute our base time to our clients.
+     * In practice, we'll hit the MxN problem which, while there's
+     * probably a solution, I'm not bothered to find. Just set them
+     * all to 0;
+     */
+    this._pipeline.setStartTime(<any>GST_CLOCK_TIME_NONE);
+    this._pipeline.setBaseTime(0);
+
+    this._pipeline.setState(Gst.State.PLAYING);
+  }
+
+  stop() {
+    this._usageCount--;
+
+    if (this._usageCount != 0) {
+      // Nothing to do. Someone else still uses it.
+      return;
+    }
+
+    // Nothing uses this pipeline now. Set it to READY so that we use less
+    // resource, but are still ready for the new clients.
+    this._pipeline.setState(Gst.State.READY);
   }
 }
 

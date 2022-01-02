@@ -14,6 +14,10 @@ export const globalPipeline = (() => {
   return pipeline;
 })();
 
+// We need this because node-gtk exposes guint64 as a double, but it can't handle
+// UINT64_MAX.
+export const GST_CLOCK_TIME_NONE = BigInt.asUintN(/* width */ 64, -1n);
+
 // Node-gtk doesn't handle circular reference well, and GstPromise doesn't have
 // a way to change the changeFunc, so we have to create a change function that
 // doesn't capture the GstPromise itself in a closure to prevent circular reference.
