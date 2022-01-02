@@ -5,7 +5,7 @@ import {
   GObject,
   Gst,
   GstWebRTC,
-  globalPipeline,
+  GST_CLOCK_TIME_NONE,
   withGstPromise
 } from '../gstUtils';
 
@@ -59,7 +59,10 @@ function validateHostPort(hostPort: string) {
   }
 }
 
+let globalCounter = 0;
+
 class NgwRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'> implements RTCPeerConnection {
+  private _pipeline: Gst.Pipeline;
   private _webrtcbin: Gst.Element;
   private _conf: NgwRTCConfiguration;
   private _closedRequested = false;
@@ -77,10 +80,15 @@ class NgwRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
   constructor(conf?: RTCConfiguration | null) {
     super();
 
+    const pipeline = new Gst.Pipeline();
+    pipeline.name = `NgwRTCPeerConnection${globalCounter}`;
+    globalCounter++;
+
     const bin = Gst.ElementFactory.make('webrtcbin');
     if (!bin) {
       throw new Error('webrtcbin is not installed!');
     }
+    this._pipeline = pipeline;
     this._webrtcbin = bin;
     this._conf = fillConfigDefault(conf);
 
@@ -93,8 +101,19 @@ class NgwRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
     ];
     // TODO: connect to more signals
 
-    globalPipeline.add(this._webrtcbin);
-    this._webrtcbin.syncStateWithParent();
+    pipeline.useClock(Gst.SystemClock.obtain());
+    pipeline.add(this._webrtcbin);
+    /*
+     * Make sure that everything runs on the same base time.
+     * Theoretically, we can distribute our base time to our clients.
+     * In practice, we'll hit the MxN problem which, while there's
+     * probably a solution, I'm not bothered to find. Just set them
+     * all to 0;
+     */
+    pipeline.setStartTime(<any>GST_CLOCK_TIME_NONE);
+    pipeline.setBaseTime(0);
+    // TODO: make state transition more granular
+    pipeline.setState(Gst.State.PLAYING);
   }
 
   private _addIceServers() {
@@ -350,8 +369,7 @@ class NgwRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
     this._closedRequested = true;
 
     setTimeout(() => {
-      globalPipeline.remove(this._webrtcbin);
-      this._webrtcbin.setState(Gst.State.NULL);
+      this._pipeline.setState(Gst.State.NULL);
 
       for (let [, ch] of this._dataChannels) {
         ch._disconnectGlibSignals();
