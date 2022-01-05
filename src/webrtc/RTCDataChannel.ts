@@ -1,3 +1,5 @@
+import { Buffer } from 'buffer';
+
 import {
   EventTarget as EventTargetShim,
   getEventAttributeValue,
@@ -112,8 +114,38 @@ class NgwRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
     }
   }
 
+  /*
+   * Implementing `bufferedAmount` to the spec is tricky. It says that the
+   * increase (due to send()) is instant, but the decrease, if sending happens
+   * in parallel, has to be queued. However, GstWebRTCDataChannel doesn't have
+   * that mechanism until _very_ recently (currently in master), and even then,
+   * it uses g_object_notify() which, due to node-gtk, will block the streaming
+   * thread until we're returned to the event queue.
+   *
+   * What we're doing here is, whenever bufferedAmount is read or send() is
+   * called, the value from Gst side is read once and then cached. Then, a
+   * setTimeout() callback is used to reset the state so that, when we yield
+   * back to the event loop, the next get() bufferedAmount gets the latest
+   * amount.
+   */
+  private _bufferedAmount: number = -1;
+
+  private _resetBufferedAmount = () => {
+    this._bufferedAmount = -1;
+  }
+
+  private _cacheBufferedAmount() {
+    if (this._bufferedAmount === -1) {
+      // This shouldn't go below 0.
+      this._bufferedAmount = (<any>this._gstdatachannel).bufferedAmount;
+
+      setTimeout(this._resetBufferedAmount, 0 /* ms */);
+    }
+  }
+
   get bufferedAmount() {
-    return (<any>this._gstdatachannel).bufferedAmount;
+    this._cacheBufferedAmount();
+    return this._bufferedAmount;
   }
 
   get bufferedAmountLowThreshold() {
@@ -170,8 +202,12 @@ class NgwRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
   }
 
   send(data: string | Blob | ArrayBuffer | ArrayBufferView) {
+    this._cacheBufferedAmount();
+
     if (typeof data === 'string') {
-      return this._gstdatachannel.emit('send-string', data);
+      this._gstdatachannel.emit('send-string', data);
+      this._bufferedAmount += Buffer.byteLength(data, 'utf-8');
+      return;
     }
 
     let arrayBuffer: ArrayBuffer;
@@ -188,6 +224,7 @@ class NgwRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
 
     const gbytes = new GLib.Bytes(arrayView);
     this._gstdatachannel.emit('send-data', gbytes);
+    this._bufferedAmount += arrayView.byteLength;
   }
 
   close() {
