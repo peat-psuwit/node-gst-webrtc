@@ -159,10 +159,10 @@ class NgwRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
 
   private _cacheBufferedAmount() {
     if (this._bufferedAmount === -1) {
+      setTimeout(this._resetBufferedAmount, 0 /* ms */);
+
       // This shouldn't go below 0.
       this._bufferedAmount = (<any>this._gstdatachannel).bufferedAmount;
-
-      setTimeout(this._resetBufferedAmount, 0 /* ms */);
     }
   }
 
