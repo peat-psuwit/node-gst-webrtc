@@ -38,8 +38,31 @@ class NgwRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
     ]
   }
 
-  private _handleBufferedAmountLow = () => {
+  /*
+   * Becacuse Gst sends data in parallel, we can get on-buffered-amount-low
+   * signal multiple times before the current task yield to the event loop.
+   * So, de-bouce it by using setTimeout(), which should run after all queued,
+   * duplicated signals are handled.
+   */
+
+  private _hasPendingBufferedAmountLow = false;
+
+  private _emitBufferedAmountLow = () => {
+    this._hasPendingBufferedAmountLow = false;
+
+    if (this.bufferedAmount > this.bufferedAmountLowThreshold) {
+      // This is now redundant. Signal should be fired again after we're actually below it.
+      return;
+    }
+
     this.dispatchEvent({ type: 'bufferedamountlow' });
+  }
+
+  private _handleBufferedAmountLow = () => {
+    if (!this._hasPendingBufferedAmountLow) {
+      this._hasPendingBufferedAmountLow = true;
+      setTimeout(this._emitBufferedAmountLow, 0 /* ms */);
+    }
   }
 
   _disconnectGlibSignals() {
