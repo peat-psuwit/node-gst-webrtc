@@ -2,6 +2,7 @@ import { Buffer } from 'buffer';
 
 import { EventTarget as EventTargetShim, getEventAttributeValue, setEventAttributeValue } from 'event-target-shim';
 
+import { resolveImmediate } from '../utils';
 import {
   GLib,
   GObject,
@@ -204,21 +205,27 @@ class NgwRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
     }
   }
 
-  private _handleDataChannel = (gstdatachannel: GObject.Object) => {
+  private _handleDataChannel = async (gstdatachannel: GObject.Object) => {
+    // Here, we must create our JS wrapper first, otherwise we'll miss the
+    // events from Gst side.
     let jsdatachannel = this._dataChannels.get(gstdatachannel);
 
     if (!jsdatachannel)
       jsdatachannel = this._createJsDataChannel(gstdatachannel);
 
+    await resolveImmediate(); // Relief the PC thread.
     this.dispatchEvent({ type: 'datachannel', channel: jsdatachannel });
   }
 
-  private _handleNegotiationNeeded = () => {
+  private _handleNegotiationNeeded = async () => {
+    await resolveImmediate(); // Relief the PC thread.
+
     // There's nothing to be put in the event.
     this.dispatchEvent<'negotiationneeded'>({ type: 'negotiationneeded' });
   }
 
-  private _handleIceCandidate = (sdpMLineIndex: number, candidate: string) => {
+  private _handleIceCandidate = async (sdpMLineIndex: number, candidate: string) => {
+    await resolveImmediate(); // Relief the PC thread.
     const candidateObj = new NgwRTCIceCandidate({ sdpMLineIndex, candidate });
     this.dispatchEvent<'icecandidate'>({ type: 'icecandidate', candidate: candidateObj });
   }

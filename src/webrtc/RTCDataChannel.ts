@@ -6,6 +6,7 @@ import {
   setEventAttributeValue
 } from 'event-target-shim';
 
+import { resolveImmediate } from '../utils';  
 import {
   GLib, GObject, GstWebRTC,
 } from '../gstUtils';
@@ -71,13 +72,17 @@ class NgwRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
     }
   }
 
-  private _handleClose = () => {
+  private _handleClose = async () => {
+    await resolveImmediate(); // Relief the PC thread.
+
     this.dispatchEvent({ type: 'close' });
 
     this._disconnectGlibSignals();
   }
 
-  private _handleError = (error: GLib.Error) => {
+  private _handleError = async (error: GLib.Error) => {
+    await resolveImmediate(); // Relief the PC thread.
+
     // Well, we receive errors in terms of GError, which can report a variety
     // of errors. I don't have a good way to translate this to proper RTCError,
     // so let's just dispatch a generic error. Also, we don't really want to
@@ -102,20 +107,24 @@ class NgwRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
     });
   }
 
-  private _handleMessageData = (data: GLib.Bytes) => {
+  private _handleMessageData = async (data: GLib.Bytes) => {
     if (this._binaryType == 'blob') {
       throw new Error("We cannot creat a blob in NodeJS!");
     }
+
+    await resolveImmediate(); // Relief the PC thread.
 
     const arrayView = Uint8Array.from(data.getData());
     this._dispatchMessageEvent(arrayView.buffer);
   }
 
-  private _handleMessageString = (data: string) => {
+  private _handleMessageString = async (data: string) => {
+    await resolveImmediate(); // Relief the PC thread.
     this._dispatchMessageEvent(data);
   }
 
-  private _handleOpen = () => {
+  private _handleOpen = async () => {
+    await resolveImmediate(); // Relief the PC thread.
     this.dispatchEvent({ type: 'open' });
   }
 
