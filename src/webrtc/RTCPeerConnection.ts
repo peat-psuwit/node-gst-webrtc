@@ -1,3 +1,5 @@
+import { Buffer } from 'buffer';
+
 import { EventTarget as EventTargetShim, getEventAttributeValue, setEventAttributeValue } from 'event-target-shim';
 
 import {
@@ -441,7 +443,7 @@ class NgwRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
       throw new Error('A data channel cannot be created while the connection is closed.');
     }
 
-    if ((new TextEncoder().encode(label)).length > 65535)
+    if (Buffer.byteLength(label, 'utf-8') > 65535)
       throw new TypeError('The label is too long.');
 
     const gstOpts = Gst.Structure.newEmpty('data-channel-opts');
@@ -475,7 +477,7 @@ class NgwRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
     }
 
     if (typeof options.protocol === 'string') {
-      if (new TextEncoder().encode(options.protocol).length > 65535) {
+      if (Buffer.byteLength(options.protocol, 'utf-8') > 65535) {
         throw new TypeError('options.protocol is too long.');
       }
 
