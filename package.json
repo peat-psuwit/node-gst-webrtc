@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "node-gtk": "git+https://github.com/peat-psuwit/node-gtk.git#master",
-    "tslib": "^2.2.0"
+    "tslib": "^2.3.1"
   },
   "engines": {
     "node": ">= 16"
