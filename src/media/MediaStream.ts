@@ -1,11 +1,6 @@
-import {
-    EventTarget as EventTargetShim,
-    getEventAttributeValue,
-    setEventAttributeValue
-} from 'event-target-shim';
-
 import { GLib } from '../gstUtils';
 
+import { NgwMediaStreamTrackEvent } from './events';
 import NgwMediaStreamTrack from './MediaStreamTrack';
 
 type TEvents = {
@@ -14,7 +9,7 @@ type TEvents = {
 };
 
 export default class NgwMediaStream
-                extends EventTargetShim<TEvents, /* mode */ 'strict'>
+                extends EventTarget
                 implements MediaStream
 {
   readonly id: string;
@@ -82,18 +77,12 @@ export default class NgwMediaStream
       return;
 
     this._tracks.set(track.id, track);
-    this.dispatchEvent({
-      type: 'addtrack',
-      track,
-    });
+    this.dispatchEvent(new NgwMediaStreamTrackEvent('addtrack', { track }));
   }
 
   removeTrack(track: NgwMediaStreamTrack) {
     if (this._tracks.delete(track.id))
-      this.dispatchEvent({
-        type: 'removetrack',
-        track,
-      });
+      this.dispatchEvent(new NgwMediaStreamTrackEvent('removetrack', { track }));
   }
 
   clone(): NgwMediaStream {
@@ -107,18 +96,28 @@ export default class NgwMediaStream
   }
 
   // BEGIN generated event getters & setters; TEventTarget = MediaStream
-  get onaddtrack(): EventTargetShim.CallbackFunction<MediaStream, MediaStreamTrackEvent> | null {
-    return getEventAttributeValue<MediaStream, MediaStreamTrackEvent>(this, 'addtrack');
+  private _onaddtrack: ((this: MediaStream, ev: MediaStreamTrackEvent) => any) | null = null;
+  get onaddtrack() {
+    return this._onaddtrack;
   }
-  set onaddtrack(value) {
-    setEventAttributeValue(this, 'addtrack', value);
+  set onaddtrack (value) {
+    if (this._onaddtrack)
+      this.removeEventListener('addtrack', <EventListener>this._onaddtrack);
+    if (value)
+      this.addEventListener('addtrack', <EventListener>value);
+    this._onaddtrack = value;
   }
 
-  get onremovetrack(): EventTargetShim.CallbackFunction<MediaStream, MediaStreamTrackEvent> | null {
-    return getEventAttributeValue<MediaStream, MediaStreamTrackEvent>(this, 'removetrack');
+  private _onremovetrack: ((this: MediaStream, ev: MediaStreamTrackEvent) => any) | null = null;
+  get onremovetrack() {
+    return this._onremovetrack;
   }
-  set onremovetrack(value) {
-    setEventAttributeValue(this, 'removetrack', value);
+  set onremovetrack (value) {
+    if (this._onremovetrack)
+      this.removeEventListener('removetrack', <EventListener>this._onremovetrack);
+    if (value)
+      this.addEventListener('removetrack', <EventListener>value);
+    this._onremovetrack = value;
   }
 
   // END generated event getters & setters

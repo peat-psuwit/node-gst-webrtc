@@ -1,10 +1,4 @@
 import {
-    EventTarget as EventTargetShim,
-    getEventAttributeValue,
-    setEventAttributeValue
-} from 'event-target-shim';
-
-import {
   GLib,
   Gst,
 } from '../gstUtils';
@@ -20,7 +14,7 @@ type TEvents = {
 const CLONE_COOKIE = Symbol('NgwMediaStreamTrack_CloneCookie');
 
 export default class NgwMediaStreamTrack
-                extends EventTargetShim<TEvents, /* mode */ 'strict'>
+                extends EventTarget
                 implements MediaStreamTrack
 {
   private _enabled: boolean;
@@ -145,25 +139,40 @@ export default class NgwMediaStreamTrack
   }
 
   // BEGIN generated event getters & setters; TEventTarget = MediaStreamTrack
-  get onended(): EventTargetShim.CallbackFunction<MediaStreamTrack, Event> | null {
-    return getEventAttributeValue<MediaStreamTrack, Event>(this, 'ended');
+  private _onended: ((this: MediaStreamTrack, ev: Event) => any) | null = null;
+  get onended() {
+    return this._onended;
   }
-  set onended(value) {
-    setEventAttributeValue(this, 'ended', value);
-  }
-
-  get onmute(): EventTargetShim.CallbackFunction<MediaStreamTrack, Event> | null {
-    return getEventAttributeValue<MediaStreamTrack, Event>(this, 'mute');
-  }
-  set onmute(value) {
-    setEventAttributeValue(this, 'mute', value);
+  set onended (value) {
+    if (this._onended)
+      this.removeEventListener('ended', <EventListener>this._onended);
+    if (value)
+      this.addEventListener('ended', <EventListener>value);
+    this._onended = value;
   }
 
-  get onunmute(): EventTargetShim.CallbackFunction<MediaStreamTrack, Event> | null {
-    return getEventAttributeValue<MediaStreamTrack, Event>(this, 'unmute');
+  private _onmute: ((this: MediaStreamTrack, ev: Event) => any) | null = null;
+  get onmute() {
+    return this._onmute;
   }
-  set onunmute(value) {
-    setEventAttributeValue(this, 'unmute', value);
+  set onmute (value) {
+    if (this._onmute)
+      this.removeEventListener('mute', <EventListener>this._onmute);
+    if (value)
+      this.addEventListener('mute', <EventListener>value);
+    this._onmute = value;
+  }
+
+  private _onunmute: ((this: MediaStreamTrack, ev: Event) => any) | null = null;
+  get onunmute() {
+    return this._onunmute;
+  }
+  set onunmute (value) {
+    if (this._onunmute)
+      this.removeEventListener('unmute', <EventListener>this._onunmute);
+    if (value)
+      this.addEventListener('unmute', <EventListener>value);
+    this._onunmute = value;
   }
 
   // END generated event getters & setters
