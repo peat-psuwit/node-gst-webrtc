@@ -30,7 +30,16 @@ function getGstPromiseChangeFuncForResolveReject(
         reject(new Error('GstPromise is interrupted.'));
         break;
       case Gst.PromiseResult.REPLIED:
-        resolve(gstPromise.getReply());
+        let reply = gstPromise.getReply();
+        if (reply && reply.hasField('error')) {
+          let errorV = <GObject.Value>reply.getValue('error');
+          let error = <GLib.Error>errorV.getBoxed();
+          errorV.unset();
+
+          reject(new Error(error.message));
+        } else {
+          resolve(reply);
+        }
     }
   }
 }
