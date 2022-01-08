@@ -18,5 +18,8 @@
     "event-target-shim": "^6.0.2",
     "node-gtk": "git+https://github.com/peat-psuwit/node-gtk.git#master",
     "tslib": "^2.2.0"
+  },
+  "engines": {
+    "node": ">= 16"
   }
 }
