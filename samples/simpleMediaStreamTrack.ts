@@ -9,7 +9,8 @@ const Gst = gi.require('Gst', '1.0');
 
 import MediaStreamTrack from '../src/media/MediaStreamTrack';
 import TestVideoTrackInput from '../src/media/TestVideoTrackInput';
-import StandaloneVideoTrackOutput from '../src/media/StandaloneVideoTrackOutput';
+import TestAudioTrackInput from '../src/media/TestAudioTrackInput';
+import StandaloneTrackOutput from '../src/media/StandaloneTrackOutput';
 
 gi.startLoop();
 Gst.init(null);
@@ -22,8 +23,13 @@ let track = new MediaStreamTrack(trackInput);
 let trackInput2 = new TestVideoTrackInput(18 /* pattern = smpte */);
 let track2 = new MediaStreamTrack(trackInput2);
 
-let trackOutput = new StandaloneVideoTrackOutput();
+let trackOutput = new StandaloneTrackOutput('video');
 trackOutput.track = track;
+
+let trackInputA = new TestAudioTrackInput(5 /* wave = white-noise */);
+let trackA = new MediaStreamTrack(trackInputA);
+let trackOutputA = new StandaloneTrackOutput('audio');
+trackOutputA.track = trackA;
 
 // For debugging
 

@@ -8,17 +8,23 @@ let idCounter = 0;
 
 /* Display 'video' MediaStreamTrack using autovideosink. */
 
-class StandaloneVideoTrackOutput implements NgwMediaStreamTrackOutput {
+class StandaloneTrackOutput implements NgwMediaStreamTrackOutput {
   private _track: NgwMediaStreamTrack | null = null;
   private _bin: Gst.Bin;
   private _proxySrc: Gst.Element;
 
-  private _name = `StandaloneVideoTrackOutput${idCounter++}`;
+  private _name = `StandaloneTrackOutput${idCounter++}`;
 
-  constructor() {
+  private _kind: 'video' | 'audio';
+
+  constructor(kind: 'video' | 'audio') {
+    this._kind = kind;
+    const launchLine =
+        kind === 'video' ? 'proxysrc name=src ! videoscale ! videoconvert ! autovideosink'
+                         : 'proxysrc name=src ! audioconvert ! autoaudiosink';
+
     // TODO: support parent pipeline
-    const bin = Gst.parseLaunch(
-      'proxysrc name=src ! videoscale ! videoconvert ! autovideosink');
+    const bin = Gst.parseLaunch(launchLine);
     if (!bin) {
       throw new Error("Can't create the bin. Broken Gst installation?");
     }
@@ -38,7 +44,7 @@ class StandaloneVideoTrackOutput implements NgwMediaStreamTrackOutput {
     if (track === this._track)
       return;
 
-    if (track && track.kind !== 'video')
+    if (track && track.kind !== this._kind)
       throw new Error(`MediaStreamTrack of kind '${track.kind}' not supported.`);
 
     if (this._track) {
@@ -72,4 +78,4 @@ class StandaloneVideoTrackOutput implements NgwMediaStreamTrackOutput {
   }
 }
 
-export default StandaloneVideoTrackOutput;
+export default StandaloneTrackOutput;
