@@ -53,10 +53,17 @@ export class NgwRTCTrackEvent extends Event implements RTCTrackEvent {
   }
 }
 
-export class NgwRTCErrorEvent extends Event implements RTCErrorEvent {
-  readonly error: RTCError;
+// Spec says this need to be RTCErrorEvent, but that's not exposed
+// by TypeScript. So, this as a convenience.
 
-  constructor(type: string, eventInitDict: RTCErrorEventInit) {
+interface NgwRTCErrorEventInit extends EventInit {
+  error: Error;
+}
+
+export class NgwRTCErrorEvent extends Event {
+  readonly error: Error;
+
+  constructor(type: string, eventInitDict: NgwRTCErrorEventInit) {
     super(type, eventInitDict);
 
     this.error = eventInitDict.error;

@@ -10,7 +10,7 @@ import { NgwRTCErrorEvent } from './events';
 type TEvents = {
   "bufferedamountlow": Event;
   "close": Event;
-  "error": RTCErrorEvent;
+  "error": Event;
   "message": MessageEvent;
   "open": Event;
 };
@@ -283,7 +283,7 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
     this._onclose = value;
   }
 
-  private _onerror: ((this: RTCDataChannel, ev: RTCErrorEvent) => any) | null = null;
+  private _onerror: ((this: RTCDataChannel, ev: Event) => any) | null = null;
   get onerror() {
     return this._onerror;
   }

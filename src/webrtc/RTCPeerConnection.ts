@@ -38,15 +38,15 @@ function fillConfigDefault(inConf?: RTCConfiguration | null): NgwRTCConfiguratio
 }
 
 type TEvents = {
-  connectionstatechange: Event;
-  datachannel: RTCDataChannelEvent;
-  icecandidate: RTCPeerConnectionIceEvent;
-  icecandidateerror: RTCPeerConnectionIceErrorEvent;
-  iceconnectionstatechange: Event;
-  icegatheringstatechange: Event;
-  negotiationneeded: Event;
-  signalingstatechange: Event;
-  track: RTCTrackEvent;
+  "connectionstatechange": Event;
+  "datachannel": RTCDataChannelEvent;
+  "icecandidate": RTCPeerConnectionIceEvent;
+  "icecandidateerror": Event;
+  "iceconnectionstatechange": Event;
+  "icegatheringstatechange": Event;
+  "negotiationneeded": Event;
+  "signalingstatechange": Event;
+  "track": RTCTrackEvent;
 };
 
 
@@ -190,7 +190,7 @@ class NgwRTCPeerConnection extends EventTarget implements RTCPeerConnection {
             gstUrl.password = server.credential;
             try {
               this._webrtcbin.emit('add-turn-server', gstUrl.toString());
-            } catch (e) {
+            } catch (e: any) {
               if (!e || typeof e.message !== 'string' || !e.message.startsWith('Invalid signal '))
                 throw e;
               // This version of Gst doesn't have 'add-turn-server' yet. Fallback to the
@@ -397,7 +397,29 @@ class NgwRTCPeerConnection extends EventTarget implements RTCPeerConnection {
     }, 0 /* ms */);
   }
 
-  async createOffer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit> {
+  private async deprecatedCreateOffer(successCallback: RTCSessionDescriptionCallback, failureCallback?: RTCPeerConnectionErrorCallback, options?: RTCOfferOptions) {
+    let sdp;
+    try {
+      sdp = await this.createOffer(options);
+    } catch (e) {
+      if (failureCallback)
+        failureCallback(<DOMException>e);
+      return;
+    }
+
+    successCallback(sdp);
+  }
+
+  createOffer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit>;
+  /** @deprecated */
+  createOffer(successCallback: RTCSessionDescriptionCallback, failureCallback: RTCPeerConnectionErrorCallback, options?: RTCOfferOptions): Promise<void>;
+  async createOffer(successCallbackOrOptions?: RTCSessionDescriptionCallback | RTCOfferOptions, failureCallback?: RTCPeerConnectionErrorCallback, options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit | void> {
+    // Legacy extionsion support
+    if (typeof successCallbackOrOptions == 'function')
+      return this.deprecatedCreateOffer(successCallbackOrOptions, failureCallback, options);
+    else
+      options = successCallbackOrOptions;
+
     // Currently webrtcbin doesn't use options, thus do nothing for now.
     const opts = Gst.Structure.newEmpty('offer-options');
     const structure = await withGstPromise((promise) => {
@@ -411,7 +433,26 @@ class NgwRTCPeerConnection extends EventTarget implements RTCPeerConnection {
     return NgwRTCSessionDescription.fromGstDesc(sdp);
   }
 
-  async createAnswer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit> {
+  private async deprecatedCreateAnswer(successCallback: RTCSessionDescriptionCallback, failureCallback?: RTCPeerConnectionErrorCallback) {
+    let sdp;
+    try {
+      sdp = await this.createAnswer();
+    } catch (e) {
+      if (failureCallback)
+        failureCallback(<DOMException>e);
+      return;
+    }
+
+    successCallback(sdp);
+  }
+
+  createAnswer(options?: RTCAnswerOptions): Promise<RTCSessionDescriptionInit>;
+  /** @deprecated */
+  createAnswer(successCallback: RTCSessionDescriptionCallback, failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
+  async createAnswer(successCallbackOrOptions?: RTCSessionDescriptionCallback | RTCOfferOptions, failureCallback?: RTCPeerConnectionErrorCallback): Promise<RTCSessionDescriptionInit | void> {
+    if (typeof successCallbackOrOptions === 'function')
+      return this.deprecatedCreateAnswer(successCallbackOrOptions, failureCallback);
+
     // Currently webrtcbin doesn't use options, thus do nothing for now.
     const opts = Gst.Structure.newEmpty('offer-options');
     const structure = await withGstPromise((promise) => {
@@ -566,10 +607,6 @@ class NgwRTCPeerConnection extends EventTarget implements RTCPeerConnection {
     throw new Error('Not implemented');
   }
 
-  setIdentityProvider(provider: string, options?: RTCIdentityProviderOptions): void {
-    throw new Error('Not implemented');
-  }
-
   async setLocalDescription(description: RTCSessionDescriptionInit): Promise<void> {
     const gstDesc = new NgwRTCSessionDescription(description).toGstDesc();
     await withGstPromise((promise) => {
@@ -621,7 +658,7 @@ class NgwRTCPeerConnection extends EventTarget implements RTCPeerConnection {
     this._onicecandidate = value;
   }
 
-  private _onicecandidateerror: ((this: RTCPeerConnection, ev: RTCPeerConnectionIceErrorEvent) => any) | null = null;
+  private _onicecandidateerror: ((this: RTCPeerConnection, ev: Event) => any) | null = null;
   get onicecandidateerror() {
     return this._onicecandidateerror;
   }

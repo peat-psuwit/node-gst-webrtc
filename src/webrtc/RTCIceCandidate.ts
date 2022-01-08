@@ -21,6 +21,7 @@ class NgwRTCIceCandidate implements RTCIceCandidate {
   }
 
   // Stub; probably be able to provide by parsing those 4 properties.
+  get address(): string | null { return null; }
   get component(): RTCIceComponent | null { return null; };
   get foundation(): string | null { return null; };
   get port(): number | null { return null; };
