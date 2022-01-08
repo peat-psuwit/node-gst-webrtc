@@ -1,7 +1,5 @@
 import { Buffer } from 'buffer';
 
-import { EventTarget as EventTargetShim, getEventAttributeValue, setEventAttributeValue } from 'event-target-shim';
-
 import { resolveImmediate } from '../utils';
 import {
   GLib,
@@ -12,6 +10,10 @@ import {
   withGstPromise
 } from '../gstUtils';
 
+import {
+  NgwRTCDataChannelEvent,
+  NgwRTCPeerConnectionIceEvent,
+} from './events';
 import NgwRTCDataChannel from './RTCDataChannel';
 import NgwRTCIceCandidate from './RTCIceCandidate';
 import NgwRTCSessionDescription from './RTCSessionDescription';
@@ -64,7 +66,7 @@ function validateHostPort(hostPort: string) {
 
 let globalCounter = 0;
 
-class NgwRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'> implements RTCPeerConnection {
+class NgwRTCPeerConnection extends EventTarget implements RTCPeerConnection {
   private _pipeline: Gst.Pipeline;
   private _webrtcbin: Gst.Element;
   private _conf: NgwRTCConfiguration;
@@ -214,20 +216,20 @@ class NgwRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
       jsdatachannel = this._createJsDataChannel(gstdatachannel);
 
     await resolveImmediate(); // Relief the PC thread.
-    this.dispatchEvent({ type: 'datachannel', channel: jsdatachannel });
+    this.dispatchEvent(new NgwRTCDataChannelEvent('datachannel', { channel: jsdatachannel }));
   }
 
   private _handleNegotiationNeeded = async () => {
     await resolveImmediate(); // Relief the PC thread.
 
     // There's nothing to be put in the event.
-    this.dispatchEvent<'negotiationneeded'>({ type: 'negotiationneeded' });
+    this.dispatchEvent(new Event('negotiationneeded'));
   }
 
   private _handleIceCandidate = async (sdpMLineIndex: number, candidate: string) => {
     await resolveImmediate(); // Relief the PC thread.
     const candidateObj = new NgwRTCIceCandidate({ sdpMLineIndex, candidate });
-    this.dispatchEvent<'icecandidate'>({ type: 'icecandidate', candidate: candidateObj });
+    this.dispatchEvent(new NgwRTCPeerConnectionIceEvent('icecandidate', { candidate: candidateObj }));
   }
 
   // libnice's document seems to say so.
@@ -583,67 +585,112 @@ class NgwRTCPeerConnection extends EventTargetShim<TEvents, /* mode */ 'strict'>
   }
 
   // BEGIN generated event getters & setters; TEventTarget = RTCPeerConnection
-  get onconnectionstatechange(): EventTargetShim.CallbackFunction<RTCPeerConnection, Event> | null {
-    return getEventAttributeValue<RTCPeerConnection, Event>(this, 'connectionstatechange');
+  private _onconnectionstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null = null;
+  get onconnectionstatechange() {
+    return this._onconnectionstatechange;
   }
-  set onconnectionstatechange(value) {
-    setEventAttributeValue(this, 'connectionstatechange', value);
-  }
-
-  get ondatachannel(): EventTargetShim.CallbackFunction<RTCPeerConnection, RTCDataChannelEvent> | null {
-    return getEventAttributeValue<RTCPeerConnection, RTCDataChannelEvent>(this, 'datachannel');
-  }
-  set ondatachannel(value) {
-    setEventAttributeValue(this, 'datachannel', value);
+  set onconnectionstatechange (value) {
+    if (this._onconnectionstatechange)
+      this.removeEventListener('connectionstatechange', <EventListener>this._onconnectionstatechange);
+    if (value)
+      this.addEventListener('connectionstatechange', <EventListener>value);
+    this._onconnectionstatechange = value;
   }
 
-  get onicecandidate(): EventTargetShim.CallbackFunction<RTCPeerConnection, RTCPeerConnectionIceEvent> | null {
-    return getEventAttributeValue<RTCPeerConnection, RTCPeerConnectionIceEvent>(this, 'icecandidate');
+  private _ondatachannel: ((this: RTCPeerConnection, ev: RTCDataChannelEvent) => any) | null = null;
+  get ondatachannel() {
+    return this._ondatachannel;
   }
-  set onicecandidate(value) {
-    setEventAttributeValue(this, 'icecandidate', value);
-  }
-
-  get onicecandidateerror(): EventTargetShim.CallbackFunction<RTCPeerConnection, RTCPeerConnectionIceErrorEvent> | null {
-    return getEventAttributeValue<RTCPeerConnection, RTCPeerConnectionIceErrorEvent>(this, 'icecandidateerror');
-  }
-  set onicecandidateerror(value) {
-    setEventAttributeValue(this, 'icecandidateerror', value);
+  set ondatachannel (value) {
+    if (this._ondatachannel)
+      this.removeEventListener('datachannel', <EventListener>this._ondatachannel);
+    if (value)
+      this.addEventListener('datachannel', <EventListener>value);
+    this._ondatachannel = value;
   }
 
-  get oniceconnectionstatechange(): EventTargetShim.CallbackFunction<RTCPeerConnection, Event> | null {
-    return getEventAttributeValue<RTCPeerConnection, Event>(this, 'iceconnectionstatechange');
+  private _onicecandidate: ((this: RTCPeerConnection, ev: RTCPeerConnectionIceEvent) => any) | null = null;
+  get onicecandidate() {
+    return this._onicecandidate;
   }
-  set oniceconnectionstatechange(value) {
-    setEventAttributeValue(this, 'iceconnectionstatechange', value);
-  }
-
-  get onicegatheringstatechange(): EventTargetShim.CallbackFunction<RTCPeerConnection, Event> | null {
-    return getEventAttributeValue<RTCPeerConnection, Event>(this, 'icegatheringstatechange');
-  }
-  set onicegatheringstatechange(value) {
-    setEventAttributeValue(this, 'icegatheringstatechange', value);
+  set onicecandidate (value) {
+    if (this._onicecandidate)
+      this.removeEventListener('icecandidate', <EventListener>this._onicecandidate);
+    if (value)
+      this.addEventListener('icecandidate', <EventListener>value);
+    this._onicecandidate = value;
   }
 
-  get onnegotiationneeded(): EventTargetShim.CallbackFunction<RTCPeerConnection, Event> | null {
-    return getEventAttributeValue<RTCPeerConnection, Event>(this, 'negotiationneeded');
+  private _onicecandidateerror: ((this: RTCPeerConnection, ev: RTCPeerConnectionIceErrorEvent) => any) | null = null;
+  get onicecandidateerror() {
+    return this._onicecandidateerror;
   }
-  set onnegotiationneeded(value) {
-    setEventAttributeValue(this, 'negotiationneeded', value);
-  }
-
-  get onsignalingstatechange(): EventTargetShim.CallbackFunction<RTCPeerConnection, Event> | null {
-    return getEventAttributeValue<RTCPeerConnection, Event>(this, 'signalingstatechange');
-  }
-  set onsignalingstatechange(value) {
-    setEventAttributeValue(this, 'signalingstatechange', value);
+  set onicecandidateerror (value) {
+    if (this._onicecandidateerror)
+      this.removeEventListener('icecandidateerror', <EventListener>this._onicecandidateerror);
+    if (value)
+      this.addEventListener('icecandidateerror', <EventListener>value);
+    this._onicecandidateerror = value;
   }
 
-  get ontrack(): EventTargetShim.CallbackFunction<RTCPeerConnection, RTCTrackEvent> | null {
-    return getEventAttributeValue<RTCPeerConnection, RTCTrackEvent>(this, 'track');
+  private _oniceconnectionstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null = null;
+  get oniceconnectionstatechange() {
+    return this._oniceconnectionstatechange;
   }
-  set ontrack(value) {
-    setEventAttributeValue(this, 'track', value);
+  set oniceconnectionstatechange (value) {
+    if (this._oniceconnectionstatechange)
+      this.removeEventListener('iceconnectionstatechange', <EventListener>this._oniceconnectionstatechange);
+    if (value)
+      this.addEventListener('iceconnectionstatechange', <EventListener>value);
+    this._oniceconnectionstatechange = value;
+  }
+
+  private _onicegatheringstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null = null;
+  get onicegatheringstatechange() {
+    return this._onicegatheringstatechange;
+  }
+  set onicegatheringstatechange (value) {
+    if (this._onicegatheringstatechange)
+      this.removeEventListener('icegatheringstatechange', <EventListener>this._onicegatheringstatechange);
+    if (value)
+      this.addEventListener('icegatheringstatechange', <EventListener>value);
+    this._onicegatheringstatechange = value;
+  }
+
+  private _onnegotiationneeded: ((this: RTCPeerConnection, ev: Event) => any) | null = null;
+  get onnegotiationneeded() {
+    return this._onnegotiationneeded;
+  }
+  set onnegotiationneeded (value) {
+    if (this._onnegotiationneeded)
+      this.removeEventListener('negotiationneeded', <EventListener>this._onnegotiationneeded);
+    if (value)
+      this.addEventListener('negotiationneeded', <EventListener>value);
+    this._onnegotiationneeded = value;
+  }
+
+  private _onsignalingstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null = null;
+  get onsignalingstatechange() {
+    return this._onsignalingstatechange;
+  }
+  set onsignalingstatechange (value) {
+    if (this._onsignalingstatechange)
+      this.removeEventListener('signalingstatechange', <EventListener>this._onsignalingstatechange);
+    if (value)
+      this.addEventListener('signalingstatechange', <EventListener>value);
+    this._onsignalingstatechange = value;
+  }
+
+  private _ontrack: ((this: RTCPeerConnection, ev: RTCTrackEvent) => any) | null = null;
+  get ontrack() {
+    return this._ontrack;
+  }
+  set ontrack (value) {
+    if (this._ontrack)
+      this.removeEventListener('track', <EventListener>this._ontrack);
+    if (value)
+      this.addEventListener('track', <EventListener>value);
+    this._ontrack = value;
   }
 
   // END generated event getters & setters

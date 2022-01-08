@@ -77,11 +77,16 @@ if (i == linesInput.length) {
 for (const kv of eventTypePairs) {
     const [event, eventType] = kv;
     linesOutput.push(`\
-${whitespace}get on${event}(): EventTargetShim.CallbackFunction<${tEventTarget}, ${eventType}> | null {
-${whitespace}  return getEventAttributeValue<${tEventTarget}, ${eventType}>(this, '${event}');
+${whitespace}private _on${event}: ((this: ${tEventTarget}, ev: ${eventType}) => any) | null = null;
+${whitespace}get on${event}() {
+${whitespace}  return this._on${event};
 ${whitespace}}
-${whitespace}set on${event}(value) {
-${whitespace}  setEventAttributeValue(this, '${event}', value);
+${whitespace}set on${event} (value) {
+${whitespace}  if (this._on${event})
+${whitespace}    this.removeEventListener('${event}', <EventListener>this._on${event});
+${whitespace}  if (value)
+${whitespace}    this.addEventListener('${event}', <EventListener>value);
+${whitespace}  this._on${event} = value;
 ${whitespace}}
 `);
 }
