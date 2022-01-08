@@ -283,7 +283,7 @@ GLib.unixSignalAdd(GLib.PRIORITY_DEFAULT, os.constants.signals.SIGINT, () => { q
 GLib.unixSignalAdd(GLib.PRIORITY_DEFAULT, os.constants.signals.SIGTERM, () => { quit(0); return false; });
 GLib.unixSignalAdd(GLib.PRIORITY_DEFAULT, os.constants.signals.SIGHUP, () => { quit(0); return false; });
 
-GLib.idleAdd(GLib.PRIORITY_DEFAULT, () => { newRound(); return false; });
+setImmediate(newRound);
 
 process.on('uncaughtException', (e) => {
   console.error(e);
