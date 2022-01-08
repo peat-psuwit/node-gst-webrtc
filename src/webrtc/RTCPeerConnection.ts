@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
+import { setImmediate as resolveImmediate } from 'timers/promises';
 
-import { resolveImmediate } from '../utils';
 import {
   GLib,
   GObject,
