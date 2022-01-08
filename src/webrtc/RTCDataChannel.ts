@@ -1,15 +1,11 @@
 import { Buffer } from 'buffer';
 
-import {
-  EventTarget as EventTargetShim,
-  getEventAttributeValue,
-  setEventAttributeValue
-} from 'event-target-shim';
-
 import { resolveImmediate } from '../utils';  
 import {
   GLib, GObject, GstWebRTC,
 } from '../gstUtils';
+
+import { NgwRTCErrorEvent } from './events';
 
 type TEvents = {
   "bufferedamountlow": Event;
@@ -19,7 +15,7 @@ type TEvents = {
   "open": Event;
 };
 
-class NgwRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> implements RTCDataChannel {
+class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
   // There's no GIR definition for GstWebRTCDataChannel, for some reason.
   private _gstdatachannel: GObject.Object;
   private _binaryType: 'blob' | 'arraybuffer' = 'blob';
@@ -56,7 +52,7 @@ class NgwRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
       return;
     }
 
-    this.dispatchEvent({ type: 'bufferedamountlow' });
+    this.dispatchEvent(new Event('bufferedamountlow'));
   }
 
   private _handleBufferedAmountLow = () => {
@@ -75,7 +71,7 @@ class NgwRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
   private _handleClose = async () => {
     await resolveImmediate(); // Relief the PC thread.
 
-    this.dispatchEvent({ type: 'close' });
+    this.dispatchEvent(new Event('close'));
 
     this._disconnectGlibSignals();
   }
@@ -92,19 +88,18 @@ class NgwRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
     let rtcError: any = new Error(error.message);
     rtcError.errorDetail = "data-channel-failure";
 
-    this.dispatchEvent({ type: 'error', error: rtcError });
+    this.dispatchEvent(new NgwRTCErrorEvent('error', { error: rtcError }));
   }
 
   // MessageEvent is a bit complicated, so I have a helper function.
   private _dispatchMessageEvent(data: string | ArrayBufferLike) {
-    this.dispatchEvent({
-      type: 'message',
+    this.dispatchEvent(new MessageEvent('message', {
       data: data,
       origin: "null", // Opaque origin
       lastEventId: '', // ???
       source: null,
       ports: [],
-    });
+    }));
   }
 
   private _handleMessageData = async (data: GLib.Bytes) => {
@@ -125,7 +120,7 @@ class NgwRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
 
   private _handleOpen = async () => {
     await resolveImmediate(); // Relief the PC thread.
-    this.dispatchEvent({ type: 'open' });
+    this.dispatchEvent(new Event('open'));
   }
 
   get binaryType() {
@@ -264,39 +259,64 @@ class NgwRTCDataChannel extends EventTargetShim<TEvents, /* mode */ 'strict'> im
   }
 
   // BEGIN generated event getters & setters; TEventTarget = RTCDataChannel
-  get onbufferedamountlow(): EventTargetShim.CallbackFunction<RTCDataChannel, Event> | null {
-    return getEventAttributeValue<RTCDataChannel, Event>(this, 'bufferedamountlow');
+  private _onbufferedamountlow: ((this: RTCDataChannel, ev: Event) => any) | null = null;
+  get onbufferedamountlow() {
+    return this._onbufferedamountlow;
   }
-  set onbufferedamountlow(value) {
-    setEventAttributeValue(this, 'bufferedamountlow', value);
-  }
-
-  get onclose(): EventTargetShim.CallbackFunction<RTCDataChannel, Event> | null {
-    return getEventAttributeValue<RTCDataChannel, Event>(this, 'close');
-  }
-  set onclose(value) {
-    setEventAttributeValue(this, 'close', value);
+  set onbufferedamountlow (value) {
+    if (this._onbufferedamountlow)
+      this.removeEventListener('bufferedamountlow', <EventListener>this._onbufferedamountlow);
+    if (value)
+      this.addEventListener('bufferedamountlow', <EventListener>value);
+    this._onbufferedamountlow = value;
   }
 
-  get onerror(): EventTargetShim.CallbackFunction<RTCDataChannel, RTCErrorEvent> | null {
-    return getEventAttributeValue<RTCDataChannel, RTCErrorEvent>(this, 'error');
+  private _onclose: ((this: RTCDataChannel, ev: Event) => any) | null = null;
+  get onclose() {
+    return this._onclose;
   }
-  set onerror(value) {
-    setEventAttributeValue(this, 'error', value);
-  }
-
-  get onmessage(): EventTargetShim.CallbackFunction<RTCDataChannel, MessageEvent> | null {
-    return getEventAttributeValue<RTCDataChannel, MessageEvent>(this, 'message');
-  }
-  set onmessage(value) {
-    setEventAttributeValue(this, 'message', value);
+  set onclose (value) {
+    if (this._onclose)
+      this.removeEventListener('close', <EventListener>this._onclose);
+    if (value)
+      this.addEventListener('close', <EventListener>value);
+    this._onclose = value;
   }
 
-  get onopen(): EventTargetShim.CallbackFunction<RTCDataChannel, Event> | null {
-    return getEventAttributeValue<RTCDataChannel, Event>(this, 'open');
+  private _onerror: ((this: RTCDataChannel, ev: RTCErrorEvent) => any) | null = null;
+  get onerror() {
+    return this._onerror;
   }
-  set onopen(value) {
-    setEventAttributeValue(this, 'open', value);
+  set onerror (value) {
+    if (this._onerror)
+      this.removeEventListener('error', <EventListener>this._onerror);
+    if (value)
+      this.addEventListener('error', <EventListener>value);
+    this._onerror = value;
+  }
+
+  private _onmessage: ((this: RTCDataChannel, ev: MessageEvent) => any) | null = null;
+  get onmessage() {
+    return this._onmessage;
+  }
+  set onmessage (value) {
+    if (this._onmessage)
+      this.removeEventListener('message', <EventListener>this._onmessage);
+    if (value)
+      this.addEventListener('message', <EventListener>value);
+    this._onmessage = value;
+  }
+
+  private _onopen: ((this: RTCDataChannel, ev: Event) => any) | null = null;
+  get onopen() {
+    return this._onopen;
+  }
+  set onopen (value) {
+    if (this._onopen)
+      this.removeEventListener('open', <EventListener>this._onopen);
+    if (value)
+      this.addEventListener('open', <EventListener>value);
+    this._onopen = value;
   }
 
   // END generated event getters & setters

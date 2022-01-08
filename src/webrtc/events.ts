@@ -52,3 +52,13 @@ export class NgwRTCTrackEvent extends Event implements RTCTrackEvent {
     this.transceiver = eventInitDict.transceiver;
   }
 }
+
+export class NgwRTCErrorEvent extends Event implements RTCErrorEvent {
+  readonly error: RTCError;
+
+  constructor(type: string, eventInitDict: RTCErrorEventInit) {
+    super(type, eventInitDict);
+
+    this.error = eventInitDict.error;
+  }
+}
