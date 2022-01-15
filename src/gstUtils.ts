@@ -1,3 +1,5 @@
+import { setImmediate as resolveImmediate } from 'timers/promises';
+
 import * as gi from 'node-gtk';
 
 // For convenience
@@ -14,20 +16,25 @@ Gst.init(null);
 // UINT64_MAX.
 export const GST_CLOCK_TIME_NONE = BigInt.asUintN(/* width */ 64, -1n);
 
+async function rejectImmediate(reason: any): Promise<any> {
+  await resolveImmediate();
+  throw reason;
+}
+
 // Node-gtk doesn't handle circular reference well, and GstPromise doesn't have
 // a way to change the changeFunc, so we have to create a change function that
 // doesn't capture the GstPromise itself in a closure to prevent circular reference.
 function getGstPromiseChangeFuncForResolveReject(
-  resolve: (s: Gst.Structure) => void,
+  resolve: (s: Promise<Gst.Structure>) => void,
   reject: (reason: any) => void,
 ) {
   return function changeFunc (gstPromise: Gst.Promise) {
     switch (gstPromise.wait()) {
       case Gst.PromiseResult.EXPIRED:
-        reject(new Error('GstPromise is expired.'));
+        resolve(rejectImmediate(new Error('GstPromise is expired.')));
         break;
       case Gst.PromiseResult.INTERRUPTED:
-        reject(new Error('GstPromise is interrupted.'));
+        resolve(rejectImmediate(new Error('GstPromise is interrupted.')));
         break;
       case Gst.PromiseResult.REPLIED:
         let reply = gstPromise.getReply();
@@ -36,9 +43,9 @@ function getGstPromiseChangeFuncForResolveReject(
           let error = <GLib.Error>errorV.getBoxed();
           errorV.unset();
 
-          reject(new Error(error.message));
+          resolve(rejectImmediate(new Error(error.message)));
         } else {
-          resolve(reply);
+          resolve(resolveImmediate(reply));
         }
     }
   }
