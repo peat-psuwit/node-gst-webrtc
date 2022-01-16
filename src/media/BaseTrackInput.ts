@@ -69,6 +69,7 @@ abstract class NgwBaseTrackInput<TSource extends Gst.Element = Gst.Element>
     const sinkPad = track.getSinkPad();
 
     this._teeMux.addPeer(sinkPad);
+    this._tracks.add(track);
   }
 
   disconnect(track: NgwMediaStreamTrack) {
@@ -78,6 +79,7 @@ abstract class NgwBaseTrackInput<TSource extends Gst.Element = Gst.Element>
     }
 
     this._teeMux.removePeer(track.getSinkPad());
+    this._tracks.delete(track);
   }
 
   getPipeline() {
