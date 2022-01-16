@@ -8,7 +8,7 @@ function padProbe_alwaysDrop() {
 export default class NgwTeeMultiplexer {
   private _tee: Gst.Element;
 
-  constructor(bin: Gst.Bin, src: Gst.Element, teeName: string) {
+  constructor(bin: Gst.Bin, srcPad: Gst.Pad, teeName: string) {
     const tee = Gst.ElementFactory.make('tee', teeName);
     if (!tee)
       throw new Error("Can't create tee element. Broken Gst installation?");
@@ -18,7 +18,9 @@ export default class NgwTeeMultiplexer {
 
     bin.add(tee);
     tee.syncStateWithParent();
-    src.link(tee);
+
+    let sinkPad = tee.getStaticPad('sink')!;
+    srcPad.link(sinkPad);
 
     this._tee = tee;
   }

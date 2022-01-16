@@ -31,11 +31,16 @@ abstract class NgwBaseTrackInput<TSource extends Gst.Element = Gst.Element>
   private _usageCount = 0;
 
   constructor(source: TSource, name: string) {
+    // Expect simple source.
+    let srcPad = source.getStaticPad('src');
+    if (!srcPad)
+      throw new Error('Simple track input requires element with src pad.');
+
     const pipeline = new Gst.Pipeline();
     pipeline.name = name;
 
     pipeline.add(source);
-    this._teeMux = new NgwTeeMultiplexer(pipeline, source, `${name}_tee`);
+    this._teeMux = new NgwTeeMultiplexer(pipeline, srcPad, `${name}_tee`);
 
     // Make sure to have the same clock.
     pipeline.useClock(Gst.SystemClock.obtain());

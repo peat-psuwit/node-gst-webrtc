@@ -11,8 +11,13 @@ export default class NgwProxyMultiplexer {
   private _proxySinks = new Set<Gst.Element>();
 
   constructor(bin: Gst.Bin, src: Gst.Element, namePrefix: string) {
+    // Expect simple src element.
+    let srcPad = src.getStaticPad('src');
+    if (!srcPad)
+      throw new Error('NgwProxyMultiplexer requires simple element.');
+
     this._bin = bin;
-    this._teeMux = new NgwTeeMultiplexer(bin, src, `${namePrefix}_tee`);
+    this._teeMux = new NgwTeeMultiplexer(bin, srcPad, `${namePrefix}_tee`);
     this._namePrefix = namePrefix;
   }
 
