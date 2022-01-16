@@ -121,6 +121,10 @@ class NgwRTCPeerConnection extends EventTarget implements RTCPeerConnection {
     pipeline.setState(Gst.State.PLAYING);
   }
 
+  getPipeline() {
+    return this._pipeline;
+  }
+
   private _addIceServers() {
     const {iceServers} = this._conf;
     let stunServerSet = false;
