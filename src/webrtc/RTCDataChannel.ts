@@ -109,7 +109,8 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
 
     await resolveImmediate(); // Relief the PC thread.
 
-    const arrayView = Uint8Array.from(data.getData());
+    // FIXME: GLib.Bytes.getData() should return array of numbers
+    const arrayView = Uint8Array.from(<number[]>data.getData());
     this._dispatchMessageEvent(arrayView.buffer);
   }
 
@@ -249,7 +250,8 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
 
     const arrayView = new Uint8Array(arrayBuffer);
 
-    const gbytes = new GLib.Bytes(arrayView);
+    // FIXME: node-gtk DOES accept typed array for an array argument.
+    const gbytes = new GLib.Bytes(<any>arrayView);
     this._gstdatachannel.emit('send-data', gbytes);
     this._bufferedAmount += arrayView.byteLength;
   }

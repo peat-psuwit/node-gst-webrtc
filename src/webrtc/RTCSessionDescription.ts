@@ -1,7 +1,7 @@
-import * as gi from 'node-gtk';
-
-const GstWebRTC = gi.require('GstWebRTC', '1.0');
-const GstSDP_ = gi.require('GstSdp', '1.0');
+import {
+  GstWebRTC,
+  GstSDP,
+} from '../gstUtils';
 
 class NgwRTCSessionDescription implements RTCSessionDescription {
   readonly sdp: string;
@@ -47,8 +47,8 @@ class NgwRTCSessionDescription implements RTCSessionDescription {
   }
 
   toGstDesc() {
-    const [ret, sdp] = GstSDP_.sdpMessageNewFromText(this.sdp);
-    if (ret != GstSDP_.SDPResult.OK) {
+    const [ret, sdp] = GstSDP.sdpMessageNewFromText(this.sdp);
+    if (ret != GstSDP.SDPResult.OK) {
       throw new Error('sdpMessageNewFromText()');
     }
 

@@ -2,10 +2,7 @@
  * GObject-2.0
  */
 
-/// <reference types="node" />
-/// <reference path="GLib-2.0.d.ts" />
-
-declare namespace GObject {
+import type * as GLib from './GLib-2.0';
 
 export enum BindingFlags {
     DEFAULT,
@@ -72,7 +69,7 @@ export const PARAM_STATIC_STRINGS: number
 export const PARAM_USER_SHIFT: number
 export const SIGNAL_FLAGS_MASK: number
 export const SIGNAL_MATCH_MASK: number
-export const TYPE_FLAG_RESERVED_ID_BIT: Type
+export const TYPE_FLAG_RESERVED_ID_BIT: GLib.Type
 export const TYPE_FUNDAMENTAL_MAX: number
 export const TYPE_FUNDAMENTAL_SHIFT: number
 export const TYPE_RESERVED_BSE_FIRST: number
@@ -83,29 +80,29 @@ export const TYPE_RESERVED_USER_FIRST: number
 export const VALUE_NOCOPY_CONTENTS: number
 export function boxedCopy(boxedType: Type, srcBoxed: object): object
 export function boxedFree(boxedType: Type, boxed: object): void
-export function cclosureMarshalBOOLEANBOXEDBOXED(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalBOOLEANFLAGS(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalSTRINGOBJECTPOINTER(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDBOOLEAN(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDBOXED(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDCHAR(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDDOUBLE(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDENUM(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDFLAGS(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDFLOAT(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDINT(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDLONG(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDOBJECT(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDPARAM(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDPOINTER(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDSTRING(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDUCHAR(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDUINT(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDUINTPOINTER(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDULONG(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDVARIANT(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalVOIDVOID(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-export function cclosureMarshalGeneric(closure: Closure, returnGvalue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalBOOLEANBOXEDBOXED(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalBOOLEANFLAGS(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalSTRINGOBJECTPOINTER(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDBOOLEAN(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDBOXED(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDCHAR(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDDOUBLE(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDENUM(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDFLAGS(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDFLOAT(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDINT(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDLONG(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDOBJECT(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDPARAM(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDPOINTER(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDSTRING(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDUCHAR(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDUINT(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDUINTPOINTER(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDULONG(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDVARIANT(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalVOIDVOID(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+export function cclosureMarshalGeneric(closure: Function, returnGvalue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
 export function clearSignalHandler(handlerIdPtr: number, instance: Object): void
 export function enumCompleteTypeInfo(gEnumType: Type, constValues: EnumValue): /* info */ TypeInfo
 export function enumGetValue(enumClass: EnumClass, value: number): EnumValue
@@ -143,44 +140,44 @@ export function paramSpecUlong(name: string, nick: string, blurb: string, minimu
 export function paramSpecUnichar(name: string, nick: string, blurb: string, defaultValue: number, flags: ParamFlags): ParamSpec
 export function paramSpecVariant(name: string, nick: string, blurb: string, type: GLib.VariantType, defaultValue: GLib.Variant | null, flags: ParamFlags): ParamSpec
 export function paramTypeRegisterStatic(name: string, pspecInfo: ParamSpecTypeInfo): Type
-export function paramValueConvert(pspec: ParamSpec, srcValue: Value, destValue: Value, strictValidation: boolean): boolean
-export function paramValueDefaults(pspec: ParamSpec, value: Value): boolean
-export function paramValueSetDefault(pspec: ParamSpec, value: Value): void
-export function paramValueValidate(pspec: ParamSpec, value: Value): boolean
-export function paramValuesCmp(pspec: ParamSpec, value1: Value, value2: Value): number
+export function paramValueConvert(pspec: ParamSpec, srcValue: any, destValue: any, strictValidation: boolean): boolean
+export function paramValueDefaults(pspec: ParamSpec, value: any): boolean
+export function paramValueSetDefault(pspec: ParamSpec, value: any): void
+export function paramValueValidate(pspec: ParamSpec, value: any): boolean
+export function paramValuesCmp(pspec: ParamSpec, value1: any, value2: any): number
 export function pointerTypeRegisterStatic(name: string): Type
-export function signalAccumulatorFirstWins(ihint: SignalInvocationHint, returnAccu: Value, handlerReturn: Value, dummy?: object | null): boolean
-export function signalAccumulatorTrueHandled(ihint: SignalInvocationHint, returnAccu: Value, handlerReturn: Value, dummy?: object | null): boolean
+export function signalAccumulatorFirstWins(ihint: SignalInvocationHint, returnAccu: any, handlerReturn: any, dummy?: object | null): boolean
+export function signalAccumulatorTrueHandled(ihint: SignalInvocationHint, returnAccu: any, handlerReturn: any, dummy?: object | null): boolean
 export function signalAddEmissionHook(signalId: number, detail: GLib.Quark, hookFunc: SignalEmissionHook): number
-export function signalChainFromOverridden(instanceAndParams: Value[], returnValue: Value): void
-export function signalConnectClosure(instance: Object, detailedSignal: string, closure: Closure, after: boolean): number
-export function signalConnectClosureById(instance: Object, signalId: number, detail: GLib.Quark, closure: Closure, after: boolean): number
-export function signalEmitv(instanceAndParams: Value[], signalId: number, detail: GLib.Quark, returnValue: Value): void
+export function signalChainFromOverridden(instanceAndParams: any[], returnValue: any): void
+export function signalConnectClosure(instance: Object, detailedSignal: string, closure: Function, after: boolean): number
+export function signalConnectClosureById(instance: Object, signalId: number, detail: GLib.Quark, closure: Function, after: boolean): number
+export function signalEmitv(instanceAndParams: any[], signalId: number, detail: GLib.Quark, returnValue?: any | null): /* returnValue */ any | null
 export function signalGetInvocationHint(instance: Object): SignalInvocationHint
 export function signalHandlerBlock(instance: Object, handlerId: number): void
 export function signalHandlerDisconnect(instance: Object, handlerId: number): void
-export function signalHandlerFind(instance: Object, mask: SignalMatchType, signalId: number, detail: GLib.Quark, closure?: Closure | null, func?: object | null, data?: object | null): number
+export function signalHandlerFind(instance: Object, mask: SignalMatchType, signalId: number, detail: GLib.Quark, closure?: Function | null, func?: object | null, data?: object | null): number
 export function signalHandlerIsConnected(instance: Object, handlerId: number): boolean
 export function signalHandlerUnblock(instance: Object, handlerId: number): void
-export function signalHandlersBlockMatched(instance: Object, mask: SignalMatchType, signalId: number, detail: GLib.Quark, closure?: Closure | null, func?: object | null, data?: object | null): number
+export function signalHandlersBlockMatched(instance: Object, mask: SignalMatchType, signalId: number, detail: GLib.Quark, closure?: Function | null, func?: object | null, data?: object | null): number
 export function signalHandlersDestroy(instance: Object): void
-export function signalHandlersDisconnectMatched(instance: Object, mask: SignalMatchType, signalId: number, detail: GLib.Quark, closure?: Closure | null, func?: object | null, data?: object | null): number
-export function signalHandlersUnblockMatched(instance: Object, mask: SignalMatchType, signalId: number, detail: GLib.Quark, closure?: Closure | null, func?: object | null, data?: object | null): number
+export function signalHandlersDisconnectMatched(instance: Object, mask: SignalMatchType, signalId: number, detail: GLib.Quark, closure?: Function | null, func?: object | null, data?: object | null): number
+export function signalHandlersUnblockMatched(instance: Object, mask: SignalMatchType, signalId: number, detail: GLib.Quark, closure?: Function | null, func?: object | null, data?: object | null): number
 export function signalHasHandlerPending(instance: Object, signalId: number, detail: GLib.Quark, mayBeBlocked: boolean): boolean
 export function signalListIds(itype: Type): number[]
 export function signalLookup(name: string, itype: Type): number
 export function signalName(signalId: number): string
-export function signalOverrideClassClosure(signalId: number, instanceType: Type, classClosure: Closure): void
+export function signalOverrideClassClosure(signalId: number, instanceType: Type, classClosure: Function): void
 export function signalParseName(detailedSignal: string, itype: Type, forceDetailQuark: boolean): [ /* returnType */ boolean, /* signalIdP */ number, /* detailP */ GLib.Quark ]
 export function signalQuery(signalId: number): /* query */ SignalQuery
 export function signalRemoveEmissionHook(signalId: number, hookId: number): void
 export function signalSetVaMarshaller(signalId: number, instanceType: Type, vaMarshaller: SignalCVaMarshaller): void
 export function signalStopEmission(instance: Object, signalId: number, detail: GLib.Quark): void
 export function signalStopEmissionByName(instance: Object, detailedSignal: string): void
-export function signalTypeCclosureNew(itype: Type, structOffset: number): Closure
-export function sourceSetClosure(source: GLib.Source, closure: Closure): void
+export function signalTypeCclosureNew(itype: Type, structOffset: number): Function
+export function sourceSetClosure(source: GLib.Source, closure: Function): void
 export function sourceSetDummyCallback(source: GLib.Source): void
-export function strdupValueContents(value: Value): string
+export function strdupValueContents(value: any): string
 export function typeAddClassPrivate(classType: Type, privateSize: number): void
 export function typeAddInstancePrivate(classType: Type, privateSize: number): number
 export function typeAddInterfaceDynamic(instanceType: Type, interfaceType: Type, plugin: TypePlugin): void
@@ -190,8 +187,8 @@ export function typeCheckInstance(instance: TypeInstance): boolean
 export function typeCheckInstanceIsA(instance: TypeInstance, ifaceType: Type): boolean
 export function typeCheckInstanceIsFundamentallyA(instance: TypeInstance, fundamentalType: Type): boolean
 export function typeCheckIsValueType(type: Type): boolean
-export function typeCheckValue(value: Value): boolean
-export function typeCheckValueHolds(value: Value, type: Type): boolean
+export function typeCheckValue(value: any): boolean
+export function typeCheckValueHolds(value: any, type: Type): boolean
 export function typeChildren(type: Type): Type[]
 export function typeClassAdjustPrivateOffset(gClass: object | null, privateSizeOrOffset: number): void
 export function typeClassPeek(type: Type): TypeClass
@@ -239,7 +236,7 @@ export interface BaseInitFunc {
     (gClass: TypeClass): void
 }
 export interface BindingTransformFunc {
-    (binding: Binding, fromValue: Value, toValue: Value): boolean
+    (binding: Binding, fromValue: any, toValue: any): boolean
 }
 export interface BoxedCopyFunc {
     (boxed: object): object
@@ -257,10 +254,10 @@ export interface ClassInitFunc {
     (gClass: TypeClass, classData?: object | null): void
 }
 export interface ClosureMarshal {
-    (closure: Closure, returnValue: Value | null, paramValues: Value[], invocationHint?: object | null, marshalData?: object | null): void
+    (closure: Function, returnValue: any | null, paramValues: any[], invocationHint?: object | null, marshalData?: object | null): void
 }
 export interface ClosureNotify {
-    (data: object | null, closure: Closure): void
+    (data: object | null, closure: Function): void
 }
 export interface InstanceInitFunc {
     (instance: TypeInstance, gClass: TypeClass): void
@@ -275,16 +272,16 @@ export interface ObjectFinalizeFunc {
     (object: Object): void
 }
 export interface ObjectGetPropertyFunc {
-    (object: Object, propertyId: number, value: Value, pspec: ParamSpec): void
+    (object: Object, propertyId: number, value: any, pspec: ParamSpec): void
 }
 export interface ObjectSetPropertyFunc {
-    (object: Object, propertyId: number, value: Value, pspec: ParamSpec): void
+    (object: Object, propertyId: number, value: any, pspec: ParamSpec): void
 }
 export interface SignalAccumulator {
-    (ihint: SignalInvocationHint, returnAccu: Value, handlerReturn: Value, data?: object | null): boolean
+    (ihint: SignalInvocationHint, returnAccu: any, handlerReturn: any, data?: object | null): boolean
 }
 export interface SignalEmissionHook {
-    (ihint: SignalInvocationHint, paramValues: Value[], data?: object | null): boolean
+    (ihint: SignalInvocationHint, paramValues: any[], data?: object | null): boolean
 }
 export interface ToggleNotify {
     (data: object | null, object: Object, isLastRef: boolean): void
@@ -308,13 +305,13 @@ export interface TypePluginUse {
     (plugin: TypePlugin): void
 }
 export interface ValueTransform {
-    (srcValue: Value, destValue: Value): void
+    (srcValue: any, destValue: any): void
 }
 export interface WeakNotify {
     (data: object | null, whereTheObjectWas: Object): void
 }
 export class TypePlugin {
-    /* Methods of GObject.TypePlugin */
+    /* Methods of GObject-2.0.GObject.TypePlugin */
     completeInterfaceInfo(instanceType: Type, interfaceType: Type, info: InterfaceInfo): void
     completeTypeInfo(gType: Type, info: TypeInfo, valueTable: TypeValueTable): void
     unuse(): void
@@ -324,33 +321,33 @@ export class TypePlugin {
 // Extra interfaces used to help define GObject classes in js; these
 // aren't part of gi.
 export interface SignalDefinition {
-    flags?: SignalFlags;
-    accumulator: number;
-    return_type?: Type;
-    param_types?: Type[];
+    flags?: SignalFlags
+    accumulator: number
+    return_type?: Type
+    param_types?: Type[]
 }
 
 export interface MetaInfo {
-    GTypeName: string;
-    GTypeFlags?: TypeFlags;
-    Implements?: Function[];
-    Properties?: {[K: string]: ParamSpec};
-    Signals?: {[K: string]: SignalDefinition};
-    Requires?: Function[];
-    CssName?: string;
-    Template?: string;
-    Children?: string[];
-    InternalChildren?: string[];
+    GTypeName: string
+    GTypeFlags?: TypeFlags
+    Implements?: Function[]
+    Properties?: { [K: string]: ParamSpec }
+    Signals?: { [K: string]: SignalDefinition }
+    Requires?: Function[]
+    CssName?: string
+    Template?: string
+    Children?: string[]
+    InternalChildren?: string[]
 }
 
-export const GTypeName: symbol;
-export const requires: symbol;
-export const interfaces: symbol;
-export const properties: symbol;
-export const signals: symbol;
-export function registerClass(metaInfo: MetaInfo, klass: Function): Function;
-export function registerClass(klass: Function): Function;
-export function registerClass<T extends MetaInfo | Function>(a: T, b?: Function): Function;
+export const GTypeName: symbol
+export const requires: symbol
+export const interfaces: symbol
+export const properties: symbol
+export const signals: symbol
+export function registerClass(metaInfo: MetaInfo, cls: Function): Function
+export function registerClass(cls: Function): Function
+export function registerClass<T extends MetaInfo | Function>(a: T, b?: Function): Function
 
 export interface Binding_ConstructProps extends Object_ConstructProps {
     flags?: BindingFlags
@@ -360,25 +357,24 @@ export interface Binding_ConstructProps extends Object_ConstructProps {
     targetProperty?: string
 }
 export class Binding {
-    /* Properties of GObject.Binding */
-    /* Fields of GObject.Object */
+    /* Fields of GObject-2.0.GObject.Object */
     gTypeInstance: TypeInstance
-    /* Methods of GObject.Binding */
+    /* Methods of GObject-2.0.GObject.Binding */
     getFlags(): BindingFlags
     getSource(): Object
     getSourceProperty(): string
     getTarget(): Object
     getTargetProperty(): string
     unbind(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: Object, targetProperty: string, flags: BindingFlags): Binding
-    bindPropertyFull(sourceProperty: string, target: Object, targetProperty: string, flags: BindingFlags, transformTo: Closure, transformFrom: Closure): Binding
+    bindPropertyFull(sourceProperty: string, target: Object, targetProperty: string, flags: BindingFlags, transformTo: Function, transformFrom: Function): Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: ParamSpec): void
@@ -386,27 +382,18 @@ export class Binding {
     refSink(): Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
     unref(): void
-    watchClosure(closure: Closure): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: Value, pspec: ParamSpec): void
-    vfuncNotify?(pspec: ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: Value, pspec: ParamSpec): void
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: Binding, pspec: ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: Binding, pspec: ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
     emit(sigName: string, ...args: any[]): void
@@ -422,18 +409,17 @@ export class Binding {
 export interface InitiallyUnowned_ConstructProps extends Object_ConstructProps {
 }
 export class InitiallyUnowned {
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: Object, targetProperty: string, flags: BindingFlags): Binding
-    bindPropertyFull(sourceProperty: string, target: Object, targetProperty: string, flags: BindingFlags, transformTo: Closure, transformFrom: Closure): Binding
+    bindPropertyFull(sourceProperty: string, target: Object, targetProperty: string, flags: BindingFlags, transformTo: Function, transformFrom: Function): Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: ParamSpec): void
@@ -441,27 +427,18 @@ export class InitiallyUnowned {
     refSink(): Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
     unref(): void
-    watchClosure(closure: Closure): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: Value, pspec: ParamSpec): void
-    vfuncNotify?(pspec: ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: Value, pspec: ParamSpec): void
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: InitiallyUnowned, pspec: ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: InitiallyUnowned, pspec: ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
     emit(sigName: string, ...args: any[]): void
@@ -477,17 +454,17 @@ export class InitiallyUnowned {
 export interface Object_ConstructProps  {
 }
 export class Object {
-    /* Fields of GObject.Object */
+    /* Fields of GObject-2.0.GObject.Object */
     gTypeInstance: TypeInstance
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: Object, targetProperty: string, flags: BindingFlags): Binding
-    bindPropertyFull(sourceProperty: string, target: Object, targetProperty: string, flags: BindingFlags, transformTo: Closure, transformFrom: Closure): Binding
+    bindPropertyFull(sourceProperty: string, target: Object, targetProperty: string, flags: BindingFlags, transformTo: Function, transformFrom: Function): Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: ParamSpec): void
@@ -495,27 +472,18 @@ export class Object {
     refSink(): Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
     unref(): void
-    watchClosure(closure: Closure): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: Value, pspec: ParamSpec): void
-    vfuncNotify?(pspec: ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: Value, pspec: ParamSpec): void
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: Object, pspec: ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: Object, pspec: ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
     emit(sigName: string, ...args: any[]): void
@@ -526,23 +494,29 @@ export class Object {
     static name: string
     constructor (config?: Object_ConstructProps)
     _init (config?: Object_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static newv(objectType: Type, parameters: Parameter[]): Object
     static compatControl(what: number, data?: object | null): number
     static interfaceFindProperty(gIface: TypeInterface, propertyName: string): ParamSpec
     static interfaceInstallProperty(gIface: TypeInterface, pspec: ParamSpec): void
     static interfaceListProperties(gIface: TypeInterface): ParamSpec[]
+    static findProperty(oclass: Object | Function | Type, propertyName: string): ParamSpec
+    static installProperties(oclass: Object | Function | Type, pspecs: ParamSpec[]): void
+    static installProperty(oclass: Object | Function | Type, propertyId: number, pspec: ParamSpec): void
+    static listProperties(oclass: Object | Function | Type): ParamSpec[]
+    static overrideProperty(oclass: Object | Function | Type, propertyId: number, name: string): void
     static $gtype: Type
 }
 export class ParamSpec {
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -551,26 +525,21 @@ export class ParamSpec {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecBoolean {
-    /* Fields of GObject.ParamSpecBoolean */
+    /* Fields of GObject-2.0.GObject.ParamSpecBoolean */
     parentInstance: ParamSpec
     defaultValue: boolean
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -579,25 +548,20 @@ export class ParamSpecBoolean {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecBoxed {
-    /* Fields of GObject.ParamSpecBoxed */
+    /* Fields of GObject-2.0.GObject.ParamSpecBoxed */
     parentInstance: ParamSpec
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -606,28 +570,23 @@ export class ParamSpecBoxed {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecChar {
-    /* Fields of GObject.ParamSpecChar */
+    /* Fields of GObject-2.0.GObject.ParamSpecChar */
     parentInstance: ParamSpec
     minimum: number
     maximum: number
     defaultValue: number
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -636,29 +595,24 @@ export class ParamSpecChar {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecDouble {
-    /* Fields of GObject.ParamSpecDouble */
+    /* Fields of GObject-2.0.GObject.ParamSpecDouble */
     parentInstance: ParamSpec
     minimum: number
     maximum: number
     defaultValue: number
     epsilon: number
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -667,27 +621,22 @@ export class ParamSpecDouble {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecEnum {
-    /* Fields of GObject.ParamSpecEnum */
+    /* Fields of GObject-2.0.GObject.ParamSpecEnum */
     parentInstance: ParamSpec
     enumClass: EnumClass
     defaultValue: number
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -696,27 +645,22 @@ export class ParamSpecEnum {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecFlags {
-    /* Fields of GObject.ParamSpecFlags */
+    /* Fields of GObject-2.0.GObject.ParamSpecFlags */
     parentInstance: ParamSpec
     flagsClass: FlagsClass
     defaultValue: number
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -725,29 +669,24 @@ export class ParamSpecFlags {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecFloat {
-    /* Fields of GObject.ParamSpecFloat */
+    /* Fields of GObject-2.0.GObject.ParamSpecFloat */
     parentInstance: ParamSpec
     minimum: number
     maximum: number
     defaultValue: number
     epsilon: number
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -756,26 +695,21 @@ export class ParamSpecFloat {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecGType {
-    /* Fields of GObject.ParamSpecGType */
+    /* Fields of GObject-2.0.GObject.ParamSpecGType */
     parentInstance: ParamSpec
     isAType: Type
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -784,28 +718,23 @@ export class ParamSpecGType {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecInt {
-    /* Fields of GObject.ParamSpecInt */
+    /* Fields of GObject-2.0.GObject.ParamSpecInt */
     parentInstance: ParamSpec
     minimum: number
     maximum: number
     defaultValue: number
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -814,28 +743,23 @@ export class ParamSpecInt {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecInt64 {
-    /* Fields of GObject.ParamSpecInt64 */
+    /* Fields of GObject-2.0.GObject.ParamSpecInt64 */
     parentInstance: ParamSpec
     minimum: number
     maximum: number
     defaultValue: number
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -844,28 +768,23 @@ export class ParamSpecInt64 {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecLong {
-    /* Fields of GObject.ParamSpecLong */
+    /* Fields of GObject-2.0.GObject.ParamSpecLong */
     parentInstance: ParamSpec
     minimum: number
     maximum: number
     defaultValue: number
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -874,25 +793,20 @@ export class ParamSpecLong {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecObject {
-    /* Fields of GObject.ParamSpecObject */
+    /* Fields of GObject-2.0.GObject.ParamSpecObject */
     parentInstance: ParamSpec
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -901,24 +815,18 @@ export class ParamSpecObject {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecOverride {
-    /* Fields of GObject.ParamSpecOverride */
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -927,25 +835,20 @@ export class ParamSpecOverride {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecParam {
-    /* Fields of GObject.ParamSpecParam */
+    /* Fields of GObject-2.0.GObject.ParamSpecParam */
     parentInstance: ParamSpec
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -954,25 +857,20 @@ export class ParamSpecParam {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecPointer {
-    /* Fields of GObject.ParamSpecPointer */
+    /* Fields of GObject-2.0.GObject.ParamSpecPointer */
     parentInstance: ParamSpec
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -981,15 +879,10 @@ export class ParamSpecPointer {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecString {
-    /* Fields of GObject.ParamSpecString */
+    /* Fields of GObject-2.0.GObject.ParamSpecString */
     parentInstance: ParamSpec
     defaultValue: string
     csetFirst: string
@@ -997,15 +890,15 @@ export class ParamSpecString {
     substitutor: number
     nullFoldIfEmpty: number
     ensureNonNull: number
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -1014,28 +907,23 @@ export class ParamSpecString {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecUChar {
-    /* Fields of GObject.ParamSpecUChar */
+    /* Fields of GObject-2.0.GObject.ParamSpecUChar */
     parentInstance: ParamSpec
     minimum: number
     maximum: number
     defaultValue: number
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -1044,28 +932,23 @@ export class ParamSpecUChar {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecUInt {
-    /* Fields of GObject.ParamSpecUInt */
+    /* Fields of GObject-2.0.GObject.ParamSpecUInt */
     parentInstance: ParamSpec
     minimum: number
     maximum: number
     defaultValue: number
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -1074,28 +957,23 @@ export class ParamSpecUInt {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecUInt64 {
-    /* Fields of GObject.ParamSpecUInt64 */
+    /* Fields of GObject-2.0.GObject.ParamSpecUInt64 */
     parentInstance: ParamSpec
     minimum: number
     maximum: number
     defaultValue: number
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -1104,28 +982,23 @@ export class ParamSpecUInt64 {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecULong {
-    /* Fields of GObject.ParamSpecULong */
+    /* Fields of GObject-2.0.GObject.ParamSpecULong */
     parentInstance: ParamSpec
     minimum: number
     maximum: number
     defaultValue: number
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -1134,26 +1007,21 @@ export class ParamSpecULong {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecUnichar {
-    /* Fields of GObject.ParamSpecUnichar */
+    /* Fields of GObject-2.0.GObject.ParamSpecUnichar */
     parentInstance: ParamSpec
     defaultValue: number
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -1162,27 +1030,22 @@ export class ParamSpecUnichar {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecValueArray {
-    /* Fields of GObject.ParamSpecValueArray */
+    /* Fields of GObject-2.0.GObject.ParamSpecValueArray */
     parentInstance: ParamSpec
     elementSpec: ParamSpec
     fixedNElements: number
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -1191,27 +1054,22 @@ export class ParamSpecValueArray {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export class ParamSpecVariant {
-    /* Fields of GObject.ParamSpecVariant */
+    /* Fields of GObject-2.0.GObject.ParamSpecVariant */
     parentInstance: ParamSpec
     type: GLib.VariantType
     defaultValue: GLib.Variant
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: TypeInstance
     name: string
     flags: ParamFlags
     valueType: Type
     ownerType: Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -1220,25 +1078,20 @@ export class ParamSpecVariant {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: Value): void
-    vfuncValueValidate?(value: Value): boolean
-    vfuncValuesCmp?(value1: Value, value2: Value): number
     static name: string
 }
 export interface TypeModule_ConstructProps extends Object_ConstructProps {
 }
 export class TypeModule {
-    /* Fields of GObject.TypeModule */
+    /* Fields of GObject-2.0.GObject.TypeModule */
     parentInstance: Object
     useCount: number
     typeInfos: object[]
     interfaceInfos: object[]
     name: string
-    /* Fields of GObject.Object */
+    /* Fields of GObject-2.0.GObject.Object */
     gTypeInstance: TypeInstance
-    /* Methods of GObject.TypeModule */
+    /* Methods of GObject-2.0.GObject.TypeModule */
     addInterface(instanceType: Type, interfaceType: Type, interfaceInfo: InterfaceInfo): void
     registerEnum(name: string, constStaticValues: EnumValue): Type
     registerFlags(name: string, constStaticValues: FlagsValue): Type
@@ -1246,15 +1099,15 @@ export class TypeModule {
     setName(name: string): void
     unuse(): void
     use(): boolean
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: Object, targetProperty: string, flags: BindingFlags): Binding
-    bindPropertyFull(sourceProperty: string, target: Object, targetProperty: string, flags: BindingFlags, transformTo: Closure, transformFrom: Closure): Binding
+    bindPropertyFull(sourceProperty: string, target: Object, targetProperty: string, flags: BindingFlags, transformTo: Function, transformFrom: Function): Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: ParamSpec): void
@@ -1262,33 +1115,18 @@ export class TypeModule {
     refSink(): Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
     unref(): void
-    watchClosure(closure: Closure): void
-    /* Methods of GObject.TypePlugin */
-    completeInterfaceInfo(instanceType: Type, interfaceType: Type, info: InterfaceInfo): void
-    completeTypeInfo(gType: Type, info: TypeInfo, valueTable: TypeValueTable): void
-    /* Virtual methods of GObject.TypeModule */
-    vfuncLoad?(): boolean
-    vfuncUnload?(): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: Value, pspec: ParamSpec): void
-    vfuncNotify?(pspec: ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: Value, pspec: ParamSpec): void
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: TypeModule, pspec: ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: TypeModule, pspec: ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
     emit(sigName: string, ...args: any[]): void
@@ -1302,57 +1140,59 @@ export class TypeModule {
     static $gtype: Type
 }
 export class CClosure {
-    /* Fields of GObject.CClosure */
-    closure: Closure
+    /* Fields of GObject-2.0.GObject.CClosure */
+    closure: Function
     callback: object
     static name: string
-    static marshalBOOLEANBOXEDBOXED(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalBOOLEANFLAGS(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalSTRINGOBJECTPOINTER(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDBOOLEAN(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDBOXED(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDCHAR(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDDOUBLE(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDENUM(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDFLAGS(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDFLOAT(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDINT(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDLONG(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDOBJECT(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDPARAM(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDPOINTER(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDSTRING(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDUCHAR(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDUINT(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDUINTPOINTER(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDULONG(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDVARIANT(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalVOIDVOID(closure: Closure, returnValue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
-    static marshalGeneric(closure: Closure, returnGvalue: Value, nParamValues: number, paramValues: Value, invocationHint?: object | null, marshalData?: object | null): void
+    /* Static methods and pseudo-constructors */
+    static marshalBOOLEANBOXEDBOXED(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalBOOLEANFLAGS(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalSTRINGOBJECTPOINTER(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDBOOLEAN(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDBOXED(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDCHAR(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDDOUBLE(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDENUM(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDFLAGS(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDFLOAT(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDINT(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDLONG(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDOBJECT(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDPARAM(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDPOINTER(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDSTRING(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDUCHAR(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDUINT(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDUINTPOINTER(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDULONG(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDVARIANT(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalVOIDVOID(closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
+    static marshalGeneric(closure: Function, returnGvalue: any, nParamValues: number, paramValues: any, invocationHint?: object | null, marshalData?: object | null): void
 }
 export class Closure {
-    /* Fields of GObject.Closure */
+    /* Fields of GObject-2.0.GObject.Closure */
     inMarshal: number
     isInvalid: number
-    marshal: any
-    /* Methods of GObject.Closure */
+    marshal: (closure: Function, returnValue: any, nParamValues: number, paramValues: any, invocationHint: object, marshalData: object) => void
+    /* Methods of GObject-2.0.GObject.Closure */
     invalidate(): void
-    invoke(paramValues: Value[], invocationHint?: object | null): /* returnValue */ Value | null
-    ref(): Closure
+    invoke(paramValues: any[], invocationHint?: object | null): /* returnValue */ any | null
+    ref(): Function
     sink(): void
     unref(): void
     static name: string
+    /* Static methods and pseudo-constructors */
     static newObject(sizeofClosure: number, object: Object): Closure
     static newSimple(sizeofClosure: number, data?: object | null): Closure
 }
 export class ClosureNotifyData {
-    /* Fields of GObject.ClosureNotifyData */
+    /* Fields of GObject-2.0.GObject.ClosureNotifyData */
     data: object
     notify: ClosureNotify
     static name: string
 }
 export class EnumClass {
-    /* Fields of GObject.EnumClass */
+    /* Fields of GObject-2.0.GObject.EnumClass */
     gTypeClass: TypeClass
     minimum: number
     maximum: number
@@ -1361,14 +1201,14 @@ export class EnumClass {
     static name: string
 }
 export class EnumValue {
-    /* Fields of GObject.EnumValue */
+    /* Fields of GObject-2.0.GObject.EnumValue */
     value: number
     valueName: string
     valueNick: string
     static name: string
 }
 export class FlagsClass {
-    /* Fields of GObject.FlagsClass */
+    /* Fields of GObject-2.0.GObject.FlagsClass */
     gTypeClass: TypeClass
     mask: number
     nValues: number
@@ -1376,67 +1216,67 @@ export class FlagsClass {
     static name: string
 }
 export class FlagsValue {
-    /* Fields of GObject.FlagsValue */
+    /* Fields of GObject-2.0.GObject.FlagsValue */
     value: number
     valueName: string
     valueNick: string
     static name: string
 }
 export abstract class InitiallyUnownedClass {
-    /* Fields of GObject.InitiallyUnownedClass */
+    /* Fields of GObject-2.0.GObject.InitiallyUnownedClass */
     gTypeClass: TypeClass
-    setProperty: any
-    getProperty: any
-    dispose: any
-    finalize: any
-    dispatchPropertiesChanged: any
-    notify: any
-    constructed: any
+    setProperty: (object: Object, propertyId: number, value: any, pspec: ParamSpec) => void
+    getProperty: (object: Object, propertyId: number, value: any, pspec: ParamSpec) => void
+    dispose: (object: Object) => void
+    finalize: (object: Object) => void
+    dispatchPropertiesChanged: (object: Object, nPspecs: number, pspecs: ParamSpec) => void
+    notify: (object: Object, pspec: ParamSpec) => void
+    constructed: (object: Object) => void
     static name: string
 }
 export class InterfaceInfo {
-    /* Fields of GObject.InterfaceInfo */
+    /* Fields of GObject-2.0.GObject.InterfaceInfo */
     interfaceInit: InterfaceInitFunc
     interfaceFinalize: InterfaceFinalizeFunc
     interfaceData: object
     static name: string
 }
 export abstract class ObjectClass {
-    /* Fields of GObject.ObjectClass */
+    /* Fields of GObject-2.0.GObject.ObjectClass */
     gTypeClass: TypeClass
-    setProperty: any
-    getProperty: any
-    dispose: any
-    finalize: any
-    dispatchPropertiesChanged: any
-    notify: any
-    constructed: any
-    /* Methods of GObject.ObjectClass */
-    findProperty(propertyName: string): ParamSpec
-    installProperties(pspecs: ParamSpec[]): void
-    installProperty(propertyId: number, pspec: ParamSpec): void
-    listProperties(): ParamSpec[]
-    overrideProperty(propertyId: number, name: string): void
+    setProperty: (object: Object, propertyId: number, value: any, pspec: ParamSpec) => void
+    getProperty: (object: Object, propertyId: number, value: any, pspec: ParamSpec) => void
+    dispose: (object: Object) => void
+    finalize: (object: Object) => void
+    dispatchPropertiesChanged: (object: Object, nPspecs: number, pspecs: ParamSpec) => void
+    notify: (object: Object, pspec: ParamSpec) => void
+    constructed: (object: Object) => void
+    /* Methods of GObject-2.0.GObject.ObjectClass */
+    findProperty(oclass: Object | Function | Type, propertyName: string): ParamSpec
+    installProperties(oclass: Object | Function | Type, pspecs: ParamSpec[]): void
+    installProperty(oclass: Object | Function | Type, propertyId: number, pspec: ParamSpec): void
+    listProperties(oclass: Object | Function | Type): ParamSpec[]
+    overrideProperty(oclass: Object | Function | Type, propertyId: number, name: string): void
     static name: string
 }
 export class ObjectConstructParam {
-    /* Fields of GObject.ObjectConstructParam */
+    /* Fields of GObject-2.0.GObject.ObjectConstructParam */
     pspec: ParamSpec
-    value: Value
+    value: any
     static name: string
 }
 export abstract class ParamSpecClass {
-    /* Fields of GObject.ParamSpecClass */
+    /* Fields of GObject-2.0.GObject.ParamSpecClass */
     gTypeClass: TypeClass
     valueType: Type
-    finalize: any
-    valueSetDefault: any
-    valueValidate: any
-    valuesCmp: any
+    finalize: (pspec: ParamSpec) => void
+    valueSetDefault: (pspec: ParamSpec, value: any) => void
+    valueValidate: (pspec: ParamSpec, value: any) => boolean
+    valuesCmp: (pspec: ParamSpec, value1: any, value2: any) => number
     static name: string
 }
 export class ParamSpecPool {
-    /* Methods of GObject.ParamSpecPool */
+    /* Methods of GObject-2.0.GObject.ParamSpecPool */
     insert(pspec: ParamSpec, ownerType: Type): void
     list(ownerType: Type): ParamSpec[]
     listOwned(ownerType: Type): ParamSpec[]
@@ -1445,32 +1285,32 @@ export class ParamSpecPool {
     static name: string
 }
 export class ParamSpecTypeInfo {
-    /* Fields of GObject.ParamSpecTypeInfo */
+    /* Fields of GObject-2.0.GObject.ParamSpecTypeInfo */
     instanceSize: number
     nPreallocs: number
-    instanceInit: any
+    instanceInit: (pspec: ParamSpec) => void
     valueType: Type
-    finalize: any
-    valueSetDefault: any
-    valueValidate: any
-    valuesCmp: any
+    finalize: (pspec: ParamSpec) => void
+    valueSetDefault: (pspec: ParamSpec, value: any) => void
+    valueValidate: (pspec: ParamSpec, value: any) => boolean
+    valuesCmp: (pspec: ParamSpec, value1: any, value2: any) => number
     static name: string
 }
 export class Parameter {
-    /* Fields of GObject.Parameter */
+    /* Fields of GObject-2.0.GObject.Parameter */
     name: string
-    value: Value
+    value: any
     static name: string
 }
 export class SignalInvocationHint {
-    /* Fields of GObject.SignalInvocationHint */
+    /* Fields of GObject-2.0.GObject.SignalInvocationHint */
     signalId: number
     detail: GLib.Quark
     runType: SignalFlags
     static name: string
 }
 export class SignalQuery {
-    /* Fields of GObject.SignalQuery */
+    /* Fields of GObject-2.0.GObject.SignalQuery */
     signalId: number
     signalName: string
     itype: Type
@@ -1481,25 +1321,25 @@ export class SignalQuery {
     static name: string
 }
 export class TypeClass {
-    /* Fields of GObject.TypeClass */
-    /* Methods of GObject.TypeClass */
+    /* Methods of GObject-2.0.GObject.TypeClass */
     addPrivate(privateSize: number): void
     getPrivate(privateType: Type): object | null
     peekParent(): TypeClass
     unref(): void
     static name: string
+    /* Static methods and pseudo-constructors */
     static adjustPrivateOffset(gClass: object | null, privateSizeOrOffset: number): void
     static peek(type: Type): TypeClass
     static peekStatic(type: Type): TypeClass
     static ref(type: Type): TypeClass
 }
 export class TypeFundamentalInfo {
-    /* Fields of GObject.TypeFundamentalInfo */
+    /* Fields of GObject-2.0.GObject.TypeFundamentalInfo */
     typeFlags: TypeFundamentalFlags
     static name: string
 }
 export class TypeInfo {
-    /* Fields of GObject.TypeInfo */
+    /* Fields of GObject-2.0.GObject.TypeInfo */
     classSize: number
     baseInit: BaseInitFunc
     baseFinalize: BaseFinalizeFunc
@@ -1513,34 +1353,33 @@ export class TypeInfo {
     static name: string
 }
 export class TypeInstance {
-    /* Fields of GObject.TypeInstance */
-    /* Methods of GObject.TypeInstance */
+    /* Methods of GObject-2.0.GObject.TypeInstance */
     getPrivate(privateType: Type): object | null
     static name: string
 }
 export class TypeInterface {
-    /* Fields of GObject.TypeInterface */
-    /* Methods of GObject.TypeInterface */
+    /* Methods of GObject-2.0.GObject.TypeInterface */
     peekParent(): TypeInterface
     static name: string
+    /* Static methods and pseudo-constructors */
     static addPrerequisite(interfaceType: Type, prerequisiteType: Type): void
     static getPlugin(instanceType: Type, interfaceType: Type): TypePlugin
     static peek(instanceClass: TypeClass, ifaceType: Type): TypeInterface
     static prerequisites(interfaceType: Type): Type[]
 }
 export abstract class TypeModuleClass {
-    /* Fields of GObject.TypeModuleClass */
+    /* Fields of GObject-2.0.GObject.TypeModuleClass */
     parentClass: ObjectClass
-    load: any
-    unload: any
-    reserved1: any
-    reserved2: any
-    reserved3: any
-    reserved4: any
+    load: (module: TypeModule) => boolean
+    unload: (module: TypeModule) => void
+    reserved1: () => void
+    reserved2: () => void
+    reserved3: () => void
+    reserved4: () => void
     static name: string
 }
 export class TypePluginClass {
-    /* Fields of GObject.TypePluginClass */
+    /* Fields of GObject-2.0.GObject.TypePluginClass */
     usePlugin: TypePluginUse
     unusePlugin: TypePluginUnuse
     completeTypeInfo: TypePluginCompleteTypeInfo
@@ -1548,7 +1387,7 @@ export class TypePluginClass {
     static name: string
 }
 export class TypeQuery {
-    /* Fields of GObject.TypeQuery */
+    /* Fields of GObject-2.0.GObject.TypeQuery */
     type: Type
     typeName: string
     classSize: number
@@ -1556,22 +1395,22 @@ export class TypeQuery {
     static name: string
 }
 export class TypeValueTable {
-    /* Fields of GObject.TypeValueTable */
-    valueInit: any
-    valueFree: any
-    valueCopy: any
-    valuePeekPointer: any
+    /* Fields of GObject-2.0.GObject.TypeValueTable */
+    valueInit: (value: any) => void
+    valueFree: (value: any) => void
+    valueCopy: (srcValue: any, destValue: any) => void
+    valuePeekPointer: (value: any) => object
     collectFormat: string
-    collectValue: any
+    collectValue: (value: any, nCollectValues: number, collectValues: TypeCValue, collectFlags: number) => string
     lcopyFormat: string
-    lcopyValue: any
+    lcopyValue: (value: any, nCollectValues: number, collectValues: TypeCValue, collectFlags: number) => string
     static name: string
 }
 export class Value {
-    /* Fields of GObject.Value */
+    /* Fields of GObject-2.0.GObject.Value */
     data: _Value__data__union[]
-    /* Methods of GObject.Value */
-    copy(destValue: Value): void
+    /* Methods of GObject-2.0.GObject.Value */
+    copy(destValue: any): void
     dupObject(): Object
     dupString(): string
     dupVariant(): GLib.Variant | null
@@ -1597,10 +1436,10 @@ export class Value {
     getUint64(): number
     getUlong(): number
     getVariant(): GLib.Variant | null
-    init(gType: Type): Value
+    init(gType: Type): any
     initFromInstance(instance: TypeInstance): void
     peekPointer(): object | null
-    reset(): Value
+    reset(): any
     setBoolean(vBoolean: boolean): void
     setBoxed(vBoxed?: object | null): void
     setBoxedTakeOwnership(vBoxed?: object | null): void
@@ -1630,38 +1469,39 @@ export class Value {
     takeBoxed(vBoxed?: object | null): void
     takeString(vString?: string | null): void
     takeVariant(variant?: GLib.Variant | null): void
-    transform(destValue: Value): boolean
+    transform(destValue: any): boolean
     unset(): void
     static name: string
+    /* Static methods and pseudo-constructors */
     static typeCompatible(srcType: Type, destType: Type): boolean
     static typeTransformable(srcType: Type, destType: Type): boolean
 }
 export class ValueArray {
-    /* Fields of GObject.ValueArray */
+    /* Fields of GObject-2.0.GObject.ValueArray */
     nValues: number
-    values: Value
-    /* Methods of GObject.ValueArray */
-    append(value?: Value | null): ValueArray
+    values: any
+    /* Methods of GObject-2.0.GObject.ValueArray */
+    append(value?: any | null): ValueArray
     copy(): ValueArray
-    getNth(index: number): Value
-    insert(index: number, value?: Value | null): ValueArray
-    prepend(value?: Value | null): ValueArray
+    getNth(index: number): any
+    insert(index: number, value?: any | null): ValueArray
+    prepend(value?: any | null): ValueArray
     remove(index: number): ValueArray
     sort(compareFunc: GLib.CompareDataFunc): ValueArray
     static name: string
     static new(nPrealloced: number): ValueArray
     constructor(nPrealloced: number)
+    /* Static methods and pseudo-constructors */
     static new(nPrealloced: number): ValueArray
 }
 export class WeakRef {
-    /* Methods of GObject.WeakRef */
     static name: string
 }
 export class TypeCValue {
     static name: string
 }
 export class _Value__data__union {
-    /* Fields of GObject._Value__data__union */
+    /* Fields of GObject-2.0.GObject._Value__data__union */
     vInt: number
     vUint: number
     vLong: number
@@ -1673,9 +1513,8 @@ export class _Value__data__union {
     vPointer: object
     static name: string
 }
-type SignalCMarshaller = ClosureMarshal
-type SignalCVaMarshaller = any
+export type SignalCMarshaller = ClosureMarshal
+export type SignalCVaMarshaller = any
 export interface Type {
     name: string
-}
 }

@@ -2,11 +2,8 @@
  * GModule-2.0
  */
 
-/// <reference types="node" />
-/// <reference path="GLib-2.0.d.ts" />
-/// <reference path="GObject-2.0.d.ts" />
-
-declare namespace GModule {
+import type * as GLib from './GLib-2.0';
+import type * as GObject from './GObject-2.0';
 
 export enum ModuleFlags {
     LAZY,
@@ -23,14 +20,14 @@ export interface ModuleUnload {
     (module: Module): void
 }
 export class Module {
-    /* Methods of GModule.Module */
+    /* Methods of GModule-2.0.GModule.Module */
     close(): boolean
     makeResident(): void
     name(): string
     symbol(symbolName: string): [ /* returnType */ boolean, /* symbol */ object | null ]
     static name: string
+    /* Static methods and pseudo-constructors */
     static buildPath(directory: string | null, moduleName: string): string
     static error(): string
     static supported(): boolean
-}
 }

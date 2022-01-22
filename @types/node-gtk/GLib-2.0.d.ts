@@ -2,10 +2,7 @@
  * GLib-2.0
  */
 
-/// <reference types="node" />
-/// <reference path="GObject-2.0.d.ts" />
-
-declare namespace GLib {
+import type * as GObject from './GObject-2.0';
 
 export enum BookmarkFileError {
     INVALID_URI,
@@ -962,11 +959,11 @@ export function atomicRefCountCompare(arc: number, val: number): boolean
 export function atomicRefCountDec(arc: number): boolean
 export function atomicRefCountInc(arc: number): void
 export function atomicRefCountInit(arc: number): void
-export function base64Decode(text: string): any
-export function base64DecodeInplace(text: any): number
-export function base64Encode(data: any | null): string
-export function base64EncodeClose(breakLines: boolean, state: number, save: number): [ /* returnType */ number, /* out */ any ]
-export function base64EncodeStep(in_: any, breakLines: boolean, state: number, save: number): [ /* returnType */ number, /* out */ any ]
+export function base64Decode(text: string): any[]
+export function base64DecodeInplace(text: any[]): [ /* returnType */ number, /* text */ any[] ]
+export function base64Encode(data: any[] | null): string
+export function base64EncodeClose(breakLines: boolean, state: number, save: number): [ /* returnType */ number, /* out */ any[], /* state */ number, /* save */ number ]
+export function base64EncodeStep(in_: any[], breakLines: boolean, state: number, save: number): [ /* returnType */ number, /* out */ any[], /* state */ number, /* save */ number ]
 export function basename(fileName: string): string
 export function bitLock(address: number, lockBit: number): void
 export function bitNthLsf(mask: number, nthBit: number): number
@@ -977,12 +974,12 @@ export function bitUnlock(address: number, lockBit: number): void
 export function bookmarkFileErrorQuark(): Quark
 export function buildFilenamev(args: string[]): string
 export function buildPathv(separator: string, args: string[]): string
-export function byteArrayFree(array: any, freeSegment: boolean): number
-export function byteArrayFreeToBytes(array: any): Bytes
-export function byteArrayNew(): any
-export function byteArrayNewTake(data: any): any
-export function byteArraySteal(array: any): [ /* returnType */ number, /* len */ number | null ]
-export function byteArrayUnref(array: any): void
+export function byteArrayFree(array: any[], freeSegment: boolean): number
+export function byteArrayFreeToBytes(array: any[]): any
+export function byteArrayNew(): any[]
+export function byteArrayNewTake(data: any[]): any[]
+export function byteArraySteal(array: any[]): [ /* returnType */ number, /* len */ number | null ]
+export function byteArrayUnref(array: any[]): void
 export function canonicalizeFilename(filename: string, relativeTo?: string | null): string
 export function chdir(path: string): number
 export function checkVersion(requiredMajor: number, requiredMinor: number, requiredMicro: number): string
@@ -991,15 +988,15 @@ export function childWatchAdd(priority: number, pid: Pid, function_: ChildWatchF
 export function childWatchSourceNew(pid: Pid): Source
 export function clearError(): void
 export function close(fd: number): boolean
-export function computeChecksumForBytes(checksumType: ChecksumType, data: Bytes): string
-export function computeChecksumForData(checksumType: ChecksumType, data: any): string
+export function computeChecksumForBytes(checksumType: ChecksumType, data: any): string
+export function computeChecksumForData(checksumType: ChecksumType, data: any[]): string
 export function computeChecksumForString(checksumType: ChecksumType, str: string, length: number): string
-export function computeHmacForBytes(digestType: ChecksumType, key: Bytes, data: Bytes): string
-export function computeHmacForData(digestType: ChecksumType, key: any, data: any): string
-export function computeHmacForString(digestType: ChecksumType, key: any, str: string, length: number): string
-export function convert(str: any, toCodeset: string, fromCodeset: string): [ /* returnType */ any, /* bytesRead */ number | null ]
+export function computeHmacForBytes(digestType: ChecksumType, key: any, data: any): string
+export function computeHmacForData(digestType: ChecksumType, key: any[], data: any[]): string
+export function computeHmacForString(digestType: ChecksumType, key: any[], str: string, length: number): string
+export function convert(str: any[], toCodeset: string, fromCodeset: string): [ /* returnType */ any[], /* bytesRead */ number | null ]
 export function convertErrorQuark(): Quark
-export function convertWithFallback(str: any, toCodeset: string, fromCodeset: string, fallback: string): [ /* returnType */ any, /* bytesRead */ number | null ]
+export function convertWithFallback(str: any[], toCodeset: string, fromCodeset: string, fallback: string): [ /* returnType */ any[], /* bytesRead */ number | null ]
 export function datalistForeach(datalist: Data, func: DataForeachFunc): void
 export function datalistGetData(datalist: Data, key: string): object | null
 export function datalistGetFlags(datalist: Data): number
@@ -1038,10 +1035,10 @@ export function environSetenv(envp: string[] | null, variable: string, value: st
 export function environUnsetenv(envp: string[] | null, variable: string): string[]
 export function fileErrorFromErrno(errNo: number): FileError
 export function fileErrorQuark(): Quark
-export function fileGetContents(filename: string): [ /* returnType */ boolean, /* contents */ any ]
+export function fileGetContents(filename: string): [ /* returnType */ boolean, /* contents */ any[] ]
 export function fileOpenTmp(tmpl?: string | null): [ /* returnType */ number, /* nameUsed */ string ]
 export function fileReadLink(filename: string): string
-export function fileSetContents(filename: string, contents: any): boolean
+export function fileSetContents(filename: string, contents: any[]): boolean
 export function fileTest(filename: string, test: FileTest): boolean
 export function filenameDisplayBasename(filename: string): string
 export function filenameDisplayName(filename: string): string
@@ -1123,8 +1120,8 @@ export function ioChannelErrorQuark(): Quark
 export function ioCreateWatch(channel: IOChannel, condition: IOCondition): Source
 export function keyFileErrorQuark(): Quark
 export function listenv(): string[]
-export function localeFromUtf8(utf8string: string, len: number): [ /* returnType */ any, /* bytesRead */ number | null ]
-export function localeToUtf8(opsysstring: any): [ /* returnType */ string, /* bytesRead */ number | null, /* bytesWritten */ number | null ]
+export function localeFromUtf8(utf8string: string, len: number): [ /* returnType */ any[], /* bytesRead */ number | null ]
+export function localeToUtf8(opsysstring: any[]): [ /* returnType */ string, /* bytesRead */ number | null, /* bytesWritten */ number | null ]
 export function logDefaultHandler(logDomain: string | null, logLevel: LogLevelFlags, message?: string | null, unusedData?: object | null): void
 export function logRemoveHandler(logDomain: string, handlerId: number): void
 export function logSetAlwaysFatal(fatalMask: LogLevelFlags): LogLevelFlags
@@ -1247,10 +1244,10 @@ export function spawnAsyncWithPipes(workingDirectory: string | null, argv: strin
 export function spawnCheckExitStatus(exitStatus: number): boolean
 export function spawnClosePid(pid: Pid): void
 export function spawnCommandLineAsync(commandLine: string): boolean
-export function spawnCommandLineSync(commandLine: string): [ /* returnType */ boolean, /* standardOutput */ any | null, /* standardError */ any | null, /* exitStatus */ number | null ]
+export function spawnCommandLineSync(commandLine: string): [ /* returnType */ boolean, /* standardOutput */ any[] | null, /* standardError */ any[] | null, /* exitStatus */ number | null ]
 export function spawnErrorQuark(): Quark
 export function spawnExitErrorQuark(): Quark
-export function spawnSync(workingDirectory: string | null, argv: string[], envp: string[] | null, flags: SpawnFlags, childSetup?: SpawnChildSetupFunc | null): [ /* returnType */ boolean, /* standardOutput */ any | null, /* standardError */ any | null, /* exitStatus */ number | null ]
+export function spawnSync(workingDirectory: string | null, argv: string[], envp: string[] | null, flags: SpawnFlags, childSetup?: SpawnChildSetupFunc | null): [ /* returnType */ boolean, /* standardOutput */ any[] | null, /* standardError */ any[] | null, /* exitStatus */ number | null ]
 export function stpcpy(dest: string, src: string): string
 export function strEqual(v1: object, v2: object): boolean
 export function strHasPrefix(str: string, prefix: string): boolean
@@ -1430,8 +1427,8 @@ export function utf8Substring(str: string, startPos: number, endPos: number): st
 export function utf8ToUcs4(str: string, len: number): [ /* returnType */ number, /* itemsRead */ number | null, /* itemsWritten */ number | null ]
 export function utf8ToUcs4Fast(str: string, len: number): [ /* returnType */ number, /* itemsWritten */ number | null ]
 export function utf8ToUtf16(str: string, len: number): [ /* returnType */ number, /* itemsRead */ number | null, /* itemsWritten */ number | null ]
-export function utf8Validate(str: any): [ /* returnType */ boolean, /* end */ string | null ]
-export function utf8ValidateLen(str: any): [ /* returnType */ boolean, /* end */ string | null ]
+export function utf8Validate(str: any[]): [ /* returnType */ boolean, /* end */ string | null ]
+export function utf8ValidateLen(str: any[]): [ /* returnType */ boolean, /* end */ string | null ]
 export function uuidStringIsValid(str: string): boolean
 export function uuidStringRandom(): string
 export function variantGetGtype(): GObject.Type
@@ -1587,13 +1584,13 @@ export interface VoidFunc {
     (): void
 }
 export class Array {
-    /* Fields of GLib.Array */
+    /* Fields of GLib-2.0.GLib.Array */
     data: string
     len: number
     static name: string
 }
 export class AsyncQueue {
-    /* Methods of GLib.AsyncQueue */
+    /* Methods of GLib-2.0.GLib.AsyncQueue */
     length(): number
     lengthUnlocked(): number
     lock(): void
@@ -1618,7 +1615,7 @@ export class AsyncQueue {
     static name: string
 }
 export class BookmarkFile {
-    /* Methods of GLib.BookmarkFile */
+    /* Methods of GLib-2.0.GLib.BookmarkFile */
     addApplication(uri: string, name?: string | null, exec?: string | null): void
     addGroup(uri: string, group: string): void
     free(): void
@@ -1638,7 +1635,7 @@ export class BookmarkFile {
     hasApplication(uri: string, name: string): boolean
     hasGroup(uri: string, group: string): boolean
     hasItem(uri: string): boolean
-    loadFromData(data: any): boolean
+    loadFromData(data: any[]): boolean
     loadFromDataDirs(file: string): [ /* returnType */ boolean, /* fullPath */ string | null ]
     loadFromFile(filename: string): boolean
     moveItem(oldUri: string, newUri?: string | null): boolean
@@ -1655,56 +1652,59 @@ export class BookmarkFile {
     setModified(uri: string, modified: number): void
     setTitle(uri: string | null, title: string): void
     setVisited(uri: string, visited: number): void
-    toData(): any
+    toData(): any[]
     toFile(filename: string): boolean
     static name: string
+    /* Static methods and pseudo-constructors */
     static errorQuark(): Quark
 }
 export class ByteArray {
-    /* Fields of GLib.ByteArray */
+    /* Fields of GLib-2.0.GLib.ByteArray */
     data: number
     len: number
     static name: string
-    static free(array: any, freeSegment: boolean): number
-    static freeToBytes(array: any): Bytes
-    static newTake(data: any): any
-    static steal(array: any): [ /* returnType */ number, /* len */ number | null ]
-    static unref(array: any): void
+    /* Static methods and pseudo-constructors */
+    static free(array: any[], freeSegment: boolean): number
+    static freeToBytes(array: any[]): any
+    static newTake(data: any[]): any[]
+    static steal(array: any[]): [ /* returnType */ number, /* len */ number | null ]
+    static unref(array: any[]): void
 }
 export class Bytes {
-    /* Methods of GLib.Bytes */
-    compare(bytes2: Bytes): number
-    equal(bytes2: Bytes): boolean
-    getData(): any | null
+    /* Methods of GLib-2.0.GLib.Bytes */
+    compare(bytes2: any): number
+    equal(bytes2: any): boolean
+    getData(): any[] | null
     getSize(): number
     hash(): number
-    newFromBytes(offset: number, length: number): Bytes
-    ref(): Bytes
+    newFromBytes(offset: number, length: number): any
+    ref(): any
     unref(): void
-    unrefToArray(): any
-    unrefToData(): any
+    unrefToArray(): any[]
+    unrefToData(): any[]
     static name: string
-    static new(data: any | null): Bytes
-    constructor(data: any | null)
-    static new(data: any | null): Bytes
-    static newTake(data: any | null): Bytes
+    static new(data: any[] | null): Bytes
+    constructor(data: any[] | null)
+    /* Static methods and pseudo-constructors */
+    static new(data: any[] | null): Bytes
+    static newTake(data: any[] | null): Bytes
 }
 export class Checksum {
-    /* Methods of GLib.Checksum */
+    /* Methods of GLib-2.0.GLib.Checksum */
     copy(): Checksum
     free(): void
     getString(): string
     reset(): void
-    update(data: any): void
+    update(data: any[]): void
     static name: string
     static new(checksumType: ChecksumType): Checksum
     constructor(checksumType: ChecksumType)
+    /* Static methods and pseudo-constructors */
     static new(checksumType: ChecksumType): Checksum
     static typeGetLength(checksumType: ChecksumType): number
 }
 export class Cond {
-    /* Fields of GLib.Cond */
-    /* Methods of GLib.Cond */
+    /* Methods of GLib-2.0.GLib.Cond */
     broadcast(): void
     clear(): void
     init(): void
@@ -1717,14 +1717,14 @@ export class Data {
     static name: string
 }
 export class Date {
-    /* Fields of GLib.Date */
+    /* Fields of GLib-2.0.GLib.Date */
     julianDays: number
     julian: number
     dmy: number
     day: number
     month: number
     year: number
-    /* Methods of GLib.Date */
+    /* Methods of GLib-2.0.GLib.Date */
     addDays(nDays: number): void
     addMonths(nMonths: number): void
     addYears(nYears: number): void
@@ -1763,6 +1763,7 @@ export class Date {
     static name: string
     static new(): Date
     constructor()
+    /* Static methods and pseudo-constructors */
     static new(): Date
     static newDmy(day: DateDay, month: DateMonth, year: DateYear): Date
     static newJulian(julianDay: number): Date
@@ -1779,7 +1780,7 @@ export class Date {
     static validYear(year: DateYear): boolean
 }
 export class DateTime {
-    /* Methods of GLib.DateTime */
+    /* Methods of GLib-2.0.GLib.DateTime */
     add(timespan: TimeSpan): DateTime
     addDays(days: number): DateTime
     addFull(years: number, months: number, days: number, hours: number, minutes: number, seconds: number): DateTime
@@ -1819,8 +1820,9 @@ export class DateTime {
     static name: string
     static new(tz: TimeZone, year: number, month: number, day: number, hour: number, minute: number, seconds: number): DateTime
     constructor(tz: TimeZone, year: number, month: number, day: number, hour: number, minute: number, seconds: number)
+    /* Static methods and pseudo-constructors */
     static new(tz: TimeZone, year: number, month: number, day: number, hour: number, minute: number, seconds: number): DateTime
-    static newFromIso8601(text: string, defaultTz?: TimeZone | null): DateTime | null
+    static newFromIso8601(text: string, defaultTz?: TimeZone | null): DateTime
     static newFromTimevalLocal(tv: TimeVal): DateTime
     static newFromTimevalUtc(tv: TimeVal): DateTime
     static newFromUnixLocal(t: number): DateTime
@@ -1835,33 +1837,36 @@ export class DateTime {
     static hash(datetime: object): number
 }
 export class DebugKey {
-    /* Fields of GLib.DebugKey */
+    /* Fields of GLib-2.0.GLib.DebugKey */
     key: string
     value: number
     static name: string
 }
 export class Dir {
-    /* Methods of GLib.Dir */
+    /* Methods of GLib-2.0.GLib.Dir */
     close(): void
     readName(): string
     rewind(): void
     static name: string
+    /* Static methods and pseudo-constructors */
     static makeTmp(tmpl?: string | null): string
 }
 export class Error {
-    /* Fields of GLib.Error */
+    /* Fields of GLib-2.0.GLib.Error */
     domain: Quark
     code: number
     message: string
-    /* Methods of GLib.Error */
+    /* Methods of GLib-2.0.GLib.Error */
     copy(): Error
     free(): void
     matches(domain: Quark, code: number): boolean
     static name: string
+    /* Static methods and pseudo-constructors */
     static newLiteral(domain: Quark, code: number, message: string): Error
 }
 export class HashTable {
     static name: string
+    /* Static methods and pseudo-constructors */
     static add(hashTable: HashTable, key?: object | null): boolean
     static contains(hashTable: HashTable, key?: object | null): boolean
     static destroy(hashTable: HashTable): void
@@ -1878,8 +1883,7 @@ export class HashTable {
     static unref(hashTable: HashTable): void
 }
 export class HashTableIter {
-    /* Fields of GLib.HashTableIter */
-    /* Methods of GLib.HashTableIter */
+    /* Methods of GLib-2.0.GLib.HashTableIter */
     init(hashTable: HashTable): void
     next(): [ /* returnType */ boolean, /* key */ object | null, /* value */ object | null ]
     remove(): void
@@ -1888,15 +1892,15 @@ export class HashTableIter {
     static name: string
 }
 export class Hmac {
-    /* Methods of GLib.Hmac */
-    getDigest(buffer: any): void
+    /* Methods of GLib-2.0.GLib.Hmac */
+    getDigest(buffer: any[]): void
     getString(): string
     unref(): void
-    update(data: any): void
+    update(data: any[]): void
     static name: string
 }
 export class Hook {
-    /* Fields of GLib.Hook */
+    /* Fields of GLib-2.0.GLib.Hook */
     data: object
     next: Hook
     prev: Hook
@@ -1905,9 +1909,10 @@ export class Hook {
     flags: number
     func: object
     destroy: DestroyNotify
-    /* Methods of GLib.Hook */
+    /* Methods of GLib-2.0.GLib.Hook */
     compareIds(sibling: Hook): number
     static name: string
+    /* Static methods and pseudo-constructors */
     static destroy(hookList: HookList, hookId: number): boolean
     static destroyLink(hookList: HookList, hook: Hook): void
     static free(hookList: HookList, hook: Hook): void
@@ -1916,7 +1921,7 @@ export class Hook {
     static unref(hookList: HookList, hook: Hook): void
 }
 export class HookList {
-    /* Fields of GLib.HookList */
+    /* Fields of GLib-2.0.GLib.HookList */
     seqId: number
     hookSize: number
     isSetup: number
@@ -1924,7 +1929,7 @@ export class HookList {
     dummy3: object
     finalizeHook: HookFinalizeFunc
     dummy: object[]
-    /* Methods of GLib.HookList */
+    /* Methods of GLib-2.0.GLib.HookList */
     clear(): void
     init(hookSize: number): void
     invoke(mayRecurse: boolean): void
@@ -1932,12 +1937,10 @@ export class HookList {
     static name: string
 }
 export class IConv {
-    /* Methods of GLib.IConv */
     static name: string
 }
 export class IOChannel {
-    /* Fields of GLib.IOChannel */
-    /* Methods of GLib.IOChannel */
+    /* Methods of GLib-2.0.GLib.IOChannel */
     close(): void
     flush(): IOStatus
     getBufferCondition(): IOCondition
@@ -1949,10 +1952,10 @@ export class IOChannel {
     getLineTerm(length: number): string
     init(): void
     read(buf: string, count: number, bytesRead: number): IOError
-    readChars(): [ /* returnType */ IOStatus, /* buf */ any, /* bytesRead */ number | null ]
+    readChars(): [ /* returnType */ IOStatus, /* buf */ any[], /* bytesRead */ number | null ]
     readLine(): [ /* returnType */ IOStatus, /* strReturn */ string, /* length */ number | null, /* terminatorPos */ number | null ]
     readLineString(buffer: String, terminatorPos?: number | null): IOStatus
-    readToEnd(): [ /* returnType */ IOStatus, /* strReturn */ any ]
+    readToEnd(): [ /* returnType */ IOStatus, /* strReturn */ any[] ]
     readUnichar(): [ /* returnType */ IOStatus, /* thechar */ number ]
     ref(): IOChannel
     seek(offset: number, type: SeekType): IOError
@@ -1967,28 +1970,29 @@ export class IOChannel {
     unixGetFd(): number
     unref(): void
     write(buf: string, count: number, bytesWritten: number): IOError
-    writeChars(buf: any, count: number): [ /* returnType */ IOStatus, /* bytesWritten */ number ]
+    writeChars(buf: any[], count: number): [ /* returnType */ IOStatus, /* bytesWritten */ number ]
     writeUnichar(thechar: number): IOStatus
     static name: string
+    /* Static methods and pseudo-constructors */
     static newFile(filename: string, mode: string): IOChannel
     static unixNew(fd: number): IOChannel
     static errorFromErrno(en: number): IOChannelError
     static errorQuark(): Quark
 }
 export class IOFuncs {
-    /* Fields of GLib.IOFuncs */
-    ioRead: any
-    ioWrite: any
-    ioSeek: any
-    ioClose: any
-    ioCreateWatch: any
-    ioFree: any
-    ioSetFlags: any
-    ioGetFlags: any
+    /* Fields of GLib-2.0.GLib.IOFuncs */
+    ioRead: (channel: IOChannel, buf: string, count: number, bytesRead: number) => IOStatus
+    ioWrite: (channel: IOChannel, buf: string, count: number, bytesWritten: number) => IOStatus
+    ioSeek: (channel: IOChannel, offset: number, type: SeekType) => IOStatus
+    ioClose: (channel: IOChannel) => IOStatus
+    ioCreateWatch: (channel: IOChannel, condition: IOCondition) => Source
+    ioFree: (channel: IOChannel) => void
+    ioSetFlags: (channel: IOChannel, flags: IOFlags) => IOStatus
+    ioGetFlags: (channel: IOChannel) => IOFlags
     static name: string
 }
 export class KeyFile {
-    /* Methods of GLib.KeyFile */
+    /* Methods of GLib-2.0.GLib.KeyFile */
     getBoolean(groupName: string, key: string): boolean
     getBooleanList(groupName: string, key: string): boolean[]
     getComment(groupName: string | null, key: string): string
@@ -2008,7 +2012,7 @@ export class KeyFile {
     getUint64(groupName: string, key: string): number
     getValue(groupName: string, key: string): string
     hasGroup(groupName: string): boolean
-    loadFromBytes(bytes: Bytes, flags: KeyFileFlags): boolean
+    loadFromBytes(bytes: any, flags: KeyFileFlags): boolean
     loadFromData(data: string, length: number, flags: KeyFileFlags): boolean
     loadFromDataDirs(file: string, flags: KeyFileFlags): [ /* returnType */ boolean, /* fullPath */ string | null ]
     loadFromDirs(file: string, searchDirs: string[], flags: KeyFileFlags): [ /* returnType */ boolean, /* fullPath */ string | null ]
@@ -2037,25 +2041,26 @@ export class KeyFile {
     static name: string
     static new(): KeyFile
     constructor()
+    /* Static methods and pseudo-constructors */
     static new(): KeyFile
     static errorQuark(): Quark
 }
 export class List {
-    /* Fields of GLib.List */
+    /* Fields of GLib-2.0.GLib.List */
     data: object
     next: object[]
     prev: object[]
     static name: string
 }
 export class LogField {
-    /* Fields of GLib.LogField */
+    /* Fields of GLib-2.0.GLib.LogField */
     key: string
     value: object
     length: number
     static name: string
 }
 export class MainContext {
-    /* Methods of GLib.MainContext */
+    /* Methods of GLib-2.0.GLib.MainContext */
     acquire(): boolean
     addPoll(fd: PollFD, priority: number): void
     check(maxPriority: number, fds: PollFD[]): boolean
@@ -2080,13 +2085,14 @@ export class MainContext {
     static name: string
     static new(): MainContext
     constructor()
+    /* Static methods and pseudo-constructors */
     static new(): MainContext
     static default(): MainContext
     static getThreadDefault(): MainContext
     static refThreadDefault(): MainContext
 }
 export class MainLoop {
-    /* Methods of GLib.MainLoop */
+    /* Methods of GLib-2.0.GLib.MainLoop */
     getContext(): MainContext
     isRunning(): boolean
     quit(): void
@@ -2096,12 +2102,13 @@ export class MainLoop {
     static name: string
     static new(context: MainContext | null, isRunning: boolean): MainLoop
     constructor(context: MainContext | null, isRunning: boolean)
+    /* Static methods and pseudo-constructors */
     static new(context: MainContext | null, isRunning: boolean): MainLoop
 }
 export class MappedFile {
-    /* Methods of GLib.MappedFile */
+    /* Methods of GLib-2.0.GLib.MappedFile */
     free(): void
-    getBytes(): Bytes
+    getBytes(): any
     getContents(): string
     getLength(): number
     ref(): MappedFile
@@ -2109,11 +2116,12 @@ export class MappedFile {
     static name: string
     static new(filename: string, writable: boolean): MappedFile
     constructor(filename: string, writable: boolean)
+    /* Static methods and pseudo-constructors */
     static new(filename: string, writable: boolean): MappedFile
     static newFromFd(fd: number, writable: boolean): MappedFile
 }
 export class MarkupParseContext {
-    /* Methods of GLib.MarkupParseContext */
+    /* Methods of GLib-2.0.GLib.MarkupParseContext */
     endParse(): boolean
     free(): void
     getElement(): string
@@ -2127,19 +2135,20 @@ export class MarkupParseContext {
     static name: string
     static new(parser: MarkupParser, flags: MarkupParseFlags, userData: object | null, userDataDnotify: DestroyNotify): MarkupParseContext
     constructor(parser: MarkupParser, flags: MarkupParseFlags, userData: object | null, userDataDnotify: DestroyNotify)
+    /* Static methods and pseudo-constructors */
     static new(parser: MarkupParser, flags: MarkupParseFlags, userData: object | null, userDataDnotify: DestroyNotify): MarkupParseContext
 }
 export class MarkupParser {
-    /* Fields of GLib.MarkupParser */
-    startElement: any
-    endElement: any
-    text: any
-    passthrough: any
-    error: any
+    /* Fields of GLib-2.0.GLib.MarkupParser */
+    startElement: (context: MarkupParseContext, elementName: string, attributeNames: string, attributeValues: string) => void
+    endElement: (context: MarkupParseContext, elementName: string) => void
+    text: (context: MarkupParseContext, text: string, textLen: number) => void
+    passthrough: (context: MarkupParseContext, passthroughText: string, textLen: number) => void
+    error: (context: MarkupParseContext, error: Error) => void
     static name: string
 }
 export class MatchInfo {
-    /* Methods of GLib.MatchInfo */
+    /* Methods of GLib-2.0.GLib.MatchInfo */
     expandReferences(stringToExpand: string): string | null
     fetch(matchNum: number): string | null
     fetchAll(): string[]
@@ -2158,23 +2167,23 @@ export class MatchInfo {
     static name: string
 }
 export class MemVTable {
-    /* Fields of GLib.MemVTable */
-    malloc: any
-    realloc: any
-    free: any
-    calloc: any
-    tryMalloc: any
-    tryRealloc: any
+    /* Fields of GLib-2.0.GLib.MemVTable */
+    malloc: (nBytes: number) => object
+    realloc: (mem: object, nBytes: number) => object
+    free: (mem: object) => void
+    calloc: (nBlocks: number, nBlockBytes: number) => object
+    tryMalloc: (nBytes: number) => object
+    tryRealloc: (mem: object, nBytes: number) => object
     static name: string
 }
 export class Node {
-    /* Fields of GLib.Node */
+    /* Fields of GLib-2.0.GLib.Node */
     data: object
     next: Node
     prev: Node
     parent: Node
     children: Node
-    /* Methods of GLib.Node */
+    /* Methods of GLib-2.0.GLib.Node */
     childIndex(data?: object | null): number
     childPosition(child: Node): number
     depth(): number
@@ -2188,16 +2197,16 @@ export class Node {
     static name: string
 }
 export class Once {
-    /* Fields of GLib.Once */
+    /* Fields of GLib-2.0.GLib.Once */
     status: OnceStatus
     retval: object
-    /* Methods of GLib.Once */
     static name: string
+    /* Static methods and pseudo-constructors */
     static initEnter(location: object): boolean
     static initLeave(location: object, result: number): void
 }
 export class OptionContext {
-    /* Methods of GLib.OptionContext */
+    /* Methods of GLib-2.0.GLib.OptionContext */
     addGroup(group: OptionGroup): void
     addMainEntries(entries: OptionEntry[], translationDomain?: string | null): void
     free(): void
@@ -2208,8 +2217,8 @@ export class OptionContext {
     getMainGroup(): OptionGroup
     getStrictPosix(): boolean
     getSummary(): string
-    parse(argv: string[]): boolean
-    parseStrv(arguments_: string[]): boolean
+    parse(argv?: string[] | null): [ /* returnType */ boolean, /* argv */ string[] | null ]
+    parseStrv(arguments_?: string[] | null): [ /* returnType */ boolean, /* arguments_ */ string[] | null ]
     setDescription(description?: string | null): void
     setHelpEnabled(helpEnabled: boolean): void
     setIgnoreUnknownOptions(ignoreUnknown: boolean): void
@@ -2221,7 +2230,7 @@ export class OptionContext {
     static name: string
 }
 export class OptionEntry {
-    /* Fields of GLib.OptionEntry */
+    /* Fields of GLib-2.0.GLib.OptionEntry */
     longName: string
     shortName: number
     flags: number
@@ -2232,7 +2241,7 @@ export class OptionEntry {
     static name: string
 }
 export class OptionGroup {
-    /* Methods of GLib.OptionGroup */
+    /* Methods of GLib-2.0.GLib.OptionGroup */
     addEntries(entries: OptionEntry[]): void
     free(): void
     ref(): OptionGroup
@@ -2242,41 +2251,41 @@ export class OptionGroup {
     static name: string
     static new(name: string, description: string, helpDescription: string, userData?: object | null, destroy?: DestroyNotify | null): OptionGroup
     constructor(name: string, description: string, helpDescription: string, userData?: object | null, destroy?: DestroyNotify | null)
+    /* Static methods and pseudo-constructors */
     static new(name: string, description: string, helpDescription: string, userData?: object | null, destroy?: DestroyNotify | null): OptionGroup
 }
 export class PatternSpec {
-    /* Methods of GLib.PatternSpec */
+    /* Methods of GLib-2.0.GLib.PatternSpec */
     equal(pspec2: PatternSpec): boolean
     free(): void
     static name: string
 }
 export class PollFD {
-    /* Fields of GLib.PollFD */
+    /* Fields of GLib-2.0.GLib.PollFD */
     fd: number
     events: number
     revents: number
     static name: string
 }
 export class Private {
-    /* Fields of GLib.Private */
-    /* Methods of GLib.Private */
+    /* Methods of GLib-2.0.GLib.Private */
     get(): object | null
     replace(value?: object | null): void
     set(value?: object | null): void
     static name: string
 }
 export class PtrArray {
-    /* Fields of GLib.PtrArray */
+    /* Fields of GLib-2.0.GLib.PtrArray */
     pdata: object
     len: number
     static name: string
 }
 export class Queue {
-    /* Fields of GLib.Queue */
+    /* Fields of GLib-2.0.GLib.Queue */
     head: object[]
     tail: object[]
     length: number
-    /* Methods of GLib.Queue */
+    /* Methods of GLib-2.0.GLib.Queue */
     clear(): void
     clearFull(freeFunc?: DestroyNotify | null): void
     free(): void
@@ -2300,8 +2309,7 @@ export class Queue {
     static name: string
 }
 export class RWLock {
-    /* Fields of GLib.RWLock */
-    /* Methods of GLib.RWLock */
+    /* Methods of GLib-2.0.GLib.RWLock */
     clear(): void
     init(): void
     readerLock(): void
@@ -2313,7 +2321,7 @@ export class RWLock {
     static name: string
 }
 export class Rand {
-    /* Methods of GLib.Rand */
+    /* Methods of GLib-2.0.GLib.Rand */
     double(): number
     doubleRange(begin: number, end: number): number
     free(): void
@@ -2324,8 +2332,7 @@ export class Rand {
     static name: string
 }
 export class RecMutex {
-    /* Fields of GLib.RecMutex */
-    /* Methods of GLib.RecMutex */
+    /* Methods of GLib-2.0.GLib.RecMutex */
     clear(): void
     init(): void
     lock(): void
@@ -2334,7 +2341,7 @@ export class RecMutex {
     static name: string
 }
 export class Regex {
-    /* Methods of GLib.Regex */
+    /* Methods of GLib-2.0.GLib.Regex */
     getCaptureCount(): number
     getCompileFlags(): RegexCompileFlags
     getHasCrOrLf(): boolean
@@ -2354,9 +2361,10 @@ export class Regex {
     splitFull(string: string[], startPosition: number, matchOptions: RegexMatchFlags, maxTokens: number): string[]
     unref(): void
     static name: string
-    static new(pattern: string, compileOptions: RegexCompileFlags, matchOptions: RegexMatchFlags): Regex | null
+    static new(pattern: string, compileOptions: RegexCompileFlags, matchOptions: RegexMatchFlags): Regex
     constructor(pattern: string, compileOptions: RegexCompileFlags, matchOptions: RegexMatchFlags)
-    static new(pattern: string, compileOptions: RegexCompileFlags, matchOptions: RegexMatchFlags): Regex | null
+    /* Static methods and pseudo-constructors */
+    static new(pattern: string, compileOptions: RegexCompileFlags, matchOptions: RegexMatchFlags): Regex
     static checkReplacement(replacement: string): [ /* returnType */ boolean, /* hasReferences */ boolean | null ]
     static errorQuark(): Quark
     static escapeNul(string: string, length: number): string
@@ -2365,13 +2373,13 @@ export class Regex {
     static splitSimple(pattern: string, string: string, compileOptions: RegexCompileFlags, matchOptions: RegexMatchFlags): string[]
 }
 export class SList {
-    /* Fields of GLib.SList */
+    /* Fields of GLib-2.0.GLib.SList */
     data: object
     next: object[]
     static name: string
 }
 export class Scanner {
-    /* Fields of GLib.Scanner */
+    /* Fields of GLib-2.0.GLib.Scanner */
     userData: object
     maxParseErrors: number
     parseErrors: number
@@ -2387,7 +2395,7 @@ export class Scanner {
     nextLine: number
     nextPosition: number
     msgHandler: ScannerMsgFunc
-    /* Methods of GLib.Scanner */
+    /* Methods of GLib-2.0.GLib.Scanner */
     curLine(): number
     curPosition(): number
     curToken(): TokenType
@@ -2407,7 +2415,7 @@ export class Scanner {
     static name: string
 }
 export class ScannerConfig {
-    /* Fields of GLib.ScannerConfig */
+    /* Fields of GLib-2.0.GLib.ScannerConfig */
     csetSkipCharacters: string
     csetIdentifierFirst: string
     csetIdentifierNth: string
@@ -2437,7 +2445,7 @@ export class ScannerConfig {
     static name: string
 }
 export class Sequence {
-    /* Methods of GLib.Sequence */
+    /* Methods of GLib-2.0.GLib.Sequence */
     append(data?: object | null): SequenceIter
     free(): void
     getBeginIter(): SequenceIter
@@ -2447,6 +2455,7 @@ export class Sequence {
     isEmpty(): boolean
     prepend(data?: object | null): SequenceIter
     static name: string
+    /* Static methods and pseudo-constructors */
     static get(iter: SequenceIter): object | null
     static insertBefore(iter: SequenceIter, data?: object | null): SequenceIter
     static move(src: SequenceIter, dest: SequenceIter): void
@@ -2458,7 +2467,7 @@ export class Sequence {
     static swap(a: SequenceIter, b: SequenceIter): void
 }
 export class SequenceIter {
-    /* Methods of GLib.SequenceIter */
+    /* Methods of GLib-2.0.GLib.SequenceIter */
     compare(b: SequenceIter): number
     getPosition(): number
     getSequence(): Sequence
@@ -2470,8 +2479,7 @@ export class SequenceIter {
     static name: string
 }
 export class Source {
-    /* Fields of GLib.Source */
-    /* Methods of GLib.Source */
+    /* Methods of GLib-2.0.GLib.Source */
     addChildSource(childSource: Source): void
     addPoll(fd: PollFD): void
     addUnixFd(fd: number, events: IOCondition): object
@@ -2503,6 +2511,7 @@ export class Source {
     static name: string
     static new(sourceFuncs: SourceFuncs, structSize: number): Source
     constructor(sourceFuncs: SourceFuncs, structSize: number)
+    /* Static methods and pseudo-constructors */
     static new(sourceFuncs: SourceFuncs, structSize: number): Source
     static remove(tag: number): boolean
     static removeByFuncsUserData(funcs: SourceFuncs, userData?: object | null): boolean
@@ -2510,16 +2519,16 @@ export class Source {
     static setNameById(tag: number, name: string): void
 }
 export class SourceCallbackFuncs {
-    /* Fields of GLib.SourceCallbackFuncs */
-    ref: any
-    unref: any
+    /* Fields of GLib-2.0.GLib.SourceCallbackFuncs */
+    ref: (cbData: object) => void
+    unref: (cbData: object) => void
     static name: string
 }
 export class SourceFuncs {
-    /* Fields of GLib.SourceFuncs */
-    prepare: any
-    check: any
-    finalize: any
+    /* Fields of GLib-2.0.GLib.SourceFuncs */
+    prepare: (source: Source, timeout: number) => boolean
+    check: (source: Source) => boolean
+    finalize: (source: Source) => void
     static name: string
 }
 export class SourcePrivate {
@@ -2529,11 +2538,11 @@ export class StatBuf {
     static name: string
 }
 export class String {
-    /* Fields of GLib.String */
+    /* Fields of GLib-2.0.GLib.String */
     str: string
     len: number
     allocatedLen: number
-    /* Methods of GLib.String */
+    /* Methods of GLib-2.0.GLib.String */
     append(val: string): String
     appendC(c: number): String
     appendLen(val: string, len: number): String
@@ -2546,7 +2555,7 @@ export class String {
     equal(v2: String): boolean
     erase(pos: number, len: number): String
     free(freeSegment: boolean): string | null
-    freeToBytes(): Bytes
+    freeToBytes(): any
     hash(): number
     insert(pos: number, val: string): String
     insertC(pos: number, c: number): String
@@ -2564,7 +2573,7 @@ export class String {
     static name: string
 }
 export class StringChunk {
-    /* Methods of GLib.StringChunk */
+    /* Methods of GLib-2.0.GLib.StringChunk */
     clear(): void
     free(): void
     insert(string: string): string
@@ -2576,7 +2585,7 @@ export class TestCase {
     static name: string
 }
 export class TestConfig {
-    /* Fields of GLib.TestConfig */
+    /* Fields of GLib-2.0.GLib.TestConfig */
     testInitialized: boolean
     testQuick: boolean
     testPerf: boolean
@@ -2586,45 +2595,45 @@ export class TestConfig {
     static name: string
 }
 export class TestLogBuffer {
-    /* Fields of GLib.TestLogBuffer */
-    /* Methods of GLib.TestLogBuffer */
+    /* Methods of GLib-2.0.GLib.TestLogBuffer */
     free(): void
     push(nBytes: number, bytes: number): void
     static name: string
 }
 export class TestLogMsg {
-    /* Fields of GLib.TestLogMsg */
+    /* Fields of GLib-2.0.GLib.TestLogMsg */
     logType: TestLogType
     nStrings: number
     strings: string
     nNums: number
-    /* Methods of GLib.TestLogMsg */
+    /* Methods of GLib-2.0.GLib.TestLogMsg */
     free(): void
     static name: string
 }
 export class TestSuite {
-    /* Methods of GLib.TestSuite */
+    /* Methods of GLib-2.0.GLib.TestSuite */
     add(testCase: TestCase): void
     addSuite(nestedsuite: TestSuite): void
     static name: string
 }
 export class Thread {
-    /* Methods of GLib.Thread */
+    /* Methods of GLib-2.0.GLib.Thread */
     join(): object | null
     ref(): Thread
     unref(): void
     static name: string
+    /* Static methods and pseudo-constructors */
     static errorQuark(): Quark
     static exit(retval?: object | null): void
     static self(): Thread
     static yield(): void
 }
 export class ThreadPool {
-    /* Fields of GLib.ThreadPool */
+    /* Fields of GLib-2.0.GLib.ThreadPool */
     func: Func
     userData: object
     exclusive: boolean
-    /* Methods of GLib.ThreadPool */
+    /* Methods of GLib-2.0.GLib.ThreadPool */
     free(immediate: boolean, wait: boolean): void
     getMaxThreads(): number
     getNumThreads(): number
@@ -2633,6 +2642,7 @@ export class ThreadPool {
     setMaxThreads(maxThreads: number): boolean
     unprocessed(): number
     static name: string
+    /* Static methods and pseudo-constructors */
     static getMaxIdleTime(): number
     static getMaxUnusedThreads(): number
     static getNumUnusedThreads(): number
@@ -2641,17 +2651,18 @@ export class ThreadPool {
     static stopUnusedThreads(): void
 }
 export class TimeVal {
-    /* Fields of GLib.TimeVal */
+    /* Fields of GLib-2.0.GLib.TimeVal */
     tvSec: number
     tvUsec: number
-    /* Methods of GLib.TimeVal */
+    /* Methods of GLib-2.0.GLib.TimeVal */
     add(microseconds: number): void
     toIso8601(): string | null
     static name: string
+    /* Static methods and pseudo-constructors */
     static fromIso8601(isoDate: string): [ /* returnType */ boolean, /* time */ TimeVal ]
 }
 export class TimeZone {
-    /* Methods of GLib.TimeZone */
+    /* Methods of GLib-2.0.GLib.TimeZone */
     adjustTime(type: TimeType, time: number): number
     findInterval(type: TimeType, time: number): number
     getAbbreviation(interval: number): string
@@ -2663,13 +2674,14 @@ export class TimeZone {
     static name: string
     static new(identifier?: string | null): TimeZone
     constructor(identifier?: string | null)
+    /* Static methods and pseudo-constructors */
     static new(identifier?: string | null): TimeZone
     static newLocal(): TimeZone
     static newOffset(seconds: number): TimeZone
     static newUtc(): TimeZone
 }
 export class Timer {
-    /* Methods of GLib.Timer */
+    /* Methods of GLib-2.0.GLib.Timer */
     continue(): void
     destroy(): void
     elapsed(microseconds: number): number
@@ -2680,16 +2692,17 @@ export class Timer {
     static name: string
 }
 export class TrashStack {
-    /* Fields of GLib.TrashStack */
+    /* Fields of GLib-2.0.GLib.TrashStack */
     next: TrashStack
     static name: string
+    /* Static methods and pseudo-constructors */
     static height(stackP: TrashStack): number
     static peek(stackP: TrashStack): object | null
     static pop(stackP: TrashStack): object | null
     static push(stackP: TrashStack, dataP: object): void
 }
 export class Tree {
-    /* Methods of GLib.Tree */
+    /* Methods of GLib-2.0.GLib.Tree */
     destroy(): void
     height(): number
     insert(key?: object | null, value?: object | null): void
@@ -2703,12 +2716,12 @@ export class Tree {
     static name: string
 }
 export class Variant {
-    /* Methods of GLib.Variant */
+    /* Methods of GLib-2.0.GLib.Variant */
     byteswap(): Variant
     checkFormatString(formatString: string, copyOnly: boolean): boolean
     classify(): VariantClass
     compare(two: Variant): number
-    dupBytestring(): any
+    dupBytestring(): any[]
     dupBytestringArray(): string[]
     dupObjv(): string[]
     dupString(): [ /* returnType */ string, /* length */ number ]
@@ -2716,11 +2729,11 @@ export class Variant {
     equal(two: Variant): boolean
     getBoolean(): boolean
     getByte(): number
-    getBytestring(): any
+    getBytestring(): any[]
     getBytestringArray(): string[]
     getChildValue(index: number): Variant
     getData(): object | null
-    getDataAsBytes(): Bytes
+    getDataAsBytes(): any
     getDouble(): number
     getHandle(): number
     getInt16(): number
@@ -2752,16 +2765,17 @@ export class Variant {
     takeRef(): Variant
     unref(): void
     static name: string
+    /* Static methods and pseudo-constructors */
     static newArray(childType: VariantType | null, children: Variant[] | null): Variant
     static newBoolean(value: boolean): Variant
     static newByte(value: number): Variant
-    static newBytestring(string: any): Variant
+    static newBytestring(string: any[]): Variant
     static newBytestringArray(strv: string[]): Variant
     static newDictEntry(key: Variant, value: Variant): Variant
     static newDouble(value: number): Variant
     static newFixedArray(elementType: VariantType, elements: object | null, nElements: number, elementSize: number): Variant
-    static newFromBytes(type: VariantType, bytes: Bytes, trusted: boolean): Variant
-    static newFromData(type: VariantType, data: any, trusted: boolean, notify: DestroyNotify, userData?: object | null): Variant
+    static newFromBytes(type: VariantType, bytes: any, trusted: boolean): Variant
+    static newFromData(type: VariantType, data: any[], trusted: boolean, notify: DestroyNotify, userData?: object | null): Variant
     static newHandle(value: number): Variant
     static newInt16(value: number): Variant
     static newInt32(value: number): Variant
@@ -2785,7 +2799,7 @@ export class Variant {
     static parserGetErrorQuark(): Quark
 }
 export class VariantBuilder {
-    /* Methods of GLib.VariantBuilder */
+    /* Methods of GLib-2.0.GLib.VariantBuilder */
     addValue(value: Variant): void
     close(): void
     end(): Variant
@@ -2795,10 +2809,11 @@ export class VariantBuilder {
     static name: string
     static new(type: VariantType): VariantBuilder
     constructor(type: VariantType)
+    /* Static methods and pseudo-constructors */
     static new(type: VariantType): VariantBuilder
 }
 export class VariantDict {
-    /* Methods of GLib.VariantDict */
+    /* Methods of GLib-2.0.GLib.VariantDict */
     clear(): void
     contains(key: string): boolean
     end(): Variant
@@ -2810,18 +2825,18 @@ export class VariantDict {
     static name: string
     static new(fromAsv?: Variant | null): VariantDict
     constructor(fromAsv?: Variant | null)
+    /* Static methods and pseudo-constructors */
     static new(fromAsv?: Variant | null): VariantDict
 }
 export class VariantIter {
-    /* Fields of GLib.VariantIter */
-    /* Methods of GLib.VariantIter */
+    /* Methods of GLib-2.0.GLib.VariantIter */
     free(): void
     nChildren(): number
     nextValue(): Variant | null
     static name: string
 }
 export class VariantType {
-    /* Methods of GLib.VariantType */
+    /* Methods of GLib-2.0.GLib.VariantType */
     copy(): VariantType
     dupString(): string
     element(): VariantType
@@ -2846,6 +2861,7 @@ export class VariantType {
     static name: string
     static new(typeString: string): VariantType
     constructor(typeString: string)
+    /* Static methods and pseudo-constructors */
     static new(typeString: string): VariantType
     static newArray(element: VariantType): VariantType
     static newDictEntry(key: VariantType, value: VariantType): VariantType
@@ -2857,18 +2873,17 @@ export class VariantType {
     static stringScan(string: string, limit?: string | null): [ /* returnType */ boolean, /* endptr */ string | null ]
 }
 export class DoubleIEEE754 {
-    /* Fields of GLib.DoubleIEEE754 */
+    /* Fields of GLib-2.0.GLib.DoubleIEEE754 */
     vDouble: number
     static name: string
 }
 export class FloatIEEE754 {
-    /* Fields of GLib.FloatIEEE754 */
+    /* Fields of GLib-2.0.GLib.FloatIEEE754 */
     vFloat: number
     static name: string
 }
 export class Mutex {
-    /* Fields of GLib.Mutex */
-    /* Methods of GLib.Mutex */
+    /* Methods of GLib-2.0.GLib.Mutex */
     clear(): void
     init(): void
     lock(): void
@@ -2877,7 +2892,7 @@ export class Mutex {
     static name: string
 }
 export class TokenValue {
-    /* Fields of GLib.TokenValue */
+    /* Fields of GLib-2.0.GLib.TokenValue */
     vSymbol: object
     vIdentifier: string
     vBinary: number
@@ -2892,18 +2907,17 @@ export class TokenValue {
     vError: number
     static name: string
 }
-type DateDay = number
-type DateYear = number
-type MainContextPusher = void
-type MutexLocker = void
-type Pid = number
-type Quark = number
-type RWLockReaderLocker = void
-type RWLockWriterLocker = void
-type RecMutexLocker = void
-type RefString = number
-type Strv = string
-type Time = number
-type TimeSpan = number
-type Type = number
-}
+export type DateDay = number
+export type DateYear = number
+export type MainContextPusher = void
+export type MutexLocker = void
+export type Pid = number
+export type Quark = number
+export type RWLockReaderLocker = void
+export type RWLockWriterLocker = void
+export type RecMutexLocker = void
+export type RefString = number
+export type Strv = string
+export type Time = number
+export type TimeSpan = number
+export type Type = number

@@ -2,12 +2,9 @@
  * Gst-1.0
  */
 
-/// <reference types="node" />
-/// <reference path="GObject-2.0.d.ts" />
-/// <reference path="GLib-2.0.d.ts" />
-/// <reference path="GModule-2.0.d.ts" />
-
-declare namespace Gst {
+import type * as GObject from './GObject-2.0';
+import type * as GLib from './GLib-2.0';
+import type * as GModule from './GModule-2.0';
 
 export enum BufferingMode {
     STREAM,
@@ -932,8 +929,8 @@ export function formatRegister(nick: string, description: string): Format
 export function formatToQuark(format: Format): GLib.Quark
 export function formatsContains(formats: Format[], format: Format): boolean
 export function getMainExecutablePath(): string | null
-export function init(argv?: string[] | null): void
-export function initCheck(argv?: string[] | null): boolean
+export function init(argv?: string[] | null): /* argv */ string[] | null
+export function initCheck(argv?: string[] | null): [ /* returnType */ boolean, /* argv */ string[] | null ]
 export function isCapsFeatures(obj?: object | null): boolean
 export function isInitialized(): boolean
 export function libraryErrorQuark(): GLib.Quark
@@ -944,8 +941,8 @@ export function metaApiTypeHasTag(api: GObject.Type, tag: GLib.Quark): boolean
 export function metaApiTypeRegister(api: string, tags: string[]): GObject.Type
 export function metaGetInfo(impl: string): MetaInfo | null
 export function metaRegister(api: GObject.Type, impl: string, size: number, initFunc: MetaInitFunction, freeFunc: MetaFreeFunction, transformFunc: MetaTransformFunction): MetaInfo | null
-export function miniObjectReplace(olddata?: MiniObject | null, newdata?: MiniObject | null): boolean
-export function miniObjectTake(olddata: MiniObject, newdata: MiniObject): boolean
+export function miniObjectReplace(olddata?: MiniObject | null, newdata?: MiniObject | null): [ /* returnType */ boolean, /* olddata */ MiniObject | null ]
+export function miniObjectTake(olddata: MiniObject, newdata: MiniObject): [ /* returnType */ boolean, /* olddata */ MiniObject ]
 export function padModeGetName(mode: PadMode): string
 export function paramSpecArray(name: string, nick: string, blurb: string, elementSpec: GObject.ParamSpec, flags: GObject.ParamFlags): GObject.ParamSpec
 export function paramSpecFraction(name: string, nick: string, blurb: string, minNum: number, minDenom: number, maxNum: number, maxDenom: number, defaultNum: number, defaultDenom: number, flags: GObject.ParamFlags): GObject.ParamSpec | null
@@ -1005,7 +1002,7 @@ export function uriProtocolIsValid(protocol: string): boolean
 export function utilArrayBinarySearch(array: object | null, numElements: number, elementSize: number, searchFunc: GLib.CompareDataFunc, mode: SearchMode, searchData?: object | null): object | null
 export function utilDoubleToFraction(src: number): [ /* destN */ number, /* destD */ number ]
 export function utilDumpBuffer(buf: Buffer): void
-export function utilDumpMem(mem: any): void
+export function utilDumpMem(mem: any[]): void
 export function utilFractionAdd(aN: number, aD: number, bN: number, bD: number): [ /* returnType */ boolean, /* resN */ number, /* resD */ number ]
 export function utilFractionCompare(aN: number, aD: number, bN: number, bD: number): number
 export function utilFractionMultiply(aN: number, aD: number, bN: number, bD: number): [ /* returnType */ boolean, /* resN */ number, /* resD */ number ]
@@ -1046,8 +1043,8 @@ export function valueGetFlagsetFlags(value: any): number
 export function valueGetFlagsetMask(value: any): number
 export function valueGetFractionDenominator(value: any): number
 export function valueGetFractionNumerator(value: any): number
-export function valueGetFractionRangeMax(value: any): any
-export function valueGetFractionRangeMin(value: any): any
+export function valueGetFractionRangeMax(value: any): any | null
+export function valueGetFractionRangeMin(value: any): any | null
 export function valueGetInt64RangeMax(value: any): number
 export function valueGetInt64RangeMin(value: any): number
 export function valueGetInt64RangeStep(value: any): number
@@ -1056,7 +1053,7 @@ export function valueGetIntRangeMin(value: any): number
 export function valueGetIntRangeStep(value: any): number
 export function valueGetStructure(value: any): Structure
 export function valueInitAndCopy(src: any): /* dest */ any
-export function valueIntersect(value1: any, value2: any): [ /* returnType */ boolean, /* dest */ any ]
+export function valueIntersect(value1: any, value2: any): [ /* returnType */ boolean, /* dest */ any | null ]
 export function valueIsFixed(value: any): boolean
 export function valueIsSubset(value1: any, value2: any): boolean
 export function valueRegister(table: ValueTable): void
@@ -1074,7 +1071,7 @@ export function valueSetInt64RangeStep(value: any, start: number, end: number, s
 export function valueSetIntRange(value: any, start: number, end: number): void
 export function valueSetIntRangeStep(value: any, start: number, end: number, step: number): void
 export function valueSetStructure(value: any, structure: Structure): void
-export function valueSubtract(minuend: any, subtrahend: any): [ /* returnType */ boolean, /* dest */ any ]
+export function valueSubtract(minuend: any, subtrahend: any): [ /* returnType */ boolean, /* dest */ any | null ]
 export function valueUnion(value1: any, value2: any): [ /* returnType */ boolean, /* dest */ any ]
 export function version(): [ /* major */ number, /* minor */ number, /* micro */ number, /* nano */ number ]
 export function versionString(): string
@@ -1277,7 +1274,7 @@ export interface ValueSerializeFunc {
     (value1: any): string
 }
 export class ChildProxy {
-    /* Methods of Gst.ChildProxy */
+    /* Methods of Gst-1.0.Gst.ChildProxy */
     childAdded(child: GObject.Object, name: string): void
     childRemoved(child: GObject.Object, name: string): void
     getChildByIndex(index: number): GObject.Object | null
@@ -1286,29 +1283,21 @@ export class ChildProxy {
     getProperty(name: string): /* value */ any
     lookup(name: string): [ /* returnType */ boolean, /* target */ GObject.Object | null, /* pspec */ GObject.ParamSpec | null ]
     setProperty(name: string, value: any): void
-    /* Virtual methods of Gst.ChildProxy */
-    vfuncChildAdded?(child: GObject.Object, name: string): void
-    vfuncChildRemoved?(child: GObject.Object, name: string): void
-    vfuncGetChildByIndex?(index: number): GObject.Object | null
-    vfuncGetChildByName?(name: string): GObject.Object | null
-    vfuncGetChildrenCount?(): number
-    /* Signals of Gst.ChildProxy */
-    connect(sigName: "child-added", callback: (($obj: ChildProxy, object: GObject.Object, name: string) => void)): number
-    connect_after(sigName: "child-added", callback: (($obj: ChildProxy, object: GObject.Object, name: string) => void)): number
+    /* Signals of Gst-1.0.Gst.ChildProxy */
+    connect(sigName: "child-added", callback: ((object: GObject.Object, name: string) => void)): number
+    on(sigName: "child-added", callback: (object: GObject.Object, name: string) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "child-added", callback: (object: GObject.Object, name: string) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "child-added", callback: (object: GObject.Object, name: string) => void): NodeJS.EventEmitter
     emit(sigName: "child-added", object: GObject.Object, name: string): void
-    on(sigName: "child-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "child-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "child-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "child-removed", callback: (($obj: ChildProxy, object: GObject.Object, name: string) => void)): number
-    connect_after(sigName: "child-removed", callback: (($obj: ChildProxy, object: GObject.Object, name: string) => void)): number
+    connect(sigName: "child-removed", callback: ((object: GObject.Object, name: string) => void)): number
+    on(sigName: "child-removed", callback: (object: GObject.Object, name: string) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "child-removed", callback: (object: GObject.Object, name: string) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "child-removed", callback: (object: GObject.Object, name: string) => void): NodeJS.EventEmitter
     emit(sigName: "child-removed", object: GObject.Object, name: string): void
-    on(sigName: "child-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "child-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "child-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
     static name: string
 }
 export class Preset {
-    /* Methods of Gst.Preset */
+    /* Methods of Gst-1.0.Gst.Preset */
     deletePreset(name: string): boolean
     getMeta(name: string, tag: string): [ /* returnType */ boolean, /* value */ string ]
     getPresetNames(): string[]
@@ -1318,193 +1307,18 @@ export class Preset {
     renamePreset(oldName: string, newName: string): boolean
     savePreset(name: string): boolean
     setMeta(name: string, tag: string, value?: string | null): boolean
-    /* Virtual methods of Gst.Preset */
-    vfuncDeletePreset?(name: string): boolean
-    vfuncGetMeta?(name: string, tag: string): [ /* returnType */ boolean, /* value */ string ]
-    vfuncGetPresetNames?(): string[]
-    vfuncGetPropertyNames?(): string[]
-    vfuncLoadPreset?(name: string): boolean
-    vfuncRenamePreset?(oldName: string, newName: string): boolean
-    vfuncSavePreset?(name: string): boolean
-    vfuncSetMeta?(name: string, tag: string, value?: string | null): boolean
     static name: string
+    /* Static methods and pseudo-constructors */
     static getAppDir(): string | null
     static setAppDir(appDir: string): boolean
 }
+export interface TagSetter_ConstructProps extends Element_ConstructProps {
+}
 export class TagSetter {
-    /* Methods of Gst.TagSetter */
-    addTagValue(mode: TagMergeMode, tag: string, value: any): void
-    getTagList(): TagList | null
-    getTagMergeMode(): TagMergeMode
-    mergeTags(list: TagList, mode: TagMergeMode): void
-    resetTags(): void
-    setTagMergeMode(mode: TagMergeMode): void
-    static name: string
-}
-export class TocSetter {
-    /* Methods of Gst.TocSetter */
-    getToc(): Toc | null
-    reset(): void
-    setToc(toc?: Toc | null): void
-    static name: string
-}
-export class URIHandler {
-    /* Methods of Gst.URIHandler */
-    getProtocols(): string[] | null
-    getUri(): string | null
-    getUriType(): URIType
-    setUri(uri: string): boolean
-    /* Virtual methods of Gst.URIHandler */
-    vfuncGetUri?(): string | null
-    vfuncSetUri?(uri: string): boolean
-    static name: string
-}
-export interface Allocator_ConstructProps extends Object_ConstructProps {
-}
-export class Allocator {
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Allocator */
-    object: Object
-    memType: string
-    memMap: MemoryMapFunction
-    memUnmap: MemoryUnmapFunction
-    memCopy: MemoryCopyFunction
-    memShare: MemoryShareFunction
-    memIsSpan: MemoryIsSpanFunction
-    memMapFull: MemoryMapFullFunction
-    memUnmapFull: MemoryUnmapFullFunction
-    /* Fields of Gst.Object */
-    lock: GLib.Mutex
-    flags: number
-    /* Fields of GObject.InitiallyUnowned */
-    gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.Allocator */
-    alloc(size: number, params?: AllocationParams | null): Memory | null
-    free(memory: Memory): void
-    setDefault(): void
-    /* Methods of Gst.Object */
-    addControlBinding(binding: ControlBinding): boolean
-    defaultError(error: GLib.Error, debug?: string | null): void
-    getControlBinding(propertyName: string): ControlBinding | null
-    getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
-    getName(): string | null
-    getParent(): Object | null
-    getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
-    hasActiveControlBindings(): boolean
-    hasAncestor(ancestor: Object): boolean
-    hasAsAncestor(ancestor: Object): boolean
-    hasAsParent(parent: Object): boolean
-    ref(): Object
-    removeControlBinding(binding: ControlBinding): boolean
-    setControlBindingDisabled(propertyName: string, disabled: boolean): void
-    setControlBindingsDisabled(disabled: boolean): void
-    setControlRate(controlRate: ClockTime): void
-    setName(name?: string | null): boolean
-    setParent(parent: Object): boolean
-    suggestNextSync(): ClockTime
-    syncValues(timestamp: ClockTime): boolean
-    unparent(): void
-    unref(): void
-    /* Methods of GObject.Object */
-    bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
-    forceFloating(): void
-    freezeNotify(): void
-    getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
-    getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
-    isFloating(): boolean
-    notify(propertyName: string): void
-    notifyByPspec(pspec: GObject.ParamSpec): void
-    refSink(): GObject.Object
-    runDispose(): void
-    setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
-    stealData(key: string): object | null
-    stealQdata(quark: GLib.Quark): object | null
-    thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Allocator */
-    vfuncAlloc?(size: number, params?: AllocationParams | null): Memory | null
-    vfuncFree?(memory: Memory): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: Allocator, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: Allocator, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: Allocator, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: Allocator, pspec: GObject.ParamSpec) => void)): number
-    emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: Allocator, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: Allocator, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: Allocator, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: Allocator, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: string, callback: any): number
-    connect_after(sigName: string, callback: any): number
-    emit(sigName: string, ...args: any[]): void
-    disconnect(id: number): void
-    on(sigName: string, callback: any): NodeJS.EventEmitter
-    once(sigName: string, callback: any): NodeJS.EventEmitter
-    off(sigName: string, callback: any): NodeJS.EventEmitter
-    static name: string
-    constructor (config?: Allocator_ConstructProps)
-    _init (config?: Allocator_ConstructProps): void
-    static find(name?: string | null): Allocator | null
-    static register(name: string, allocator: Allocator): void
-    static $gtype: GObject.Type
-}
-export interface Bin_ConstructProps extends Element_ConstructProps {
-    asyncHandling?: boolean
-    messageForward?: boolean
-}
-export class Bin {
-    /* Properties of Gst.Bin */
-    asyncHandling: boolean
-    messageForward: boolean
-    /* Properties of Gst.Object */
-    name: string
-    parent: Object
-    /* Fields of Gst.Bin */
-    element: Element
-    numchildren: number
-    children: Element[]
-    childrenCookie: number
-    childBus: Bus
-    messages: Message[]
-    polling: boolean
-    stateDirty: boolean
-    clockDirty: boolean
-    providedClock: Clock
-    clockProvider: Element
-    /* Fields of Gst.Element */
+    /* Fields of Gst-1.0.Gst.Element */
     object: Object
     stateLock: GLib.RecMutex
     stateCond: GLib.Cond
@@ -1526,30 +1340,19 @@ export class Bin {
     sinkpads: Pad[]
     padsCookie: number
     contexts: Context[]
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.Bin */
-    add(element: Element): boolean
-    findUnlinkedPad(direction: PadDirection): Pad | null
-    getByInterface(iface: GObject.Type): Element | null
-    getByName(name: string): Element | null
-    getByNameRecurseUp(name: string): Element | null
-    getSuppressedFlags(): ElementFlags
-    iterateAllByInterface(iface: GObject.Type): Iterator | null
-    iterateElements(): Iterator | null
-    iterateRecurse(): Iterator | null
-    iterateSinks(): Iterator | null
-    iterateSorted(): Iterator | null
-    iterateSources(): Iterator | null
-    recalculateLatency(): boolean
-    remove(element: Element): boolean
-    setSuppressedFlags(flags: ElementFlags): void
-    syncChildrenStates(): boolean
-    /* Methods of Gst.Element */
+    /* Methods of Gst-1.0.Gst.TagSetter */
+    addTagValue(mode: TagMergeMode, tag: string, value: any): void
+    getTagList(): TagList | null
+    getTagMergeMode(): TagMergeMode
+    mergeTags(list: TagList, mode: TagMergeMode): void
+    resetTags(): void
+    setTagMergeMode(mode: TagMergeMode): void
+    /* Methods of Gst-1.0.Gst.Element */
     abortState(): void
     addPad(pad: Pad): boolean
     addPropertyDeepNotifyWatch(propertyName: string | null, includeValue: boolean): number
@@ -1613,16 +1416,16 @@ export class Bin {
     syncStateWithParent(): boolean
     unlink(dest: Element): void
     unlinkPads(srcpadname: string, dest: Element, destpadname: string): void
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -1638,165 +1441,630 @@ export class Bin {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Methods of Gst.ChildProxy */
-    childAdded(child: GObject.Object, name: string): void
-    childRemoved(child: GObject.Object, name: string): void
-    getChildByIndex(index: number): GObject.Object | null
-    getChildByName(name: string): GObject.Object | null
-    getChildrenCount(): number
-    lookup(name: string): [ /* returnType */ boolean, /* target */ GObject.Object | null, /* pspec */ GObject.ParamSpec | null ]
-    /* Virtual methods of Gst.Bin */
-    vfuncAddElement?(element: Element): boolean
-    vfuncDeepElementAdded?(subBin: Bin, child: Element): void
-    vfuncDeepElementRemoved?(subBin: Bin, child: Element): void
-    vfuncDoLatency?(): boolean
-    vfuncElementAdded?(child: Element): void
-    vfuncElementRemoved?(child: Element): void
-    vfuncHandleMessage?(message: Message): void
-    vfuncRemoveElement?(element: Element): boolean
-    /* Virtual methods of Gst.Element */
-    vfuncChangeState?(transition: StateChange): StateChangeReturn
-    vfuncGetState?(timeout: ClockTime): [ /* returnType */ StateChangeReturn, /* state */ State | null, /* pending */ State | null ]
-    vfuncNoMorePads?(): void
-    vfuncPadAdded?(pad: Pad): void
-    vfuncPadRemoved?(pad: Pad): void
-    vfuncPostMessage?(message: Message): boolean
-    vfuncProvideClock?(): Clock | null
-    vfuncQuery?(query: Query): boolean
-    vfuncReleasePad?(pad: Pad): void
-    vfuncRequestNewPad?(templ: PadTemplate, name?: string | null, caps?: Caps | null): Pad | null
-    vfuncSendEvent?(event: Event): boolean
-    vfuncSetBus?(bus?: Bus | null): void
-    vfuncSetClock?(clock?: Clock | null): boolean
-    vfuncSetContext?(context: Context): void
-    vfuncSetState?(state: State): StateChangeReturn
-    vfuncStateChanged?(oldstate: State, newstate: State, pending: State): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Bin */
-    connect(sigName: "deep-element-added", callback: (($obj: Bin, subBin: Bin, element: Element) => void)): number
-    connect_after(sigName: "deep-element-added", callback: (($obj: Bin, subBin: Bin, element: Element) => void)): number
-    emit(sigName: "deep-element-added", subBin: Bin, element: Element): void
-    on(sigName: "deep-element-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-element-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-element-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "deep-element-removed", callback: (($obj: Bin, subBin: Bin, element: Element) => void)): number
-    connect_after(sigName: "deep-element-removed", callback: (($obj: Bin, subBin: Bin, element: Element) => void)): number
-    emit(sigName: "deep-element-removed", subBin: Bin, element: Element): void
-    on(sigName: "deep-element-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-element-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-element-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "do-latency", callback: (($obj: Bin) => boolean)): number
-    connect_after(sigName: "do-latency", callback: (($obj: Bin) => boolean)): number
-    emit(sigName: "do-latency"): void
-    on(sigName: "do-latency", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "do-latency", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "do-latency", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "element-added", callback: (($obj: Bin, element: Element) => void)): number
-    connect_after(sigName: "element-added", callback: (($obj: Bin, element: Element) => void)): number
-    emit(sigName: "element-added", element: Element): void
-    on(sigName: "element-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "element-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "element-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "element-removed", callback: (($obj: Bin, element: Element) => void)): number
-    connect_after(sigName: "element-removed", callback: (($obj: Bin, element: Element) => void)): number
-    emit(sigName: "element-removed", element: Element): void
-    on(sigName: "element-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "element-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "element-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of Gst.Element */
-    connect(sigName: "no-more-pads", callback: (($obj: Bin) => void)): number
-    connect_after(sigName: "no-more-pads", callback: (($obj: Bin) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Element */
+    connect(sigName: "no-more-pads", callback: (() => void)): number
+    on(sigName: "no-more-pads", callback: () => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "no-more-pads", callback: () => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "no-more-pads", callback: () => void): NodeJS.EventEmitter
     emit(sigName: "no-more-pads"): void
-    on(sigName: "no-more-pads", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "no-more-pads", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "no-more-pads", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "pad-added", callback: (($obj: Bin, newPad: Pad) => void)): number
-    connect_after(sigName: "pad-added", callback: (($obj: Bin, newPad: Pad) => void)): number
+    connect(sigName: "pad-added", callback: ((newPad: Pad) => void)): number
+    on(sigName: "pad-added", callback: (newPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "pad-added", callback: (newPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "pad-added", callback: (newPad: Pad) => void): NodeJS.EventEmitter
     emit(sigName: "pad-added", newPad: Pad): void
-    on(sigName: "pad-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "pad-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "pad-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "pad-removed", callback: (($obj: Bin, oldPad: Pad) => void)): number
-    connect_after(sigName: "pad-removed", callback: (($obj: Bin, oldPad: Pad) => void)): number
+    connect(sigName: "pad-removed", callback: ((oldPad: Pad) => void)): number
+    on(sigName: "pad-removed", callback: (oldPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "pad-removed", callback: (oldPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "pad-removed", callback: (oldPad: Pad) => void): NodeJS.EventEmitter
     emit(sigName: "pad-removed", oldPad: Pad): void
-    on(sigName: "pad-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "pad-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "pad-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: Bin, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: Bin, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: Bin, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: Bin, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of Gst.ChildProxy */
-    connect(sigName: "child-added", callback: (($obj: Bin, object: GObject.Object, name: string) => void)): number
-    connect_after(sigName: "child-added", callback: (($obj: Bin, object: GObject.Object, name: string) => void)): number
-    emit(sigName: "child-added", object: GObject.Object, name: string): void
-    on(sigName: "child-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "child-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "child-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "child-removed", callback: (($obj: Bin, object: GObject.Object, name: string) => void)): number
-    connect_after(sigName: "child-removed", callback: (($obj: Bin, object: GObject.Object, name: string) => void)): number
-    emit(sigName: "child-removed", object: GObject.Object, name: string): void
-    on(sigName: "child-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "child-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "child-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::async-handling", callback: (($obj: Bin, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::async-handling", callback: (($obj: Bin, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::async-handling", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::async-handling", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify::async-handling", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::message-forward", callback: (($obj: Bin, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::message-forward", callback: (($obj: Bin, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::message-forward", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::message-forward", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify::message-forward", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: Bin, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: Bin, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: Bin, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: Bin, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: string, callback: any): number
+    connect_after(sigName: string, callback: any): number
+    emit(sigName: string, ...args: any[]): void
+    disconnect(id: number): void
+    on(sigName: string, callback: any): NodeJS.EventEmitter
+    once(sigName: string, callback: any): NodeJS.EventEmitter
+    off(sigName: string, callback: any): NodeJS.EventEmitter
+    static name: string
+    constructor (config?: TagSetter_ConstructProps)
+    _init (config?: TagSetter_ConstructProps): void
+    static $gtype: GObject.Type
+}
+export interface TocSetter_ConstructProps extends Element_ConstructProps {
+}
+export class TocSetter {
+    /* Properties of Gst-1.0.Gst.Object */
+    name: string
+    parent: Object
+    /* Fields of Gst-1.0.Gst.Element */
+    object: Object
+    stateLock: GLib.RecMutex
+    stateCond: GLib.Cond
+    stateCookie: number
+    targetState: State
+    currentState: State
+    nextState: State
+    pendingState: State
+    lastReturn: StateChangeReturn
+    bus: Bus
+    clock: Clock
+    baseTime: ClockTimeDiff
+    startTime: ClockTime
+    numpads: number
+    pads: Pad[]
+    numsrcpads: number
+    srcpads: Pad[]
+    numsinkpads: number
+    sinkpads: Pad[]
+    padsCookie: number
+    contexts: Context[]
+    /* Fields of Gst-1.0.Gst.Object */
+    lock: GLib.Mutex
+    flags: number
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
+    gTypeInstance: GObject.TypeInstance
+    /* Methods of Gst-1.0.Gst.TocSetter */
+    getToc(): Toc | null
+    reset(): void
+    setToc(toc?: Toc | null): void
+    /* Methods of Gst-1.0.Gst.Element */
+    abortState(): void
+    addPad(pad: Pad): boolean
+    addPropertyDeepNotifyWatch(propertyName: string | null, includeValue: boolean): number
+    addPropertyNotifyWatch(propertyName: string | null, includeValue: boolean): number
+    callAsync(func: ElementCallAsyncFunc): void
+    changeState(transition: StateChange): StateChangeReturn
+    continueState(ret: StateChangeReturn): StateChangeReturn
+    createAllPads(): void
+    foreachPad(func: ElementForeachPadFunc): boolean
+    foreachSinkPad(func: ElementForeachPadFunc): boolean
+    foreachSrcPad(func: ElementForeachPadFunc): boolean
+    getBaseTime(): ClockTime
+    getBus(): Bus | null
+    getClock(): Clock | null
+    getCompatiblePad(pad: Pad, caps?: Caps | null): Pad | null
+    getCompatiblePadTemplate(compattempl: PadTemplate): PadTemplate | null
+    getContext(contextType: string): Context
+    getContextUnlocked(contextType: string): Context | null
+    getContexts(): Context[]
+    getFactory(): ElementFactory | null
+    getMetadata(key: string): string
+    getPadTemplate(name: string): PadTemplate | null
+    getPadTemplateList(): PadTemplate[]
+    getRequestPad(name: string): Pad | null
+    getStartTime(): ClockTime
+    getState(timeout: ClockTime): [ /* returnType */ StateChangeReturn, /* state */ State | null, /* pending */ State | null ]
+    getStaticPad(name: string): Pad | null
+    isLockedState(): boolean
+    iteratePads(): Iterator
+    iterateSinkPads(): Iterator
+    iterateSrcPads(): Iterator
+    link(dest: Element): boolean
+    linkFiltered(dest: Element, filter?: Caps | null): boolean
+    linkPads(srcpadname: string | null, dest: Element, destpadname?: string | null): boolean
+    linkPadsFiltered(srcpadname: string | null, dest: Element, destpadname?: string | null, filter?: Caps | null): boolean
+    linkPadsFull(srcpadname: string | null, dest: Element, destpadname: string | null, flags: PadLinkCheck): boolean
+    lostState(): void
+    messageFull(type: MessageType, domain: GLib.Quark, code: number, text: string | null, debug: string | null, file: string, function_: string, line: number): void
+    messageFullWithDetails(type: MessageType, domain: GLib.Quark, code: number, text: string | null, debug: string | null, file: string, function_: string, line: number, structure: Structure): void
+    noMorePads(): void
+    postMessage(message: Message): boolean
+    provideClock(): Clock | null
+    query(query: Query): boolean
+    queryConvert(srcFormat: Format, srcVal: number, destFormat: Format): [ /* returnType */ boolean, /* destVal */ number ]
+    queryDuration(format: Format): [ /* returnType */ boolean, /* duration */ number | null ]
+    queryPosition(format: Format): [ /* returnType */ boolean, /* cur */ number | null ]
+    releaseRequestPad(pad: Pad): void
+    removePad(pad: Pad): boolean
+    removePropertyNotifyWatch(watchId: number): void
+    requestPad(templ: PadTemplate, name?: string | null, caps?: Caps | null): Pad | null
+    seek(rate: number, format: Format, flags: SeekFlags, startType: SeekType, start: number, stopType: SeekType, stop: number): boolean
+    seekSimple(format: Format, seekFlags: SeekFlags, seekPos: number): boolean
+    sendEvent(event: Event): boolean
+    setBaseTime(time: ClockTime): void
+    setBus(bus?: Bus | null): void
+    setClock(clock?: Clock | null): boolean
+    setContext(context: Context): void
+    setLockedState(lockedState: boolean): boolean
+    setStartTime(time: ClockTime): void
+    setState(state: State): StateChangeReturn
+    syncStateWithParent(): boolean
+    unlink(dest: Element): void
+    unlinkPads(srcpadname: string, dest: Element, destpadname: string): void
+    /* Methods of Gst-1.0.Gst.Object */
+    addControlBinding(binding: ControlBinding): boolean
+    defaultError(error: GLib.Error, debug?: string | null): void
+    getControlBinding(propertyName: string): ControlBinding | null
+    getControlRate(): ClockTime
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
+    getName(): string | null
+    getParent(): Object | null
+    getPathString(): string
+    getValue(propertyName: string, timestamp: ClockTime): any | null
+    hasActiveControlBindings(): boolean
+    hasAncestor(ancestor: Object): boolean
+    hasAsAncestor(ancestor: Object): boolean
+    hasAsParent(parent: Object): boolean
+    ref(): Object
+    removeControlBinding(binding: ControlBinding): boolean
+    setControlBindingDisabled(propertyName: string, disabled: boolean): void
+    setControlBindingsDisabled(disabled: boolean): void
+    setControlRate(controlRate: ClockTime): void
+    setName(name?: string | null): boolean
+    setParent(parent: Object): boolean
+    suggestNextSync(): ClockTime
+    syncValues(timestamp: ClockTime): boolean
+    unparent(): void
+    unref(): void
+    /* Methods of GObject-2.0.GObject.Object */
+    bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
+    forceFloating(): void
+    freezeNotify(): void
+    getData(key: string): object | null
+    getProperty(propertyName: string, value: any): void
+    getQdata(quark: GLib.Quark): object | null
+    getv(names: string[], values: any[]): void
+    isFloating(): boolean
+    notify(propertyName: string): void
+    notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
+    refSink(): GObject.Object
+    runDispose(): void
+    setData(key: string, data?: object | null): void
+    setProperty(propertyName: string, value: any): void
+    stealData(key: string): object | null
+    stealQdata(quark: GLib.Quark): object | null
+    thawNotify(): void
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Element */
+    connect(sigName: "no-more-pads", callback: (() => void)): number
+    on(sigName: "no-more-pads", callback: () => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "no-more-pads", callback: () => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "no-more-pads", callback: () => void): NodeJS.EventEmitter
+    emit(sigName: "no-more-pads"): void
+    connect(sigName: "pad-added", callback: ((newPad: Pad) => void)): number
+    on(sigName: "pad-added", callback: (newPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "pad-added", callback: (newPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "pad-added", callback: (newPad: Pad) => void): NodeJS.EventEmitter
+    emit(sigName: "pad-added", newPad: Pad): void
+    connect(sigName: "pad-removed", callback: ((oldPad: Pad) => void)): number
+    on(sigName: "pad-removed", callback: (oldPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "pad-removed", callback: (oldPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "pad-removed", callback: (oldPad: Pad) => void): NodeJS.EventEmitter
+    emit(sigName: "pad-removed", oldPad: Pad): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
+    emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
+    emit(sigName: "notify", pspec: GObject.ParamSpec): void
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: string, callback: any): number
+    connect_after(sigName: string, callback: any): number
+    emit(sigName: string, ...args: any[]): void
+    disconnect(id: number): void
+    on(sigName: string, callback: any): NodeJS.EventEmitter
+    once(sigName: string, callback: any): NodeJS.EventEmitter
+    off(sigName: string, callback: any): NodeJS.EventEmitter
+    static name: string
+    constructor (config?: TocSetter_ConstructProps)
+    _init (config?: TocSetter_ConstructProps): void
+    static $gtype: GObject.Type
+}
+export class URIHandler {
+    /* Methods of Gst-1.0.Gst.URIHandler */
+    getProtocols(): string[] | null
+    getUri(): string | null
+    getUriType(): URIType
+    setUri(uri: string): boolean
+    static name: string
+}
+export interface Allocator_ConstructProps extends Object_ConstructProps {
+}
+export class Allocator {
+    /* Properties of Gst-1.0.Gst.Object */
+    name: string
+    parent: Object
+    /* Fields of Gst-1.0.Gst.Allocator */
+    object: Object
+    memType: string
+    memMap: MemoryMapFunction
+    memUnmap: MemoryUnmapFunction
+    memCopy: MemoryCopyFunction
+    memShare: MemoryShareFunction
+    memIsSpan: MemoryIsSpanFunction
+    memMapFull: MemoryMapFullFunction
+    memUnmapFull: MemoryUnmapFullFunction
+    /* Fields of Gst-1.0.Gst.Object */
+    lock: GLib.Mutex
+    flags: number
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
+    gTypeInstance: GObject.TypeInstance
+    /* Methods of Gst-1.0.Gst.Allocator */
+    alloc(size: number, params?: AllocationParams | null): Memory | null
+    free(memory: Memory): void
+    setDefault(): void
+    /* Methods of Gst-1.0.Gst.Object */
+    addControlBinding(binding: ControlBinding): boolean
+    defaultError(error: GLib.Error, debug?: string | null): void
+    getControlBinding(propertyName: string): ControlBinding | null
+    getControlRate(): ClockTime
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
+    getName(): string | null
+    getParent(): Object | null
+    getPathString(): string
+    getValue(propertyName: string, timestamp: ClockTime): any | null
+    hasActiveControlBindings(): boolean
+    hasAncestor(ancestor: Object): boolean
+    hasAsAncestor(ancestor: Object): boolean
+    hasAsParent(parent: Object): boolean
+    ref(): Object
+    removeControlBinding(binding: ControlBinding): boolean
+    setControlBindingDisabled(propertyName: string, disabled: boolean): void
+    setControlBindingsDisabled(disabled: boolean): void
+    setControlRate(controlRate: ClockTime): void
+    setName(name?: string | null): boolean
+    setParent(parent: Object): boolean
+    suggestNextSync(): ClockTime
+    syncValues(timestamp: ClockTime): boolean
+    unparent(): void
+    unref(): void
+    /* Methods of GObject-2.0.GObject.Object */
+    bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
+    forceFloating(): void
+    freezeNotify(): void
+    getData(key: string): object | null
+    getProperty(propertyName: string, value: any): void
+    getQdata(quark: GLib.Quark): object | null
+    getv(names: string[], values: any[]): void
+    isFloating(): boolean
+    notify(propertyName: string): void
+    notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
+    refSink(): GObject.Object
+    runDispose(): void
+    setData(key: string, data?: object | null): void
+    setProperty(propertyName: string, value: any): void
+    stealData(key: string): object | null
+    stealQdata(quark: GLib.Quark): object | null
+    thawNotify(): void
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
+    emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
+    emit(sigName: "notify", pspec: GObject.ParamSpec): void
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: string, callback: any): number
+    connect_after(sigName: string, callback: any): number
+    emit(sigName: string, ...args: any[]): void
+    disconnect(id: number): void
+    on(sigName: string, callback: any): NodeJS.EventEmitter
+    once(sigName: string, callback: any): NodeJS.EventEmitter
+    off(sigName: string, callback: any): NodeJS.EventEmitter
+    static name: string
+    constructor (config?: Allocator_ConstructProps)
+    _init (config?: Allocator_ConstructProps): void
+    /* Static methods and pseudo-constructors */
+    static find(name?: string | null): Allocator | null
+    static register(name: string, allocator: Allocator): void
+    static $gtype: GObject.Type
+}
+export interface Bin_ConstructProps extends Element_ConstructProps {
+    asyncHandling?: boolean
+    messageForward?: boolean
+}
+export class Bin {
+    /* Properties of Gst-1.0.Gst.Bin */
+    asyncHandling: boolean
+    messageForward: boolean
+    /* Properties of Gst-1.0.Gst.Object */
+    name: string
+    parent: Object
+    /* Fields of Gst-1.0.Gst.Bin */
+    element: Element
+    numchildren: number
+    children: Element[]
+    childrenCookie: number
+    childBus: Bus
+    messages: Message[]
+    polling: boolean
+    stateDirty: boolean
+    clockDirty: boolean
+    providedClock: Clock
+    clockProvider: Element
+    /* Fields of Gst-1.0.Gst.Element */
+    object: Object
+    stateLock: GLib.RecMutex
+    stateCond: GLib.Cond
+    stateCookie: number
+    targetState: State
+    currentState: State
+    nextState: State
+    pendingState: State
+    lastReturn: StateChangeReturn
+    bus: Bus
+    clock: Clock
+    baseTime: ClockTimeDiff
+    startTime: ClockTime
+    numpads: number
+    pads: Pad[]
+    numsrcpads: number
+    srcpads: Pad[]
+    numsinkpads: number
+    sinkpads: Pad[]
+    padsCookie: number
+    contexts: Context[]
+    /* Fields of Gst-1.0.Gst.Object */
+    lock: GLib.Mutex
+    flags: number
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
+    gTypeInstance: GObject.TypeInstance
+    /* Methods of Gst-1.0.Gst.Bin */
+    add(element: Element): boolean
+    findUnlinkedPad(direction: PadDirection): Pad | null
+    getByInterface(iface: GObject.Type): Element | null
+    getByName(name: string): Element | null
+    getByNameRecurseUp(name: string): Element | null
+    getSuppressedFlags(): ElementFlags
+    iterateAllByInterface(iface: GObject.Type): Iterator | null
+    iterateElements(): Iterator | null
+    iterateRecurse(): Iterator | null
+    iterateSinks(): Iterator | null
+    iterateSorted(): Iterator | null
+    iterateSources(): Iterator | null
+    recalculateLatency(): boolean
+    remove(element: Element): boolean
+    setSuppressedFlags(flags: ElementFlags): void
+    syncChildrenStates(): boolean
+    /* Methods of Gst-1.0.Gst.Element */
+    abortState(): void
+    addPad(pad: Pad): boolean
+    addPropertyDeepNotifyWatch(propertyName: string | null, includeValue: boolean): number
+    addPropertyNotifyWatch(propertyName: string | null, includeValue: boolean): number
+    callAsync(func: ElementCallAsyncFunc): void
+    changeState(transition: StateChange): StateChangeReturn
+    continueState(ret: StateChangeReturn): StateChangeReturn
+    createAllPads(): void
+    foreachPad(func: ElementForeachPadFunc): boolean
+    foreachSinkPad(func: ElementForeachPadFunc): boolean
+    foreachSrcPad(func: ElementForeachPadFunc): boolean
+    getBaseTime(): ClockTime
+    getBus(): Bus | null
+    getClock(): Clock | null
+    getCompatiblePad(pad: Pad, caps?: Caps | null): Pad | null
+    getCompatiblePadTemplate(compattempl: PadTemplate): PadTemplate | null
+    getContext(contextType: string): Context
+    getContextUnlocked(contextType: string): Context | null
+    getContexts(): Context[]
+    getFactory(): ElementFactory | null
+    getMetadata(key: string): string
+    getPadTemplate(name: string): PadTemplate | null
+    getPadTemplateList(): PadTemplate[]
+    getRequestPad(name: string): Pad | null
+    getStartTime(): ClockTime
+    getState(timeout: ClockTime): [ /* returnType */ StateChangeReturn, /* state */ State | null, /* pending */ State | null ]
+    getStaticPad(name: string): Pad | null
+    isLockedState(): boolean
+    iteratePads(): Iterator
+    iterateSinkPads(): Iterator
+    iterateSrcPads(): Iterator
+    link(dest: Element): boolean
+    linkFiltered(dest: Element, filter?: Caps | null): boolean
+    linkPads(srcpadname: string | null, dest: Element, destpadname?: string | null): boolean
+    linkPadsFiltered(srcpadname: string | null, dest: Element, destpadname?: string | null, filter?: Caps | null): boolean
+    linkPadsFull(srcpadname: string | null, dest: Element, destpadname: string | null, flags: PadLinkCheck): boolean
+    lostState(): void
+    messageFull(type: MessageType, domain: GLib.Quark, code: number, text: string | null, debug: string | null, file: string, function_: string, line: number): void
+    messageFullWithDetails(type: MessageType, domain: GLib.Quark, code: number, text: string | null, debug: string | null, file: string, function_: string, line: number, structure: Structure): void
+    noMorePads(): void
+    postMessage(message: Message): boolean
+    provideClock(): Clock | null
+    query(query: Query): boolean
+    queryConvert(srcFormat: Format, srcVal: number, destFormat: Format): [ /* returnType */ boolean, /* destVal */ number ]
+    queryDuration(format: Format): [ /* returnType */ boolean, /* duration */ number | null ]
+    queryPosition(format: Format): [ /* returnType */ boolean, /* cur */ number | null ]
+    releaseRequestPad(pad: Pad): void
+    removePad(pad: Pad): boolean
+    removePropertyNotifyWatch(watchId: number): void
+    requestPad(templ: PadTemplate, name?: string | null, caps?: Caps | null): Pad | null
+    seek(rate: number, format: Format, flags: SeekFlags, startType: SeekType, start: number, stopType: SeekType, stop: number): boolean
+    seekSimple(format: Format, seekFlags: SeekFlags, seekPos: number): boolean
+    sendEvent(event: Event): boolean
+    setBaseTime(time: ClockTime): void
+    setBus(bus?: Bus | null): void
+    setClock(clock?: Clock | null): boolean
+    setContext(context: Context): void
+    setLockedState(lockedState: boolean): boolean
+    setStartTime(time: ClockTime): void
+    setState(state: State): StateChangeReturn
+    syncStateWithParent(): boolean
+    unlink(dest: Element): void
+    unlinkPads(srcpadname: string, dest: Element, destpadname: string): void
+    /* Methods of Gst-1.0.Gst.Object */
+    addControlBinding(binding: ControlBinding): boolean
+    defaultError(error: GLib.Error, debug?: string | null): void
+    getControlBinding(propertyName: string): ControlBinding | null
+    getControlRate(): ClockTime
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
+    getName(): string | null
+    getParent(): Object | null
+    getPathString(): string
+    getValue(propertyName: string, timestamp: ClockTime): any | null
+    hasActiveControlBindings(): boolean
+    hasAncestor(ancestor: Object): boolean
+    hasAsAncestor(ancestor: Object): boolean
+    hasAsParent(parent: Object): boolean
+    ref(): Object
+    removeControlBinding(binding: ControlBinding): boolean
+    setControlBindingDisabled(propertyName: string, disabled: boolean): void
+    setControlBindingsDisabled(disabled: boolean): void
+    setControlRate(controlRate: ClockTime): void
+    setName(name?: string | null): boolean
+    setParent(parent: Object): boolean
+    suggestNextSync(): ClockTime
+    syncValues(timestamp: ClockTime): boolean
+    unparent(): void
+    unref(): void
+    /* Methods of GObject-2.0.GObject.Object */
+    bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
+    forceFloating(): void
+    freezeNotify(): void
+    getData(key: string): object | null
+    getProperty(propertyName: string, value: any): void
+    getQdata(quark: GLib.Quark): object | null
+    getv(names: string[], values: any[]): void
+    isFloating(): boolean
+    notify(propertyName: string): void
+    notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
+    refSink(): GObject.Object
+    runDispose(): void
+    setData(key: string, data?: object | null): void
+    setProperty(propertyName: string, value: any): void
+    stealData(key: string): object | null
+    stealQdata(quark: GLib.Quark): object | null
+    thawNotify(): void
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Bin */
+    connect(sigName: "deep-element-added", callback: ((subBin: Bin, element: Element) => void)): number
+    on(sigName: "deep-element-added", callback: (subBin: Bin, element: Element) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-element-added", callback: (subBin: Bin, element: Element) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-element-added", callback: (subBin: Bin, element: Element) => void): NodeJS.EventEmitter
+    emit(sigName: "deep-element-added", subBin: Bin, element: Element): void
+    connect(sigName: "deep-element-removed", callback: ((subBin: Bin, element: Element) => void)): number
+    on(sigName: "deep-element-removed", callback: (subBin: Bin, element: Element) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-element-removed", callback: (subBin: Bin, element: Element) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-element-removed", callback: (subBin: Bin, element: Element) => void): NodeJS.EventEmitter
+    emit(sigName: "deep-element-removed", subBin: Bin, element: Element): void
+    connect(sigName: "do-latency", callback: (() => boolean)): number
+    on(sigName: "do-latency", callback: () => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "do-latency", callback: () => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "do-latency", callback: () => void): NodeJS.EventEmitter
+    emit(sigName: "do-latency"): void
+    connect(sigName: "element-added", callback: ((element: Element) => void)): number
+    on(sigName: "element-added", callback: (element: Element) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "element-added", callback: (element: Element) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "element-added", callback: (element: Element) => void): NodeJS.EventEmitter
+    emit(sigName: "element-added", element: Element): void
+    connect(sigName: "element-removed", callback: ((element: Element) => void)): number
+    on(sigName: "element-removed", callback: (element: Element) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "element-removed", callback: (element: Element) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "element-removed", callback: (element: Element) => void): NodeJS.EventEmitter
+    emit(sigName: "element-removed", element: Element): void
+    /* Signals of Gst-1.0.Gst.Element */
+    connect(sigName: "no-more-pads", callback: (() => void)): number
+    on(sigName: "no-more-pads", callback: () => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "no-more-pads", callback: () => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "no-more-pads", callback: () => void): NodeJS.EventEmitter
+    emit(sigName: "no-more-pads"): void
+    connect(sigName: "pad-added", callback: ((newPad: Pad) => void)): number
+    on(sigName: "pad-added", callback: (newPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "pad-added", callback: (newPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "pad-added", callback: (newPad: Pad) => void): NodeJS.EventEmitter
+    emit(sigName: "pad-added", newPad: Pad): void
+    connect(sigName: "pad-removed", callback: ((oldPad: Pad) => void)): number
+    on(sigName: "pad-removed", callback: (oldPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "pad-removed", callback: (oldPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "pad-removed", callback: (oldPad: Pad) => void): NodeJS.EventEmitter
+    emit(sigName: "pad-removed", oldPad: Pad): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
+    emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
+    emit(sigName: "notify", pspec: GObject.ParamSpec): void
+    connect(sigName: "notify::async-handling", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::async-handling", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::async-handling", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify::async-handling", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::message-forward", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::message-forward", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::message-forward", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify::message-forward", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -1808,6 +2076,7 @@ export class Bin {
     static name: string
     constructor (config?: Bin_ConstructProps)
     _init (config?: Bin_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static new(name?: string | null): Bin
     static $gtype: GObject.Type
 }
@@ -1817,19 +2086,18 @@ export class Bitmask {
 export interface BufferPool_ConstructProps extends Object_ConstructProps {
 }
 export class BufferPool {
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.BufferPool */
+    /* Fields of Gst-1.0.Gst.BufferPool */
     object: Object
     flushing: number
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.BufferPool */
+    /* Methods of Gst-1.0.Gst.BufferPool */
     acquireBuffer(params?: BufferPoolAcquireParams | null): [ /* returnType */ FlowReturn, /* buffer */ Buffer ]
     getConfig(): Structure
     getOptions(): string[]
@@ -1839,16 +2107,16 @@ export class BufferPool {
     setActive(active: boolean): boolean
     setConfig(config: Structure): boolean
     setFlushing(flushing: boolean): void
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -1864,71 +2132,46 @@ export class BufferPool {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.BufferPool */
-    vfuncAcquireBuffer?(params?: BufferPoolAcquireParams | null): [ /* returnType */ FlowReturn, /* buffer */ Buffer ]
-    vfuncAllocBuffer?(buffer: Buffer, params: BufferPoolAcquireParams): FlowReturn
-    vfuncFlushStart?(): void
-    vfuncFlushStop?(): void
-    vfuncFreeBuffer?(buffer: Buffer): void
-    vfuncGetOptions?(): string[]
-    vfuncReleaseBuffer?(buffer: Buffer): void
-    vfuncResetBuffer?(buffer: Buffer): void
-    vfuncSetConfig?(config: Structure): boolean
-    vfuncStart?(): boolean
-    vfuncStop?(): boolean
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: BufferPool, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: BufferPool, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: BufferPool, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: BufferPool, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: BufferPool, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: BufferPool, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: BufferPool, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: BufferPool, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -1940,6 +2183,7 @@ export class BufferPool {
     static name: string
     constructor (config?: BufferPool_ConstructProps)
     _init (config?: BufferPool_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static new(): BufferPool
     static configAddOption(config: Structure, option: string): void
     static configGetAllocator(config: Structure): [ /* returnType */ boolean, /* allocator */ Allocator | null, /* params */ AllocationParams | null ]
@@ -1956,19 +2200,17 @@ export interface Bus_ConstructProps extends Object_ConstructProps {
     enableAsync?: boolean
 }
 export class Bus {
-    /* Properties of Gst.Bus */
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Bus */
+    /* Fields of Gst-1.0.Gst.Bus */
     object: Object
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.Bus */
+    /* Methods of Gst-1.0.Gst.Bus */
     addSignalWatch(): void
     addSignalWatchFull(priority: number): void
     addWatch(priority: number, func: BusFunc): number
@@ -1990,16 +2232,16 @@ export class Bus {
     syncSignalHandler(message: Message, data?: object | null): BusSyncReply
     timedPop(timeout: ClockTime): Message | null
     timedPopFiltered(timeout: ClockTime, types: MessageType): Message | null
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -2015,75 +2257,57 @@ export class Bus {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Bus */
-    vfuncMessage?(message: Message): void
-    vfuncSyncMessage?(message: Message): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Bus */
-    connect(sigName: "message", callback: (($obj: Bus, message: Message) => void)): number
-    connect_after(sigName: "message", callback: (($obj: Bus, message: Message) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Bus */
+    connect(sigName: "message", callback: ((message: Message) => void)): number
+    on(sigName: "message", callback: (message: Message) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "message", callback: (message: Message) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "message", callback: (message: Message) => void): NodeJS.EventEmitter
     emit(sigName: "message", message: Message): void
-    on(sigName: "message", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "message", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "message", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "sync-message", callback: (($obj: Bus, message: Message) => void)): number
-    connect_after(sigName: "sync-message", callback: (($obj: Bus, message: Message) => void)): number
+    connect(sigName: "sync-message", callback: ((message: Message) => void)): number
+    on(sigName: "sync-message", callback: (message: Message) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "sync-message", callback: (message: Message) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "sync-message", callback: (message: Message) => void): NodeJS.EventEmitter
     emit(sigName: "sync-message", message: Message): void
-    on(sigName: "sync-message", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "sync-message", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "sync-message", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: Bus, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: Bus, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: Bus, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: Bus, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: Bus, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: Bus, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: Bus, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: Bus, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -2095,6 +2319,7 @@ export class Bus {
     static name: string
     constructor (config?: Bus_ConstructProps)
     _init (config?: Bus_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static new(): Bus
     static $gtype: GObject.Type
 }
@@ -2104,22 +2329,21 @@ export interface Clock_ConstructProps extends Object_ConstructProps {
     windowThreshold?: number
 }
 export class Clock {
-    /* Properties of Gst.Clock */
+    /* Properties of Gst-1.0.Gst.Clock */
     timeout: number
     windowSize: number
     windowThreshold: number
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Clock */
+    /* Fields of Gst-1.0.Gst.Clock */
     object: Object
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.Clock */
+    /* Methods of Gst-1.0.Gst.Clock */
     addObservation(slave: ClockTime, master: ClockTime): [ /* returnType */ boolean, /* rSquared */ number ]
     addObservationUnapplied(slave: ClockTime, master: ClockTime): [ /* returnType */ boolean, /* rSquared */ number, /* internal */ ClockTime | null, /* external */ ClockTime | null, /* rateNum */ ClockTime | null, /* rateDenom */ ClockTime | null ]
     adjustUnlocked(internal: ClockTime): ClockTime
@@ -2143,16 +2367,16 @@ export class Clock {
     unadjustUnlocked(external: ClockTime): ClockTime
     unadjustWithCalibration(externalTarget: ClockTime, cinternal: ClockTime, cexternal: ClockTime, cnum: ClockTime, cdenom: ClockTime): ClockTime
     waitForSync(timeout: ClockTime): boolean
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -2168,88 +2392,64 @@ export class Clock {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Clock */
-    vfuncChangeResolution?(oldResolution: ClockTime, newResolution: ClockTime): ClockTime
-    vfuncGetInternalTime?(): ClockTime
-    vfuncGetResolution?(): ClockTime
-    vfuncUnschedule?(entry: ClockEntry): void
-    vfuncWait?(entry: ClockEntry, jitter: ClockTimeDiff): ClockReturn
-    vfuncWaitAsync?(entry: ClockEntry): ClockReturn
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Clock */
-    connect(sigName: "synced", callback: (($obj: Clock, synced: boolean) => void)): number
-    connect_after(sigName: "synced", callback: (($obj: Clock, synced: boolean) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Clock */
+    connect(sigName: "synced", callback: ((synced: boolean) => void)): number
+    on(sigName: "synced", callback: (synced: boolean) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "synced", callback: (synced: boolean) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "synced", callback: (synced: boolean) => void): NodeJS.EventEmitter
     emit(sigName: "synced", synced: boolean): void
-    on(sigName: "synced", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "synced", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "synced", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: Clock, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: Clock, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: Clock, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: Clock, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::timeout", callback: (($obj: Clock, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::timeout", callback: (($obj: Clock, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::timeout", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::timeout", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::timeout", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::timeout", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::timeout", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::timeout", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::window-size", callback: (($obj: Clock, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::window-size", callback: (($obj: Clock, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::window-size", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::window-size", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::window-size", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::window-size", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::window-size", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::window-size", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::window-threshold", callback: (($obj: Clock, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::window-threshold", callback: (($obj: Clock, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::window-threshold", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::window-threshold", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::window-threshold", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::window-threshold", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::window-threshold", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::window-threshold", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: Clock, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: Clock, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: Clock, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: Clock, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -2261,6 +2461,7 @@ export class Clock {
     static name: string
     constructor (config?: Clock_ConstructProps)
     _init (config?: Clock_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static idCompareFunc(id1?: object | null, id2?: object | null): number
     static idGetClock(id: ClockID): Clock | null
     static idGetTime(id: ClockID): ClockTime
@@ -2277,33 +2478,33 @@ export interface ControlBinding_ConstructProps extends Object_ConstructProps {
     object?: Object
 }
 export class ControlBinding {
-    /* Properties of Gst.ControlBinding */
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.ControlBinding */
+    /* Fields of Gst-1.0.Gst.ControlBinding */
     pspec: GObject.ParamSpec
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     object: GObject.InitiallyUnowned
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.ControlBinding */
-    getGValueArray(timestamp: ClockTime, interval: ClockTime, values: any): boolean
-    getValue(timestamp: ClockTime): any
+    /* Methods of Gst-1.0.Gst.ControlBinding */
+    getGValueArray(timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
+    getValue(timestamp: ClockTime): any | null
     isDisabled(): boolean
     setDisabled(disabled: boolean): void
     syncValues(object: Object, timestamp: ClockTime, lastSync: ClockTime): boolean
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -2316,65 +2517,49 @@ export class ControlBinding {
     setName(name?: string | null): boolean
     setParent(parent: Object): boolean
     suggestNextSync(): ClockTime
+    syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.ControlBinding */
-    vfuncGetGValueArray?(timestamp: ClockTime, interval: ClockTime, values: any): boolean
-    vfuncGetValue?(timestamp: ClockTime): any
-    vfuncSyncValues?(object: Object, timestamp: ClockTime, lastSync: ClockTime): boolean
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: ControlBinding, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: ControlBinding, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: ControlBinding, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: ControlBinding, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: ControlBinding, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: ControlBinding, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: ControlBinding, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: ControlBinding, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -2391,28 +2576,27 @@ export class ControlBinding {
 export interface ControlSource_ConstructProps extends Object_ConstructProps {
 }
 export class ControlSource {
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.ControlSource */
+    /* Fields of Gst-1.0.Gst.ControlSource */
     getValue: ControlSourceGetValue
     getValueArray: ControlSourceGetValueArray
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     object: GObject.InitiallyUnowned
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.ControlSource */
+    /* Methods of Gst-1.0.Gst.ControlSource */
     controlSourceGetValue(timestamp: ClockTime): [ /* returnType */ boolean, /* value */ number ]
     controlSourceGetValueArray(timestamp: ClockTime, interval: ClockTime, values: number[]): boolean
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
@@ -2431,59 +2615,46 @@ export class ControlSource {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: ControlSource, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: ControlSource, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: ControlSource, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: ControlSource, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: ControlSource, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: ControlSource, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: ControlSource, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: ControlSource, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -2504,19 +2675,16 @@ export interface Device_ConstructProps extends Object_ConstructProps {
     properties?: Structure
 }
 export class Device {
-    /* Properties of Gst.Device */
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Device */
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     object: GObject.InitiallyUnowned
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.Device */
+    /* Methods of Gst-1.0.Gst.Device */
     createElement(name?: string | null): Element | null
     getCaps(): Caps | null
     getDeviceClass(): string
@@ -2525,16 +2693,16 @@ export class Device {
     hasClasses(classes: string): boolean
     hasClassesv(classes: string[]): boolean
     reconfigureElement(element: Element): boolean
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -2550,69 +2718,52 @@ export class Device {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Device */
-    vfuncCreateElement?(name?: string | null): Element | null
-    vfuncReconfigureElement?(element: Element): boolean
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Device */
-    connect(sigName: "removed", callback: (($obj: Device) => void)): number
-    connect_after(sigName: "removed", callback: (($obj: Device) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Device */
+    connect(sigName: "removed", callback: (() => void)): number
+    on(sigName: "removed", callback: () => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "removed", callback: () => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "removed", callback: () => void): NodeJS.EventEmitter
     emit(sigName: "removed"): void
-    on(sigName: "removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: Device, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: Device, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: Device, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: Device, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: Device, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: Device, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: Device, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: Device, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -2630,20 +2781,18 @@ export interface DeviceMonitor_ConstructProps extends Object_ConstructProps {
     showAll?: boolean
 }
 export class DeviceMonitor {
-    /* Properties of Gst.DeviceMonitor */
+    /* Properties of Gst-1.0.Gst.DeviceMonitor */
     showAll: boolean
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.DeviceMonitor */
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     object: GObject.InitiallyUnowned
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.DeviceMonitor */
+    /* Methods of Gst-1.0.Gst.DeviceMonitor */
     addFilter(classes?: string | null, caps?: Caps | null): number
     getBus(): Bus
     getDevices(): Device[] | null
@@ -2653,16 +2802,16 @@ export class DeviceMonitor {
     setShowAllDevices(showAll: boolean): void
     start(): boolean
     stop(): void
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -2678,64 +2827,50 @@ export class DeviceMonitor {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: DeviceMonitor, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: DeviceMonitor, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: DeviceMonitor, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: DeviceMonitor, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::show-all", callback: (($obj: DeviceMonitor, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::show-all", callback: (($obj: DeviceMonitor, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::show-all", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::show-all", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::show-all", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::show-all", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::show-all", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::show-all", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: DeviceMonitor, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: DeviceMonitor, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: DeviceMonitor, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: DeviceMonitor, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -2747,25 +2882,25 @@ export class DeviceMonitor {
     static name: string
     constructor (config?: DeviceMonitor_ConstructProps)
     _init (config?: DeviceMonitor_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static new(): DeviceMonitor
     static $gtype: GObject.Type
 }
 export interface DeviceProvider_ConstructProps extends Object_ConstructProps {
 }
 export class DeviceProvider {
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.DeviceProvider */
+    /* Fields of Gst-1.0.Gst.DeviceProvider */
     devices: object[]
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     object: GObject.InitiallyUnowned
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.DeviceProvider */
+    /* Methods of Gst-1.0.Gst.DeviceProvider */
     canMonitor(): boolean
     deviceAdd(device: Device): void
     deviceChanged(device: Device, changedDevice: Device): void
@@ -2779,16 +2914,16 @@ export class DeviceProvider {
     start(): boolean
     stop(): void
     unhideProvider(name: string): void
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -2804,75 +2939,57 @@ export class DeviceProvider {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.DeviceProvider */
-    vfuncStart?(): boolean
-    vfuncStop?(): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.DeviceProvider */
-    connect(sigName: "provider-hidden", callback: (($obj: DeviceProvider, object: string) => void)): number
-    connect_after(sigName: "provider-hidden", callback: (($obj: DeviceProvider, object: string) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.DeviceProvider */
+    connect(sigName: "provider-hidden", callback: ((object: string) => void)): number
+    on(sigName: "provider-hidden", callback: (object: string) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "provider-hidden", callback: (object: string) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "provider-hidden", callback: (object: string) => void): NodeJS.EventEmitter
     emit(sigName: "provider-hidden", object: string): void
-    on(sigName: "provider-hidden", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "provider-hidden", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "provider-hidden", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "provider-unhidden", callback: (($obj: DeviceProvider, object: string) => void)): number
-    connect_after(sigName: "provider-unhidden", callback: (($obj: DeviceProvider, object: string) => void)): number
+    connect(sigName: "provider-unhidden", callback: ((object: string) => void)): number
+    on(sigName: "provider-unhidden", callback: (object: string) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "provider-unhidden", callback: (object: string) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "provider-unhidden", callback: (object: string) => void): NodeJS.EventEmitter
     emit(sigName: "provider-unhidden", object: string): void
-    on(sigName: "provider-unhidden", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "provider-unhidden", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "provider-unhidden", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: DeviceProvider, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: DeviceProvider, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: DeviceProvider, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: DeviceProvider, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: DeviceProvider, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: DeviceProvider, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: DeviceProvider, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: DeviceProvider, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -2884,46 +3001,51 @@ export class DeviceProvider {
     static name: string
     constructor (config?: DeviceProvider_ConstructProps)
     _init (config?: DeviceProvider_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static register(plugin: Plugin | null, name: string, rank: number, type: GObject.Type): boolean
+    static addMetadata(klass: DeviceProvider | Function | GObject.Type, key: string, value: string): void
+    static addStaticMetadata(klass: DeviceProvider | Function | GObject.Type, key: string, value: string): void
+    static getMetadata(klass: DeviceProvider | Function | GObject.Type, key: string): string | null
+    static setMetadata(klass: DeviceProvider | Function | GObject.Type, longname: string, classification: string, description: string, author: string): void
+    static setStaticMetadata(klass: DeviceProvider | Function | GObject.Type, longname: string, classification: string, description: string, author: string): void
     static $gtype: GObject.Type
 }
 export interface DeviceProviderFactory_ConstructProps extends PluginFeature_ConstructProps {
 }
 export class DeviceProviderFactory {
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     object: GObject.InitiallyUnowned
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.DeviceProviderFactory */
+    /* Methods of Gst-1.0.Gst.DeviceProviderFactory */
     get(): DeviceProvider | null
     getDeviceProviderType(): GObject.Type
     getMetadata(key: string): string | null
     getMetadataKeys(): string[] | null
     hasClasses(classes?: string | null): boolean
     hasClassesv(classes?: string[] | null): boolean
-    /* Methods of Gst.PluginFeature */
+    /* Methods of Gst-1.0.Gst.PluginFeature */
     checkVersion(minMajor: number, minMinor: number, minMicro: number): boolean
     getPlugin(): Plugin | null
     getPluginName(): string | null
     getRank(): number
     load(): PluginFeature | null
     setRank(rank: number): void
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -2939,59 +3061,46 @@ export class DeviceProviderFactory {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: DeviceProviderFactory, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: DeviceProviderFactory, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: DeviceProviderFactory, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: DeviceProviderFactory, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: DeviceProviderFactory, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: DeviceProviderFactory, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: DeviceProviderFactory, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: DeviceProviderFactory, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -3003,6 +3112,7 @@ export class DeviceProviderFactory {
     static name: string
     constructor (config?: DeviceProviderFactory_ConstructProps)
     _init (config?: DeviceProviderFactory_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static find(name: string): DeviceProviderFactory | null
     static getByName(factoryname: string): DeviceProvider | null
     static listGetDeviceProviders(minrank: Rank): DeviceProviderFactory[]
@@ -3014,33 +3124,32 @@ export class DoubleRange {
 export interface DynamicTypeFactory_ConstructProps extends PluginFeature_ConstructProps {
 }
 export class DynamicTypeFactory {
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     object: GObject.InitiallyUnowned
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.PluginFeature */
+    /* Methods of Gst-1.0.Gst.PluginFeature */
     checkVersion(minMajor: number, minMinor: number, minMicro: number): boolean
     getPlugin(): Plugin | null
     getPluginName(): string | null
     getRank(): number
     load(): PluginFeature | null
     setRank(rank: number): void
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -3056,59 +3165,46 @@ export class DynamicTypeFactory {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: DynamicTypeFactory, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: DynamicTypeFactory, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: DynamicTypeFactory, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: DynamicTypeFactory, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: DynamicTypeFactory, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: DynamicTypeFactory, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: DynamicTypeFactory, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: DynamicTypeFactory, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -3120,16 +3216,17 @@ export class DynamicTypeFactory {
     static name: string
     constructor (config?: DynamicTypeFactory_ConstructProps)
     _init (config?: DynamicTypeFactory_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static load(factoryname: string): GObject.Type
     static $gtype: GObject.Type
 }
 export interface Element_ConstructProps extends Object_ConstructProps {
 }
 export class Element {
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Element */
+    /* Fields of Gst-1.0.Gst.Element */
     object: Object
     stateLock: GLib.RecMutex
     stateCond: GLib.Cond
@@ -3151,13 +3248,12 @@ export class Element {
     sinkpads: Pad[]
     padsCookie: number
     contexts: Context[]
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.Element */
+    /* Methods of Gst-1.0.Gst.Element */
     abortState(): void
     addPad(pad: Pad): boolean
     addPropertyDeepNotifyWatch(propertyName: string | null, includeValue: boolean): number
@@ -3221,16 +3317,16 @@ export class Element {
     syncStateWithParent(): boolean
     unlink(dest: Element): void
     unlinkPads(srcpadname: string, dest: Element, destpadname: string): void
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -3246,95 +3342,62 @@ export class Element {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Element */
-    vfuncChangeState?(transition: StateChange): StateChangeReturn
-    vfuncGetState?(timeout: ClockTime): [ /* returnType */ StateChangeReturn, /* state */ State | null, /* pending */ State | null ]
-    vfuncNoMorePads?(): void
-    vfuncPadAdded?(pad: Pad): void
-    vfuncPadRemoved?(pad: Pad): void
-    vfuncPostMessage?(message: Message): boolean
-    vfuncProvideClock?(): Clock | null
-    vfuncQuery?(query: Query): boolean
-    vfuncReleasePad?(pad: Pad): void
-    vfuncRequestNewPad?(templ: PadTemplate, name?: string | null, caps?: Caps | null): Pad | null
-    vfuncSendEvent?(event: Event): boolean
-    vfuncSetBus?(bus?: Bus | null): void
-    vfuncSetClock?(clock?: Clock | null): boolean
-    vfuncSetContext?(context: Context): void
-    vfuncSetState?(state: State): StateChangeReturn
-    vfuncStateChanged?(oldstate: State, newstate: State, pending: State): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Element */
-    connect(sigName: "no-more-pads", callback: (($obj: Element) => void)): number
-    connect_after(sigName: "no-more-pads", callback: (($obj: Element) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Element */
+    connect(sigName: "no-more-pads", callback: (() => void)): number
+    on(sigName: "no-more-pads", callback: () => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "no-more-pads", callback: () => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "no-more-pads", callback: () => void): NodeJS.EventEmitter
     emit(sigName: "no-more-pads"): void
-    on(sigName: "no-more-pads", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "no-more-pads", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "no-more-pads", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "pad-added", callback: (($obj: Element, newPad: Pad) => void)): number
-    connect_after(sigName: "pad-added", callback: (($obj: Element, newPad: Pad) => void)): number
+    connect(sigName: "pad-added", callback: ((newPad: Pad) => void)): number
+    on(sigName: "pad-added", callback: (newPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "pad-added", callback: (newPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "pad-added", callback: (newPad: Pad) => void): NodeJS.EventEmitter
     emit(sigName: "pad-added", newPad: Pad): void
-    on(sigName: "pad-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "pad-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "pad-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "pad-removed", callback: (($obj: Element, oldPad: Pad) => void)): number
-    connect_after(sigName: "pad-removed", callback: (($obj: Element, oldPad: Pad) => void)): number
+    connect(sigName: "pad-removed", callback: ((oldPad: Pad) => void)): number
+    on(sigName: "pad-removed", callback: (oldPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "pad-removed", callback: (oldPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "pad-removed", callback: (oldPad: Pad) => void): NodeJS.EventEmitter
     emit(sigName: "pad-removed", oldPad: Pad): void
-    on(sigName: "pad-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "pad-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "pad-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: Element, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: Element, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: Element, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: Element, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: Element, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: Element, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: Element, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: Element, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -3346,26 +3409,36 @@ export class Element {
     static name: string
     constructor (config?: Element_ConstructProps)
     _init (config?: Element_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static makeFromUri(type: URIType, uri: string, elementname?: string | null): Element | null
     static register(plugin: Plugin | null, name: string, rank: number, type: GObject.Type): boolean
     static stateChangeReturnGetName(stateRet: StateChangeReturn): string
     static stateGetName(state: State): string
+    static addMetadata(klass: Element | Function | GObject.Type, key: string, value: string): void
+    static addPadTemplate(klass: Element | Function | GObject.Type, templ: PadTemplate): void
+    static addStaticMetadata(klass: Element | Function | GObject.Type, key: string, value: string): void
+    static addStaticPadTemplate(klass: Element | Function | GObject.Type, staticTempl: StaticPadTemplate): void
+    static addStaticPadTemplateWithGtype(klass: Element | Function | GObject.Type, staticTempl: StaticPadTemplate, padType: GObject.Type): void
+    static getMetadata(klass: Element | Function | GObject.Type, key: string): string
+    static getPadTemplate(element_class: Element | Function | GObject.Type, name: string): PadTemplate | null
+    static getPadTemplateList(element_class: Element | Function | GObject.Type): PadTemplate[]
+    static setMetadata(klass: Element | Function | GObject.Type, longname: string, classification: string, description: string, author: string): void
+    static setStaticMetadata(klass: Element | Function | GObject.Type, longname: string, classification: string, description: string, author: string): void
     static $gtype: GObject.Type
 }
 export interface ElementFactory_ConstructProps extends PluginFeature_ConstructProps {
 }
 export class ElementFactory {
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     object: GObject.InitiallyUnowned
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.ElementFactory */
+    /* Methods of Gst-1.0.Gst.ElementFactory */
     canSinkAllCaps(caps: Caps): boolean
     canSinkAnyCaps(caps: Caps): boolean
     canSrcAllCaps(caps: Caps): boolean
@@ -3380,23 +3453,23 @@ export class ElementFactory {
     getUriType(): URIType
     hasInterface(interfacename: string): boolean
     listIsType(type: ElementFactoryListType): boolean
-    /* Methods of Gst.PluginFeature */
+    /* Methods of Gst-1.0.Gst.PluginFeature */
     checkVersion(minMajor: number, minMinor: number, minMicro: number): boolean
     getPlugin(): Plugin | null
     getPluginName(): string | null
     getRank(): number
     load(): PluginFeature | null
     setRank(rank: number): void
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -3412,59 +3485,46 @@ export class ElementFactory {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: ElementFactory, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: ElementFactory, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: ElementFactory, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: ElementFactory, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: ElementFactory, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: ElementFactory, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: ElementFactory, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: ElementFactory, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -3476,6 +3536,7 @@ export class ElementFactory {
     static name: string
     constructor (config?: ElementFactory_ConstructProps)
     _init (config?: ElementFactory_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static find(name: string): ElementFactory | null
     static listFilter(list: ElementFactory[], caps: Caps, direction: PadDirection, subsetonly: boolean): ElementFactory[]
     static listGetElements(type: ElementFactoryListType, minrank: Rank): ElementFactory[]
@@ -3484,6 +3545,7 @@ export class ElementFactory {
 }
 export class FlagSet {
     static name: string
+    /* Static methods and pseudo-constructors */
     static register(flagsType: GObject.Type): GObject.Type
 }
 export class Fraction {
@@ -3495,34 +3557,32 @@ export class FractionRange {
 export interface GhostPad_ConstructProps extends ProxyPad_ConstructProps {
 }
 export class GhostPad {
-    /* Properties of Gst.Pad */
+    /* Properties of Gst-1.0.Gst.Pad */
     readonly caps: Caps
     offset: number
     template: PadTemplate
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.GhostPad */
+    /* Fields of Gst-1.0.Gst.GhostPad */
     pad: ProxyPad
-    /* Fields of Gst.ProxyPad */
-    /* Fields of Gst.Pad */
+    /* Fields of Gst-1.0.Gst.Pad */
     object: Object
     elementPrivate: object
     padtemplate: PadTemplate
     direction: PadDirection
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.GhostPad */
+    /* Methods of Gst-1.0.Gst.GhostPad */
     construct(): boolean
     getTarget(): Pad | null
     setTarget(newtarget?: Pad | null): boolean
-    /* Methods of Gst.ProxyPad */
+    /* Methods of Gst-1.0.Gst.ProxyPad */
     getInternal(): ProxyPad | null
-    /* Methods of Gst.Pad */
+    /* Methods of Gst-1.0.Gst.Pad */
     activateMode(mode: PadMode, active: boolean): boolean
     addProbe(mask: PadProbeType, callback: PadProbeCallback): number
     canLink(sinkpad: Pad): boolean
@@ -3602,16 +3662,16 @@ export class GhostPad {
     storeStickyEvent(event: Event): FlowReturn
     unlink(sinkpad: Pad): boolean
     useFixedCaps(): void
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -3627,90 +3687,69 @@ export class GhostPad {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Pad */
-    vfuncLinked?(peer: Pad): void
-    vfuncUnlinked?(peer: Pad): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Pad */
-    connect(sigName: "linked", callback: (($obj: GhostPad, peer: Pad) => void)): number
-    connect_after(sigName: "linked", callback: (($obj: GhostPad, peer: Pad) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Pad */
+    connect(sigName: "linked", callback: ((peer: Pad) => void)): number
+    on(sigName: "linked", callback: (peer: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "linked", callback: (peer: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "linked", callback: (peer: Pad) => void): NodeJS.EventEmitter
     emit(sigName: "linked", peer: Pad): void
-    on(sigName: "linked", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "linked", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "linked", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "unlinked", callback: (($obj: GhostPad, peer: Pad) => void)): number
-    connect_after(sigName: "unlinked", callback: (($obj: GhostPad, peer: Pad) => void)): number
+    connect(sigName: "unlinked", callback: ((peer: Pad) => void)): number
+    on(sigName: "unlinked", callback: (peer: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "unlinked", callback: (peer: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "unlinked", callback: (peer: Pad) => void): NodeJS.EventEmitter
     emit(sigName: "unlinked", peer: Pad): void
-    on(sigName: "unlinked", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "unlinked", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "unlinked", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: GhostPad, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: GhostPad, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: GhostPad, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: GhostPad, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::caps", callback: (($obj: GhostPad, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::caps", callback: (($obj: GhostPad, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::caps", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::caps", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::caps", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::caps", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::caps", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::caps", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::offset", callback: (($obj: GhostPad, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::offset", callback: (($obj: GhostPad, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::offset", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::offset", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::offset", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::offset", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::offset", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::offset", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::template", callback: (($obj: GhostPad, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::template", callback: (($obj: GhostPad, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::template", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::template", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::template", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::template", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::template", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::template", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: GhostPad, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: GhostPad, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: GhostPad, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: GhostPad, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -3722,8 +3761,11 @@ export class GhostPad {
     static name: string
     constructor (config?: GhostPad_ConstructProps)
     _init (config?: GhostPad_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static new(name: string | null, target: Pad): GhostPad
+    static new(name: string | null, direction: PadDirection): GhostPad
     static newFromTemplate(name: string | null, target: Pad, templ: PadTemplate): GhostPad
+    static newFromTemplate(templ: PadTemplate, name?: string | null): GhostPad
     static newNoTarget(name: string | null, dir: PadDirection): GhostPad
     static newNoTargetFromTemplate(name: string | null, templ: PadTemplate): GhostPad
     static activateModeDefault(pad: Pad, parent: Object | null, mode: PadMode, active: boolean): boolean
@@ -3741,26 +3783,25 @@ export interface Object_ConstructProps extends GObject.InitiallyUnowned_Construc
     parent?: Object
 }
 export class Object {
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     object: GObject.InitiallyUnowned
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -3776,59 +3817,46 @@ export class Object {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: Object, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: Object, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: Object, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: Object, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: Object, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: Object, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: Object, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: Object, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -3840,9 +3868,10 @@ export class Object {
     static name: string
     constructor (config?: Object_ConstructProps)
     _init (config?: Object_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static checkUniqueness(list: Object[], name: string): boolean
     static defaultDeepNotify(object: GObject.Object, orig: Object, pspec: GObject.ParamSpec, excludedProps?: string[] | null): void
-    static replace(oldobj?: Object | null, newobj?: Object | null): boolean
+    static replace(oldobj?: Object | null, newobj?: Object | null): [ /* returnType */ boolean, /* oldobj */ Object | null ]
     static $gtype: GObject.Type
 }
 export interface Pad_ConstructProps extends Object_ConstructProps {
@@ -3851,25 +3880,24 @@ export interface Pad_ConstructProps extends Object_ConstructProps {
     template?: PadTemplate
 }
 export class Pad {
-    /* Properties of Gst.Pad */
+    /* Properties of Gst-1.0.Gst.Pad */
     readonly caps: Caps
     offset: number
     template: PadTemplate
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Pad */
+    /* Fields of Gst-1.0.Gst.Pad */
     object: Object
     elementPrivate: object
     padtemplate: PadTemplate
     direction: PadDirection
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.Pad */
+    /* Methods of Gst-1.0.Gst.Pad */
     activateMode(mode: PadMode, active: boolean): boolean
     addProbe(mask: PadProbeType, callback: PadProbeCallback): number
     canLink(sinkpad: Pad): boolean
@@ -3949,16 +3977,16 @@ export class Pad {
     storeStickyEvent(event: Event): FlowReturn
     unlink(sinkpad: Pad): boolean
     useFixedCaps(): void
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -3974,90 +4002,69 @@ export class Pad {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Pad */
-    vfuncLinked?(peer: Pad): void
-    vfuncUnlinked?(peer: Pad): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Pad */
-    connect(sigName: "linked", callback: (($obj: Pad, peer: Pad) => void)): number
-    connect_after(sigName: "linked", callback: (($obj: Pad, peer: Pad) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Pad */
+    connect(sigName: "linked", callback: ((peer: Pad) => void)): number
+    on(sigName: "linked", callback: (peer: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "linked", callback: (peer: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "linked", callback: (peer: Pad) => void): NodeJS.EventEmitter
     emit(sigName: "linked", peer: Pad): void
-    on(sigName: "linked", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "linked", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "linked", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "unlinked", callback: (($obj: Pad, peer: Pad) => void)): number
-    connect_after(sigName: "unlinked", callback: (($obj: Pad, peer: Pad) => void)): number
+    connect(sigName: "unlinked", callback: ((peer: Pad) => void)): number
+    on(sigName: "unlinked", callback: (peer: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "unlinked", callback: (peer: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "unlinked", callback: (peer: Pad) => void): NodeJS.EventEmitter
     emit(sigName: "unlinked", peer: Pad): void
-    on(sigName: "unlinked", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "unlinked", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "unlinked", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: Pad, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: Pad, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: Pad, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: Pad, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::caps", callback: (($obj: Pad, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::caps", callback: (($obj: Pad, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::caps", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::caps", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::caps", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::caps", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::caps", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::caps", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::offset", callback: (($obj: Pad, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::offset", callback: (($obj: Pad, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::offset", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::offset", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::offset", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::offset", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::offset", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::offset", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::template", callback: (($obj: Pad, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::template", callback: (($obj: Pad, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::template", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::template", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::template", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::template", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::template", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::template", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: Pad, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: Pad, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: Pad, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: Pad, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -4069,6 +4076,7 @@ export class Pad {
     static name: string
     constructor (config?: Pad_ConstructProps)
     _init (config?: Pad_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static new(name: string | null, direction: PadDirection): Pad
     static newFromStaticTemplate(templ: StaticPadTemplate, name: string): Pad
     static newFromTemplate(templ: PadTemplate, name?: string | null): Pad
@@ -4083,35 +4091,33 @@ export interface PadTemplate_ConstructProps extends Object_ConstructProps {
     presence?: PadPresence
 }
 export class PadTemplate {
-    /* Properties of Gst.PadTemplate */
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.PadTemplate */
+    /* Fields of Gst-1.0.Gst.PadTemplate */
     object: Object
     nameTemplate: string
     direction: PadDirection
     presence: PadPresence
     caps: Caps
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.PadTemplate */
+    /* Methods of Gst-1.0.Gst.PadTemplate */
     getCaps(): Caps
     padCreated(pad: Pad): void
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -4127,68 +4133,52 @@ export class PadTemplate {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.PadTemplate */
-    vfuncPadCreated?(pad: Pad): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.PadTemplate */
-    connect(sigName: "pad-created", callback: (($obj: PadTemplate, pad: Pad) => void)): number
-    connect_after(sigName: "pad-created", callback: (($obj: PadTemplate, pad: Pad) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.PadTemplate */
+    connect(sigName: "pad-created", callback: ((pad: Pad) => void)): number
+    on(sigName: "pad-created", callback: (pad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "pad-created", callback: (pad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "pad-created", callback: (pad: Pad) => void): NodeJS.EventEmitter
     emit(sigName: "pad-created", pad: Pad): void
-    on(sigName: "pad-created", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "pad-created", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "pad-created", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: PadTemplate, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: PadTemplate, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: PadTemplate, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: PadTemplate, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: PadTemplate, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: PadTemplate, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: PadTemplate, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: PadTemplate, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -4200,21 +4190,22 @@ export class PadTemplate {
     static name: string
     constructor (config?: PadTemplate_ConstructProps)
     _init (config?: PadTemplate_ConstructProps): void
-    static new(nameTemplate: string, direction: PadDirection, presence: PadPresence, caps: Caps): PadTemplate | null
-    static newFromStaticPadTemplateWithGtype(padTemplate: StaticPadTemplate, padType: GObject.Type): PadTemplate | null
-    static newWithGtype(nameTemplate: string, direction: PadDirection, presence: PadPresence, caps: Caps, padType: GObject.Type): PadTemplate | null
+    /* Static methods and pseudo-constructors */
+    static new(nameTemplate: string, direction: PadDirection, presence: PadPresence, caps: Caps): PadTemplate
+    static newFromStaticPadTemplateWithGtype(padTemplate: StaticPadTemplate, padType: GObject.Type): PadTemplate
+    static newWithGtype(nameTemplate: string, direction: PadDirection, presence: PadPresence, caps: Caps, padType: GObject.Type): PadTemplate
     static $gtype: GObject.Type
 }
 export class ParamArray {
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: GObject.TypeInstance
     name: string
     flags: GObject.ParamFlags
     valueType: GObject.Type
     ownerType: GObject.Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): GObject.Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -4223,23 +4214,18 @@ export class ParamArray {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: GObject.Value): void
-    vfuncValueValidate?(value: GObject.Value): boolean
-    vfuncValuesCmp?(value1: GObject.Value, value2: GObject.Value): number
     static name: string
 }
 export class ParamFraction {
-    /* Fields of GObject.ParamSpec */
+    /* Fields of GObject-2.0.GObject.ParamSpec */
     gTypeInstance: GObject.TypeInstance
     name: string
     flags: GObject.ParamFlags
     valueType: GObject.Type
     ownerType: GObject.Type
-    /* Methods of GObject.ParamSpec */
+    /* Methods of GObject-2.0.GObject.ParamSpec */
     getBlurb(): string
-    getDefaultValue(): GObject.Value
+    getDefaultValue(): any
     getName(): string
     getNameQuark(): GLib.Quark
     getNick(): string
@@ -4248,11 +4234,6 @@ export class ParamFraction {
     setQdata(quark: GLib.Quark, data?: object | null): void
     sink(): void
     stealQdata(quark: GLib.Quark): object | null
-    /* Virtual methods of GObject.ParamSpec */
-    vfuncFinalize?(): void
-    vfuncValueSetDefault?(value: GObject.Value): void
-    vfuncValueValidate?(value: GObject.Value): boolean
-    vfuncValuesCmp?(value1: GObject.Value, value2: GObject.Value): number
     static name: string
 }
 export interface Pipeline_ConstructProps extends Bin_ConstructProps {
@@ -4261,21 +4242,21 @@ export interface Pipeline_ConstructProps extends Bin_ConstructProps {
     latency?: number
 }
 export class Pipeline {
-    /* Properties of Gst.Pipeline */
+    /* Properties of Gst-1.0.Gst.Pipeline */
     autoFlushBus: boolean
     delay: number
     latency: number
-    /* Properties of Gst.Bin */
+    /* Properties of Gst-1.0.Gst.Bin */
     asyncHandling: boolean
     messageForward: boolean
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Pipeline */
+    /* Fields of Gst-1.0.Gst.Pipeline */
     bin: Bin
     fixedClock: Clock
     streamTime: ClockTime
-    /* Fields of Gst.Bin */
+    /* Fields of Gst-1.0.Gst.Bin */
     element: Element
     numchildren: number
     children: Element[]
@@ -4287,7 +4268,7 @@ export class Pipeline {
     clockDirty: boolean
     providedClock: Clock
     clockProvider: Element
-    /* Fields of Gst.Element */
+    /* Fields of Gst-1.0.Gst.Element */
     object: Object
     stateLock: GLib.RecMutex
     stateCond: GLib.Cond
@@ -4309,13 +4290,12 @@ export class Pipeline {
     sinkpads: Pad[]
     padsCookie: number
     contexts: Context[]
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.Pipeline */
+    /* Methods of Gst-1.0.Gst.Pipeline */
     autoClock(): void
     getAutoFlushBus(): boolean
     getBus(): Bus
@@ -4326,7 +4306,7 @@ export class Pipeline {
     setDelay(delay: ClockTime): void
     setLatency(latency: ClockTime): void
     useClock(clock?: Clock | null): void
-    /* Methods of Gst.Bin */
+    /* Methods of Gst-1.0.Gst.Bin */
     add(element: Element): boolean
     findUnlinkedPad(direction: PadDirection): Pad | null
     getByInterface(iface: GObject.Type): Element | null
@@ -4343,7 +4323,7 @@ export class Pipeline {
     remove(element: Element): boolean
     setSuppressedFlags(flags: ElementFlags): void
     syncChildrenStates(): boolean
-    /* Methods of Gst.Element */
+    /* Methods of Gst-1.0.Gst.Element */
     abortState(): void
     addPad(pad: Pad): boolean
     addPropertyDeepNotifyWatch(propertyName: string | null, includeValue: boolean): number
@@ -4356,6 +4336,7 @@ export class Pipeline {
     foreachSinkPad(func: ElementForeachPadFunc): boolean
     foreachSrcPad(func: ElementForeachPadFunc): boolean
     getBaseTime(): ClockTime
+    getBus(): Bus | null
     getClock(): Clock | null
     getCompatiblePad(pad: Pad, caps?: Caps | null): Pad | null
     getCompatiblePadTemplate(compattempl: PadTemplate): PadTemplate | null
@@ -4406,16 +4387,16 @@ export class Pipeline {
     syncStateWithParent(): boolean
     unlink(dest: Element): void
     unlinkPads(srcpadname: string, dest: Element, destpadname: string): void
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -4431,180 +4412,108 @@ export class Pipeline {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Methods of Gst.ChildProxy */
-    childAdded(child: GObject.Object, name: string): void
-    childRemoved(child: GObject.Object, name: string): void
-    getChildByIndex(index: number): GObject.Object | null
-    getChildByName(name: string): GObject.Object | null
-    getChildrenCount(): number
-    lookup(name: string): [ /* returnType */ boolean, /* target */ GObject.Object | null, /* pspec */ GObject.ParamSpec | null ]
-    /* Virtual methods of Gst.Bin */
-    vfuncAddElement?(element: Element): boolean
-    vfuncDeepElementAdded?(subBin: Bin, child: Element): void
-    vfuncDeepElementRemoved?(subBin: Bin, child: Element): void
-    vfuncDoLatency?(): boolean
-    vfuncElementAdded?(child: Element): void
-    vfuncElementRemoved?(child: Element): void
-    vfuncHandleMessage?(message: Message): void
-    vfuncRemoveElement?(element: Element): boolean
-    /* Virtual methods of Gst.Element */
-    vfuncChangeState?(transition: StateChange): StateChangeReturn
-    vfuncGetState?(timeout: ClockTime): [ /* returnType */ StateChangeReturn, /* state */ State | null, /* pending */ State | null ]
-    vfuncNoMorePads?(): void
-    vfuncPadAdded?(pad: Pad): void
-    vfuncPadRemoved?(pad: Pad): void
-    vfuncPostMessage?(message: Message): boolean
-    vfuncProvideClock?(): Clock | null
-    vfuncQuery?(query: Query): boolean
-    vfuncReleasePad?(pad: Pad): void
-    vfuncRequestNewPad?(templ: PadTemplate, name?: string | null, caps?: Caps | null): Pad | null
-    vfuncSendEvent?(event: Event): boolean
-    vfuncSetBus?(bus?: Bus | null): void
-    vfuncSetClock?(clock?: Clock | null): boolean
-    vfuncSetContext?(context: Context): void
-    vfuncSetState?(state: State): StateChangeReturn
-    vfuncStateChanged?(oldstate: State, newstate: State, pending: State): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Bin */
-    connect(sigName: "deep-element-added", callback: (($obj: Pipeline, subBin: Bin, element: Element) => void)): number
-    connect_after(sigName: "deep-element-added", callback: (($obj: Pipeline, subBin: Bin, element: Element) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Bin */
+    connect(sigName: "deep-element-added", callback: ((subBin: Bin, element: Element) => void)): number
+    on(sigName: "deep-element-added", callback: (subBin: Bin, element: Element) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-element-added", callback: (subBin: Bin, element: Element) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-element-added", callback: (subBin: Bin, element: Element) => void): NodeJS.EventEmitter
     emit(sigName: "deep-element-added", subBin: Bin, element: Element): void
-    on(sigName: "deep-element-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-element-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-element-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "deep-element-removed", callback: (($obj: Pipeline, subBin: Bin, element: Element) => void)): number
-    connect_after(sigName: "deep-element-removed", callback: (($obj: Pipeline, subBin: Bin, element: Element) => void)): number
+    connect(sigName: "deep-element-removed", callback: ((subBin: Bin, element: Element) => void)): number
+    on(sigName: "deep-element-removed", callback: (subBin: Bin, element: Element) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-element-removed", callback: (subBin: Bin, element: Element) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-element-removed", callback: (subBin: Bin, element: Element) => void): NodeJS.EventEmitter
     emit(sigName: "deep-element-removed", subBin: Bin, element: Element): void
-    on(sigName: "deep-element-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-element-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-element-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "do-latency", callback: (($obj: Pipeline) => boolean)): number
-    connect_after(sigName: "do-latency", callback: (($obj: Pipeline) => boolean)): number
+    connect(sigName: "do-latency", callback: (() => boolean)): number
+    on(sigName: "do-latency", callback: () => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "do-latency", callback: () => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "do-latency", callback: () => void): NodeJS.EventEmitter
     emit(sigName: "do-latency"): void
-    on(sigName: "do-latency", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "do-latency", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "do-latency", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "element-added", callback: (($obj: Pipeline, element: Element) => void)): number
-    connect_after(sigName: "element-added", callback: (($obj: Pipeline, element: Element) => void)): number
+    connect(sigName: "element-added", callback: ((element: Element) => void)): number
+    on(sigName: "element-added", callback: (element: Element) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "element-added", callback: (element: Element) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "element-added", callback: (element: Element) => void): NodeJS.EventEmitter
     emit(sigName: "element-added", element: Element): void
-    on(sigName: "element-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "element-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "element-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "element-removed", callback: (($obj: Pipeline, element: Element) => void)): number
-    connect_after(sigName: "element-removed", callback: (($obj: Pipeline, element: Element) => void)): number
+    connect(sigName: "element-removed", callback: ((element: Element) => void)): number
+    on(sigName: "element-removed", callback: (element: Element) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "element-removed", callback: (element: Element) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "element-removed", callback: (element: Element) => void): NodeJS.EventEmitter
     emit(sigName: "element-removed", element: Element): void
-    on(sigName: "element-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "element-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "element-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of Gst.Element */
-    connect(sigName: "no-more-pads", callback: (($obj: Pipeline) => void)): number
-    connect_after(sigName: "no-more-pads", callback: (($obj: Pipeline) => void)): number
+    /* Signals of Gst-1.0.Gst.Element */
+    connect(sigName: "no-more-pads", callback: (() => void)): number
+    on(sigName: "no-more-pads", callback: () => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "no-more-pads", callback: () => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "no-more-pads", callback: () => void): NodeJS.EventEmitter
     emit(sigName: "no-more-pads"): void
-    on(sigName: "no-more-pads", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "no-more-pads", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "no-more-pads", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "pad-added", callback: (($obj: Pipeline, newPad: Pad) => void)): number
-    connect_after(sigName: "pad-added", callback: (($obj: Pipeline, newPad: Pad) => void)): number
+    connect(sigName: "pad-added", callback: ((newPad: Pad) => void)): number
+    on(sigName: "pad-added", callback: (newPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "pad-added", callback: (newPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "pad-added", callback: (newPad: Pad) => void): NodeJS.EventEmitter
     emit(sigName: "pad-added", newPad: Pad): void
-    on(sigName: "pad-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "pad-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "pad-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "pad-removed", callback: (($obj: Pipeline, oldPad: Pad) => void)): number
-    connect_after(sigName: "pad-removed", callback: (($obj: Pipeline, oldPad: Pad) => void)): number
+    connect(sigName: "pad-removed", callback: ((oldPad: Pad) => void)): number
+    on(sigName: "pad-removed", callback: (oldPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "pad-removed", callback: (oldPad: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "pad-removed", callback: (oldPad: Pad) => void): NodeJS.EventEmitter
     emit(sigName: "pad-removed", oldPad: Pad): void
-    on(sigName: "pad-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "pad-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "pad-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: Pipeline, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: Pipeline, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: Pipeline, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: Pipeline, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of Gst.ChildProxy */
-    connect(sigName: "child-added", callback: (($obj: Pipeline, object: GObject.Object, name: string) => void)): number
-    connect_after(sigName: "child-added", callback: (($obj: Pipeline, object: GObject.Object, name: string) => void)): number
-    emit(sigName: "child-added", object: GObject.Object, name: string): void
-    on(sigName: "child-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "child-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "child-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "child-removed", callback: (($obj: Pipeline, object: GObject.Object, name: string) => void)): number
-    connect_after(sigName: "child-removed", callback: (($obj: Pipeline, object: GObject.Object, name: string) => void)): number
-    emit(sigName: "child-removed", object: GObject.Object, name: string): void
-    on(sigName: "child-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "child-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "child-removed", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::auto-flush-bus", callback: (($obj: Pipeline, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::auto-flush-bus", callback: (($obj: Pipeline, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::auto-flush-bus", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::auto-flush-bus", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::auto-flush-bus", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::auto-flush-bus", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::auto-flush-bus", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::auto-flush-bus", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::delay", callback: (($obj: Pipeline, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::delay", callback: (($obj: Pipeline, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::delay", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::delay", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::delay", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::delay", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::delay", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::delay", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::latency", callback: (($obj: Pipeline, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::latency", callback: (($obj: Pipeline, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::latency", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::latency", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::latency", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::latency", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::latency", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::latency", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::async-handling", callback: (($obj: Pipeline, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::async-handling", callback: (($obj: Pipeline, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::async-handling", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::async-handling", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::async-handling", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::async-handling", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::async-handling", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::async-handling", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::message-forward", callback: (($obj: Pipeline, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::message-forward", callback: (($obj: Pipeline, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::message-forward", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::message-forward", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::message-forward", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::message-forward", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::message-forward", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::message-forward", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: Pipeline, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: Pipeline, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: Pipeline, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: Pipeline, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -4616,23 +4525,23 @@ export class Pipeline {
     static name: string
     constructor (config?: Pipeline_ConstructProps)
     _init (config?: Pipeline_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static new(name?: string | null): Pipeline
     static $gtype: GObject.Type
 }
 export interface Plugin_ConstructProps extends Object_ConstructProps {
 }
 export class Plugin {
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     object: GObject.InitiallyUnowned
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.Plugin */
+    /* Methods of Gst-1.0.Gst.Plugin */
     addDependency(envVars: string[] | null, paths: string[] | null, names: string[] | null, flags: PluginDependencyFlags): void
     addDependencySimple(envVars: string | null, paths: string | null, names: string | null, flags: PluginDependencyFlags): void
     getCacheData(): Structure | null
@@ -4648,15 +4557,16 @@ export class Plugin {
     isLoaded(): boolean
     load(): Plugin | null
     setCacheData(cacheData: Structure): void
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
+    getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -4672,59 +4582,46 @@ export class Plugin {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: Plugin, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: Plugin, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: Plugin, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: Plugin, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: Plugin, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: Plugin, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: Plugin, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: Plugin, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -4736,6 +4633,7 @@ export class Plugin {
     static name: string
     constructor (config?: Plugin_ConstructProps)
     _init (config?: Plugin_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static listFree(list: Plugin[]): void
     static loadByName(name: string): Plugin | null
     static loadFile(filename: string): Plugin
@@ -4746,33 +4644,32 @@ export class Plugin {
 export interface PluginFeature_ConstructProps extends Object_ConstructProps {
 }
 export class PluginFeature {
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     object: GObject.InitiallyUnowned
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.PluginFeature */
+    /* Methods of Gst-1.0.Gst.PluginFeature */
     checkVersion(minMajor: number, minMinor: number, minMicro: number): boolean
     getPlugin(): Plugin | null
     getPluginName(): string | null
     getRank(): number
     load(): PluginFeature | null
     setRank(rank: number): void
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -4788,59 +4685,46 @@ export class PluginFeature {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: PluginFeature, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: PluginFeature, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: PluginFeature, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: PluginFeature, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: PluginFeature, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: PluginFeature, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: PluginFeature, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: PluginFeature, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -4852,6 +4736,7 @@ export class PluginFeature {
     static name: string
     constructor (config?: PluginFeature_ConstructProps)
     _init (config?: PluginFeature_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static listCopy(list: PluginFeature[]): PluginFeature[]
     static listDebug(list: PluginFeature[]): void
     static listFree(list: PluginFeature[]): void
@@ -4861,29 +4746,28 @@ export class PluginFeature {
 export interface ProxyPad_ConstructProps extends Pad_ConstructProps {
 }
 export class ProxyPad {
-    /* Properties of Gst.Pad */
+    /* Properties of Gst-1.0.Gst.Pad */
     readonly caps: Caps
     offset: number
     template: PadTemplate
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.ProxyPad */
+    /* Fields of Gst-1.0.Gst.ProxyPad */
     pad: Pad
-    /* Fields of Gst.Pad */
+    /* Fields of Gst-1.0.Gst.Pad */
     object: Object
     elementPrivate: object
     padtemplate: PadTemplate
     direction: PadDirection
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.ProxyPad */
+    /* Methods of Gst-1.0.Gst.ProxyPad */
     getInternal(): ProxyPad | null
-    /* Methods of Gst.Pad */
+    /* Methods of Gst-1.0.Gst.Pad */
     activateMode(mode: PadMode, active: boolean): boolean
     addProbe(mask: PadProbeType, callback: PadProbeCallback): number
     canLink(sinkpad: Pad): boolean
@@ -4963,16 +4847,16 @@ export class ProxyPad {
     storeStickyEvent(event: Event): FlowReturn
     unlink(sinkpad: Pad): boolean
     useFixedCaps(): void
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -4988,90 +4872,69 @@ export class ProxyPad {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Pad */
-    vfuncLinked?(peer: Pad): void
-    vfuncUnlinked?(peer: Pad): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Pad */
-    connect(sigName: "linked", callback: (($obj: ProxyPad, peer: Pad) => void)): number
-    connect_after(sigName: "linked", callback: (($obj: ProxyPad, peer: Pad) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Pad */
+    connect(sigName: "linked", callback: ((peer: Pad) => void)): number
+    on(sigName: "linked", callback: (peer: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "linked", callback: (peer: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "linked", callback: (peer: Pad) => void): NodeJS.EventEmitter
     emit(sigName: "linked", peer: Pad): void
-    on(sigName: "linked", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "linked", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "linked", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "unlinked", callback: (($obj: ProxyPad, peer: Pad) => void)): number
-    connect_after(sigName: "unlinked", callback: (($obj: ProxyPad, peer: Pad) => void)): number
+    connect(sigName: "unlinked", callback: ((peer: Pad) => void)): number
+    on(sigName: "unlinked", callback: (peer: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "unlinked", callback: (peer: Pad) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "unlinked", callback: (peer: Pad) => void): NodeJS.EventEmitter
     emit(sigName: "unlinked", peer: Pad): void
-    on(sigName: "unlinked", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "unlinked", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "unlinked", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: ProxyPad, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: ProxyPad, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: ProxyPad, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: ProxyPad, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::caps", callback: (($obj: ProxyPad, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::caps", callback: (($obj: ProxyPad, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::caps", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::caps", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::caps", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::caps", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::caps", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::caps", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::offset", callback: (($obj: ProxyPad, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::offset", callback: (($obj: ProxyPad, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::offset", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::offset", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::offset", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::offset", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::offset", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::offset", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::template", callback: (($obj: ProxyPad, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::template", callback: (($obj: ProxyPad, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::template", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::template", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::template", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::template", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::template", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::template", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: ProxyPad, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: ProxyPad, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: ProxyPad, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: ProxyPad, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -5083,6 +4946,7 @@ export class ProxyPad {
     static name: string
     constructor (config?: ProxyPad_ConstructProps)
     _init (config?: ProxyPad_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static chainDefault(pad: Pad, parent: Object | null, buffer: Buffer): FlowReturn
     static chainListDefault(pad: Pad, parent: Object | null, list: BufferList): FlowReturn
     static getrangeDefault(pad: Pad, parent: Object, offset: number, size: number): [ /* returnType */ FlowReturn, /* buffer */ Buffer ]
@@ -5092,18 +4956,17 @@ export class ProxyPad {
 export interface Registry_ConstructProps extends Object_ConstructProps {
 }
 export class Registry {
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Registry */
+    /* Fields of Gst-1.0.Gst.Registry */
     object: Object
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.Registry */
+    /* Methods of Gst-1.0.Gst.Registry */
     addFeature(feature: PluginFeature): boolean
     addPlugin(plugin: Plugin): boolean
     checkFeatureVersion(featureName: string, minMajor: number, minMinor: number, minMicro: number): boolean
@@ -5120,16 +4983,16 @@ export class Registry {
     removeFeature(feature: PluginFeature): void
     removePlugin(plugin: Plugin): void
     scanPath(path: string): boolean
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -5145,72 +5008,57 @@ export class Registry {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Registry */
-    connect(sigName: "feature-added", callback: (($obj: Registry, feature: PluginFeature) => void)): number
-    connect_after(sigName: "feature-added", callback: (($obj: Registry, feature: PluginFeature) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Registry */
+    connect(sigName: "feature-added", callback: ((feature: PluginFeature) => void)): number
+    on(sigName: "feature-added", callback: (feature: PluginFeature) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "feature-added", callback: (feature: PluginFeature) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "feature-added", callback: (feature: PluginFeature) => void): NodeJS.EventEmitter
     emit(sigName: "feature-added", feature: PluginFeature): void
-    on(sigName: "feature-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "feature-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "feature-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "plugin-added", callback: (($obj: Registry, plugin: Plugin) => void)): number
-    connect_after(sigName: "plugin-added", callback: (($obj: Registry, plugin: Plugin) => void)): number
+    connect(sigName: "plugin-added", callback: ((plugin: Plugin) => void)): number
+    on(sigName: "plugin-added", callback: (plugin: Plugin) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "plugin-added", callback: (plugin: Plugin) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "plugin-added", callback: (plugin: Plugin) => void): NodeJS.EventEmitter
     emit(sigName: "plugin-added", plugin: Plugin): void
-    on(sigName: "plugin-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "plugin-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "plugin-added", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: Registry, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: Registry, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: Registry, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: Registry, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: Registry, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: Registry, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: Registry, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: Registry, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -5222,6 +5070,7 @@ export class Registry {
     static name: string
     constructor (config?: Registry_ConstructProps)
     _init (config?: Registry_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static forkIsEnabled(): boolean
     static forkSetEnabled(enabled: boolean): void
     static get(): Registry
@@ -5235,24 +5084,23 @@ export interface Stream_ConstructProps extends Object_ConstructProps {
     tags?: TagList
 }
 export class Stream {
-    /* Properties of Gst.Stream */
+    /* Properties of Gst-1.0.Gst.Stream */
     caps: Caps
     streamFlags: StreamFlags
     streamType: StreamType
     tags: TagList
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Stream */
+    /* Fields of Gst-1.0.Gst.Stream */
     streamId: string
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     object: GObject.InitiallyUnowned
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.Stream */
+    /* Methods of Gst-1.0.Gst.Stream */
     getCaps(): Caps | null
     getStreamFlags(): StreamFlags
     getStreamId(): string | null
@@ -5262,16 +5110,16 @@ export class Stream {
     setStreamFlags(flags: StreamFlags): void
     setStreamType(streamType: StreamType): void
     setTags(tags?: TagList | null): void
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -5287,79 +5135,62 @@ export class Stream {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: Stream, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: Stream, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: Stream, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: Stream, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::caps", callback: (($obj: Stream, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::caps", callback: (($obj: Stream, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::caps", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::caps", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::caps", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::caps", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::caps", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::caps", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::stream-flags", callback: (($obj: Stream, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::stream-flags", callback: (($obj: Stream, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::stream-flags", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::stream-flags", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::stream-flags", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::stream-flags", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::stream-flags", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::stream-flags", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::stream-type", callback: (($obj: Stream, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::stream-type", callback: (($obj: Stream, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::stream-type", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::stream-type", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::stream-type", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::stream-type", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::stream-type", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::stream-type", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::tags", callback: (($obj: Stream, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::tags", callback: (($obj: Stream, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::tags", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::tags", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::tags", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::tags", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::tags", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::tags", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: Stream, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: Stream, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: Stream, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: Stream, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -5371,6 +5202,7 @@ export class Stream {
     static name: string
     constructor (config?: Stream_ConstructProps)
     _init (config?: Stream_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static new(streamId: string | null, caps: Caps | null, type: StreamType, flags: StreamFlags): Stream
     static $gtype: GObject.Type
 }
@@ -5378,34 +5210,32 @@ export interface StreamCollection_ConstructProps extends Object_ConstructProps {
     upstreamId?: string
 }
 export class StreamCollection {
-    /* Properties of Gst.StreamCollection */
+    /* Properties of Gst-1.0.Gst.StreamCollection */
     upstreamId: string
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.StreamCollection */
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     object: GObject.InitiallyUnowned
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.StreamCollection */
+    /* Methods of Gst-1.0.Gst.StreamCollection */
     addStream(stream: Stream): boolean
     getSize(): number
     getStream(index: number): Stream | null
     getUpstreamId(): string
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -5421,73 +5251,56 @@ export class StreamCollection {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.StreamCollection */
-    vfuncStreamNotify?(stream: Stream, pspec: GObject.ParamSpec): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.StreamCollection */
-    connect(sigName: "stream-notify", callback: (($obj: StreamCollection, object: Stream, p0: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "stream-notify", callback: (($obj: StreamCollection, object: Stream, p0: GObject.ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.StreamCollection */
+    connect(sigName: "stream-notify", callback: ((object: Stream, p0: GObject.ParamSpec) => void)): number
+    on(sigName: "stream-notify", callback: (object: Stream, p0: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "stream-notify", callback: (object: Stream, p0: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "stream-notify", callback: (object: Stream, p0: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "stream-notify", object: Stream, p0: GObject.ParamSpec): void
-    on(sigName: "stream-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "stream-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "stream-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: StreamCollection, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: StreamCollection, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: StreamCollection, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: StreamCollection, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::upstream-id", callback: (($obj: StreamCollection, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::upstream-id", callback: (($obj: StreamCollection, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::upstream-id", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::upstream-id", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::upstream-id", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::upstream-id", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::upstream-id", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::upstream-id", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: StreamCollection, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: StreamCollection, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: StreamCollection, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: StreamCollection, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -5499,6 +5312,7 @@ export class StreamCollection {
     static name: string
     constructor (config?: StreamCollection_ConstructProps)
     _init (config?: StreamCollection_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static new(upstreamId?: string | null): StreamCollection
     static $gtype: GObject.Type
 }
@@ -5506,26 +5320,25 @@ export interface SystemClock_ConstructProps extends Clock_ConstructProps {
     clockType?: ClockType
 }
 export class SystemClock {
-    /* Properties of Gst.SystemClock */
+    /* Properties of Gst-1.0.Gst.SystemClock */
     clockType: ClockType
-    /* Properties of Gst.Clock */
+    /* Properties of Gst-1.0.Gst.Clock */
     timeout: number
     windowSize: number
     windowThreshold: number
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.SystemClock */
+    /* Fields of Gst-1.0.Gst.SystemClock */
     clock: Clock
-    /* Fields of Gst.Clock */
+    /* Fields of Gst-1.0.Gst.Clock */
     object: Object
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.Clock */
+    /* Methods of Gst-1.0.Gst.Clock */
     addObservation(slave: ClockTime, master: ClockTime): [ /* returnType */ boolean, /* rSquared */ number ]
     addObservationUnapplied(slave: ClockTime, master: ClockTime): [ /* returnType */ boolean, /* rSquared */ number, /* internal */ ClockTime | null, /* external */ ClockTime | null, /* rateNum */ ClockTime | null, /* rateDenom */ ClockTime | null ]
     adjustUnlocked(internal: ClockTime): ClockTime
@@ -5549,16 +5362,16 @@ export class SystemClock {
     unadjustUnlocked(external: ClockTime): ClockTime
     unadjustWithCalibration(externalTarget: ClockTime, cinternal: ClockTime, cexternal: ClockTime, cnum: ClockTime, cdenom: ClockTime): ClockTime
     waitForSync(timeout: ClockTime): boolean
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -5574,93 +5387,68 @@ export class SystemClock {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Clock */
-    vfuncChangeResolution?(oldResolution: ClockTime, newResolution: ClockTime): ClockTime
-    vfuncGetInternalTime?(): ClockTime
-    vfuncGetResolution?(): ClockTime
-    vfuncUnschedule?(entry: ClockEntry): void
-    vfuncWait?(entry: ClockEntry, jitter: ClockTimeDiff): ClockReturn
-    vfuncWaitAsync?(entry: ClockEntry): ClockReturn
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Clock */
-    connect(sigName: "synced", callback: (($obj: SystemClock, synced: boolean) => void)): number
-    connect_after(sigName: "synced", callback: (($obj: SystemClock, synced: boolean) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Clock */
+    connect(sigName: "synced", callback: ((synced: boolean) => void)): number
+    on(sigName: "synced", callback: (synced: boolean) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "synced", callback: (synced: boolean) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "synced", callback: (synced: boolean) => void): NodeJS.EventEmitter
     emit(sigName: "synced", synced: boolean): void
-    on(sigName: "synced", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "synced", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "synced", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: SystemClock, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: SystemClock, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: SystemClock, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: SystemClock, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::clock-type", callback: (($obj: SystemClock, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::clock-type", callback: (($obj: SystemClock, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::clock-type", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::clock-type", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::clock-type", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::clock-type", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::clock-type", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::clock-type", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::timeout", callback: (($obj: SystemClock, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::timeout", callback: (($obj: SystemClock, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::timeout", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::timeout", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::timeout", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::timeout", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::timeout", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::timeout", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::window-size", callback: (($obj: SystemClock, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::window-size", callback: (($obj: SystemClock, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::window-size", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::window-size", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::window-size", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::window-size", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::window-size", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::window-size", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::window-threshold", callback: (($obj: SystemClock, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::window-threshold", callback: (($obj: SystemClock, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::window-threshold", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::window-threshold", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::window-threshold", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::window-threshold", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::window-threshold", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::window-threshold", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: SystemClock, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: SystemClock, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: SystemClock, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: SystemClock, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -5672,6 +5460,7 @@ export class SystemClock {
     static name: string
     constructor (config?: SystemClock_ConstructProps)
     _init (config?: SystemClock_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static obtain(): Clock
     static setDefault(newClock?: Clock | null): void
     static $gtype: GObject.Type
@@ -5679,10 +5468,10 @@ export class SystemClock {
 export interface Task_ConstructProps extends Object_ConstructProps {
 }
 export class Task {
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Task */
+    /* Fields of Gst-1.0.Gst.Task */
     object: Object
     state: TaskState
     cond: GLib.Cond
@@ -5691,12 +5480,11 @@ export class Task {
     userData: object
     notify: GLib.DestroyNotify
     running: boolean
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.Task */
+    /* Methods of Gst-1.0.Gst.Task */
     getPool(): TaskPool
     getState(): TaskState
     join(): boolean
@@ -5708,16 +5496,16 @@ export class Task {
     setState(state: TaskState): boolean
     start(): boolean
     stop(): boolean
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -5733,58 +5521,45 @@ export class Task {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: Task, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: Task, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: Task, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: Task, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: Task, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: Task, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: Task, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: Task, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -5796,6 +5571,7 @@ export class Task {
     static name: string
     constructor (config?: Task_ConstructProps)
     _init (config?: Task_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static new(func: TaskFunction): Task
     static cleanupAll(): void
     static $gtype: GObject.Type
@@ -5803,32 +5579,31 @@ export class Task {
 export interface TaskPool_ConstructProps extends Object_ConstructProps {
 }
 export class TaskPool {
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.TaskPool */
+    /* Fields of Gst-1.0.Gst.TaskPool */
     object: Object
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.TaskPool */
+    /* Methods of Gst-1.0.Gst.TaskPool */
     cleanup(): void
     join(id?: object | null): void
     prepare(): void
     push(func: TaskPoolFunction): object | null
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -5844,64 +5619,46 @@ export class TaskPool {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.TaskPool */
-    vfuncCleanup?(): void
-    vfuncJoin?(id?: object | null): void
-    vfuncPrepare?(): void
-    vfuncPush?(func: TaskPoolFunction): object | null
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: TaskPool, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: TaskPool, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: TaskPool, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: TaskPool, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: TaskPool, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: TaskPool, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: TaskPool, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: TaskPool, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -5913,6 +5670,7 @@ export class TaskPool {
     static name: string
     constructor (config?: TaskPool_ConstructProps)
     _init (config?: TaskPool_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static new(): TaskPool
     static $gtype: GObject.Type
 }
@@ -5920,29 +5678,27 @@ export interface Tracer_ConstructProps extends Object_ConstructProps {
     params?: string
 }
 export class Tracer {
-    /* Properties of Gst.Tracer */
+    /* Properties of Gst-1.0.Gst.Tracer */
     params: string
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Tracer */
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     object: GObject.InitiallyUnowned
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -5958,64 +5714,50 @@ export class Tracer {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: Tracer, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: Tracer, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: Tracer, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: Tracer, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::params", callback: (($obj: Tracer, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::params", callback: (($obj: Tracer, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::params", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::params", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::params", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::params", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::params", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::params", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: Tracer, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: Tracer, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: Tracer, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: Tracer, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -6032,35 +5774,34 @@ export class Tracer {
 export interface TracerFactory_ConstructProps extends PluginFeature_ConstructProps {
 }
 export class TracerFactory {
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     object: GObject.InitiallyUnowned
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.TracerFactory */
+    /* Methods of Gst-1.0.Gst.TracerFactory */
     getTracerType(): GObject.Type
-    /* Methods of Gst.PluginFeature */
+    /* Methods of Gst-1.0.Gst.PluginFeature */
     checkVersion(minMajor: number, minMinor: number, minMicro: number): boolean
     getPlugin(): Plugin | null
     getPluginName(): string | null
     getRank(): number
     load(): PluginFeature | null
     setRank(rank: number): void
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -6076,59 +5817,46 @@ export class TracerFactory {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: TracerFactory, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: TracerFactory, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: TracerFactory, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: TracerFactory, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: TracerFactory, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: TracerFactory, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: TracerFactory, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: TracerFactory, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -6140,32 +5868,32 @@ export class TracerFactory {
     static name: string
     constructor (config?: TracerFactory_ConstructProps)
     _init (config?: TracerFactory_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static getList(): TracerFactory[]
     static $gtype: GObject.Type
 }
 export interface TracerRecord_ConstructProps extends Object_ConstructProps {
 }
 export class TracerRecord {
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     object: GObject.InitiallyUnowned
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -6181,59 +5909,46 @@ export class TracerRecord {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: TracerRecord, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: TracerRecord, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: TracerRecord, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: TracerRecord, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: TracerRecord, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: TracerRecord, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: TracerRecord, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: TracerRecord, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -6250,38 +5965,37 @@ export class TracerRecord {
 export interface TypeFindFactory_ConstructProps extends PluginFeature_ConstructProps {
 }
 export class TypeFindFactory {
-    /* Properties of Gst.Object */
+    /* Properties of Gst-1.0.Gst.Object */
     name: string
     parent: Object
-    /* Fields of Gst.Object */
+    /* Fields of Gst-1.0.Gst.Object */
     object: GObject.InitiallyUnowned
     lock: GLib.Mutex
     flags: number
-    /* Fields of GObject.InitiallyUnowned */
+    /* Fields of GObject-2.0.GObject.InitiallyUnowned */
     gTypeInstance: GObject.TypeInstance
-    /* Fields of GObject.Object */
-    /* Methods of Gst.TypeFindFactory */
+    /* Methods of Gst-1.0.Gst.TypeFindFactory */
     callFunction(find: TypeFind): void
     getCaps(): Caps
     getExtensions(): string[] | null
     hasFunction(): boolean
-    /* Methods of Gst.PluginFeature */
+    /* Methods of Gst-1.0.Gst.PluginFeature */
     checkVersion(minMajor: number, minMinor: number, minMicro: number): boolean
     getPlugin(): Plugin | null
     getPluginName(): string | null
     getRank(): number
     load(): PluginFeature | null
     setRank(rank: number): void
-    /* Methods of Gst.Object */
+    /* Methods of Gst-1.0.Gst.Object */
     addControlBinding(binding: ControlBinding): boolean
     defaultError(error: GLib.Error, debug?: string | null): void
     getControlBinding(propertyName: string): ControlBinding | null
     getControlRate(): ClockTime
-    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any): boolean
+    getGValueArray(propertyName: string, timestamp: ClockTime, interval: ClockTime, values: any[]): boolean
     getName(): string | null
     getParent(): Object | null
     getPathString(): string
-    getValue(propertyName: string, timestamp: ClockTime): any
+    getValue(propertyName: string, timestamp: ClockTime): any | null
     hasActiveControlBindings(): boolean
     hasAncestor(ancestor: Object): boolean
     hasAsAncestor(ancestor: Object): boolean
@@ -6297,59 +6011,46 @@ export class TypeFindFactory {
     syncValues(timestamp: ClockTime): boolean
     unparent(): void
     unref(): void
-    /* Methods of GObject.Object */
+    /* Methods of GObject-2.0.GObject.Object */
     bindProperty(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags): GObject.Binding
-    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: GObject.Closure, transformFrom: GObject.Closure): GObject.Binding
+    bindPropertyFull(sourceProperty: string, target: GObject.Object, targetProperty: string, flags: GObject.BindingFlags, transformTo: Function, transformFrom: Function): GObject.Binding
     forceFloating(): void
     freezeNotify(): void
     getData(key: string): object | null
-    getProperty(propertyName: string, value: GObject.Value): void
+    getProperty(propertyName: string, value: any): void
     getQdata(quark: GLib.Quark): object | null
-    getv(names: string[], values: GObject.Value[]): void
+    getv(names: string[], values: any[]): void
     isFloating(): boolean
     notify(propertyName: string): void
     notifyByPspec(pspec: GObject.ParamSpec): void
+    ref(): GObject.Object
     refSink(): GObject.Object
     runDispose(): void
     setData(key: string, data?: object | null): void
-    setProperty(propertyName: string, value: GObject.Value): void
+    setProperty(propertyName: string, value: any): void
     stealData(key: string): object | null
     stealQdata(quark: GLib.Quark): object | null
     thawNotify(): void
-    watchClosure(closure: GObject.Closure): void
-    /* Virtual methods of Gst.Object */
-    vfuncDeepNotify?(orig: Object, pspec: GObject.ParamSpec): void
-    /* Virtual methods of GObject.Object */
-    vfuncConstructed?(): void
-    vfuncDispatchPropertiesChanged?(nPspecs: number, pspecs: GObject.ParamSpec): void
-    vfuncDispose?(): void
-    vfuncFinalize?(): void
-    vfuncGetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    vfuncNotify?(pspec: GObject.ParamSpec): void
-    vfuncSetProperty?(propertyId: number, value: GObject.Value, pspec: GObject.ParamSpec): void
-    /* Signals of Gst.Object */
-    connect(sigName: "deep-notify", callback: (($obj: TypeFindFactory, propObject: Object, prop: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "deep-notify", callback: (($obj: TypeFindFactory, propObject: Object, prop: GObject.ParamSpec) => void)): number
+    watchClosure(closure: Function): void
+    /* Signals of Gst-1.0.Gst.Object */
+    connect(sigName: "deep-notify", callback: ((propObject: Object, prop: GObject.ParamSpec) => void)): number
+    on(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "deep-notify", callback: (propObject: Object, prop: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "deep-notify", propObject: Object, prop: GObject.ParamSpec): void
-    on(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "deep-notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    /* Signals of GObject.Object */
-    connect(sigName: "notify", callback: (($obj: TypeFindFactory, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify", callback: (($obj: TypeFindFactory, pspec: GObject.ParamSpec) => void)): number
+    /* Signals of GObject-2.0.GObject.Object */
+    connect(sigName: "notify", callback: ((pspec: GObject.ParamSpec) => void)): number
+    on(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify", callback: (pspec: GObject.ParamSpec) => void): NodeJS.EventEmitter
     emit(sigName: "notify", pspec: GObject.ParamSpec): void
-    on(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    off(sigName: "notify", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::name", callback: (($obj: TypeFindFactory, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::name", callback: (($obj: TypeFindFactory, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::name", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::name", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::name", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    connect(sigName: "notify::parent", callback: (($obj: TypeFindFactory, pspec: GObject.ParamSpec) => void)): number
-    connect_after(sigName: "notify::parent", callback: (($obj: TypeFindFactory, pspec: GObject.ParamSpec) => void)): number
-    on(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
-    once(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    connect(sigName: "notify::parent", callback: ((...args: any[]) => void)): number
+    on(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::parent", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
     off(sigName: "notify::parent", callback: (...args: any[]) => void): NodeJS.EventEmitter
     connect(sigName: string, callback: any): number
     connect_after(sigName: string, callback: any): number
@@ -6361,11 +6062,13 @@ export class TypeFindFactory {
     static name: string
     constructor (config?: TypeFindFactory_ConstructProps)
     _init (config?: TypeFindFactory_ConstructProps): void
+    /* Static methods and pseudo-constructors */
     static getList(): TypeFindFactory[]
     static $gtype: GObject.Type
 }
 export class ValueArray {
     static name: string
+    /* Static methods and pseudo-constructors */
     static appendAndTakeValue(value: any, appendValue: any): void
     static appendValue(value: any, appendValue: any): void
     static getSize(value: any): number
@@ -6374,6 +6077,7 @@ export class ValueArray {
 }
 export class ValueList {
     static name: string
+    /* Static methods and pseudo-constructors */
     static appendAndTakeValue(value: any, appendValue: any): void
     static appendValue(value: any, appendValue: any): void
     static concat(value1: any, value2: any): /* dest */ any
@@ -6383,29 +6087,29 @@ export class ValueList {
     static prependValue(value: any, prependValue: any): void
 }
 export class AllocationParams {
-    /* Fields of Gst.AllocationParams */
+    /* Fields of Gst-1.0.Gst.AllocationParams */
     flags: MemoryFlags
     align: number
     prefix: number
     padding: number
-    /* Methods of Gst.AllocationParams */
+    /* Methods of Gst-1.0.Gst.AllocationParams */
     copy(): AllocationParams | null
     free(): void
     init(): void
     static name: string
 }
 export abstract class AllocatorClass {
-    /* Fields of Gst.AllocatorClass */
+    /* Fields of Gst-1.0.Gst.AllocatorClass */
     objectClass: ObjectClass
-    alloc: any
-    free: any
+    alloc: (allocator: Allocator | null, size: number, params?: AllocationParams | null) => Memory | null
+    free: (allocator: Allocator, memory: Memory) => void
     static name: string
 }
 export class AllocatorPrivate {
     static name: string
 }
 export class AtomicQueue {
-    /* Methods of Gst.AtomicQueue */
+    /* Methods of Gst-1.0.Gst.AtomicQueue */
     length(): number
     peek(): object | null
     pop(): object | null
@@ -6415,26 +6119,27 @@ export class AtomicQueue {
     static name: string
     static new(initialSize: number): AtomicQueue
     constructor(initialSize: number)
+    /* Static methods and pseudo-constructors */
     static new(initialSize: number): AtomicQueue
 }
 export abstract class BinClass {
-    /* Fields of Gst.BinClass */
+    /* Fields of Gst-1.0.Gst.BinClass */
     parentClass: ElementClass
-    elementAdded: any
-    elementRemoved: any
-    addElement: any
-    removeElement: any
-    handleMessage: any
-    doLatency: any
-    deepElementAdded: any
-    deepElementRemoved: any
+    elementAdded: (bin: Bin, child: Element) => void
+    elementRemoved: (bin: Bin, child: Element) => void
+    addElement: (bin: Bin, element: Element) => boolean
+    removeElement: (bin: Bin, element: Element) => boolean
+    handleMessage: (bin: Bin, message: Message) => void
+    doLatency: (bin: Bin) => boolean
+    deepElementAdded: (bin: Bin, subBin: Bin, child: Element) => void
+    deepElementRemoved: (bin: Bin, subBin: Bin, child: Element) => void
     static name: string
 }
 export class BinPrivate {
     static name: string
 }
 export class Buffer {
-    /* Fields of Gst.Buffer */
+    /* Fields of Gst-1.0.Gst.Buffer */
     miniObject: MiniObject
     pool: BufferPool
     pts: ClockTime
@@ -6442,7 +6147,7 @@ export class Buffer {
     duration: ClockTime
     offset: number
     offsetEnd: number
-    /* Methods of Gst.Buffer */
+    /* Methods of Gst-1.0.Gst.Buffer */
     addMeta(info: MetaInfo, params?: object | null): Meta | null
     addParentBufferMeta(ref: Buffer): ParentBufferMeta | null
     addProtectionMeta(info: Structure): ProtectionMeta
@@ -6453,9 +6158,9 @@ export class Buffer {
     copyDeep(): Buffer
     copyInto(src: Buffer, flags: BufferCopyFlags, offset: number, size: number): boolean
     copyRegion(flags: BufferCopyFlags, offset: number, size: number): Buffer
-    extract(offset: number): [ /* returnType */ number, /* dest */ any ]
-    extractDup(offset: number, size: number): /* dest */ any
-    fill(offset: number, src: any): number
+    extract(offset: number): [ /* returnType */ number, /* dest */ any[] ]
+    extractDup(offset: number, size: number): /* dest */ any[]
+    fill(offset: number, src: any[]): number
     findMemory(offset: number, size: number): [ /* returnType */ boolean, /* idx */ number, /* length */ number, /* skip */ number ]
     foreachMeta(func: BufferForeachMetaFunc): boolean
     getAllMemory(): Memory | null
@@ -6474,7 +6179,7 @@ export class Buffer {
     isMemoryRangeWritable(idx: number, length: number): boolean
     map(flags: MapFlags): [ /* returnType */ boolean, /* info */ MapInfo ]
     mapRange(idx: number, length: number, flags: MapFlags): [ /* returnType */ boolean, /* info */ MapInfo ]
-    memcmp(offset: number, mem: any): number
+    memcmp(offset: number, mem: any[]): number
     memset(offset: number, val: number, size: number): number
     nMemory(): number
     peekMemory(idx: number): Memory | null
@@ -6495,15 +6200,16 @@ export class Buffer {
     static name: string
     static new(): Buffer
     constructor()
+    /* Static methods and pseudo-constructors */
     static new(): Buffer
-    static newAllocate(allocator: Allocator | null, size: number, params?: AllocationParams | null): Buffer | null
-    static newWrapped(data: any): Buffer
+    static newAllocate(allocator: Allocator | null, size: number, params?: AllocationParams | null): Buffer
+    static newWrapped(data: any[]): Buffer
     static newWrappedBytes(bytes: any): Buffer
-    static newWrappedFull(flags: MemoryFlags, data: any, maxsize: number, offset: number, notify?: GLib.DestroyNotify | null): Buffer
+    static newWrappedFull(flags: MemoryFlags, data: any[], maxsize: number, offset: number, notify?: GLib.DestroyNotify | null): Buffer
     static getMaxMemory(): number
 }
 export class BufferList {
-    /* Methods of Gst.BufferList */
+    /* Methods of Gst-1.0.Gst.BufferList */
     calculateSize(): number
     copyDeep(): BufferList
     foreach(func: BufferListFunc): boolean
@@ -6515,11 +6221,12 @@ export class BufferList {
     static name: string
     static new(): BufferList
     constructor()
+    /* Static methods and pseudo-constructors */
     static new(): BufferList
     static newSized(size: number): BufferList
 }
 export class BufferPoolAcquireParams {
-    /* Fields of Gst.BufferPoolAcquireParams */
+    /* Fields of Gst-1.0.Gst.BufferPoolAcquireParams */
     format: Format
     start: number
     stop: number
@@ -6527,38 +6234,38 @@ export class BufferPoolAcquireParams {
     static name: string
 }
 export abstract class BufferPoolClass {
-    /* Fields of Gst.BufferPoolClass */
+    /* Fields of Gst-1.0.Gst.BufferPoolClass */
     objectClass: ObjectClass
-    getOptions: any
-    setConfig: any
-    start: any
-    stop: any
-    acquireBuffer: any
-    allocBuffer: any
-    resetBuffer: any
-    releaseBuffer: any
-    freeBuffer: any
-    flushStart: any
-    flushStop: any
+    getOptions: (pool: BufferPool) => string[]
+    setConfig: (pool: BufferPool, config: Structure) => boolean
+    start: (pool: BufferPool) => boolean
+    stop: (pool: BufferPool) => boolean
+    acquireBuffer: (pool: BufferPool, params?: BufferPoolAcquireParams | null) => [ /* returnType */ FlowReturn, /* buffer */ Buffer ]
+    allocBuffer: (pool: BufferPool, buffer: Buffer, params: BufferPoolAcquireParams) => FlowReturn
+    resetBuffer: (pool: BufferPool, buffer: Buffer) => void
+    releaseBuffer: (pool: BufferPool, buffer: Buffer) => void
+    freeBuffer: (pool: BufferPool, buffer: Buffer) => void
+    flushStart: (pool: BufferPool) => void
+    flushStop: (pool: BufferPool) => void
     static name: string
 }
 export class BufferPoolPrivate {
     static name: string
 }
 export abstract class BusClass {
-    /* Fields of Gst.BusClass */
+    /* Fields of Gst-1.0.Gst.BusClass */
     parentClass: ObjectClass
-    message: any
-    syncMessage: any
+    message: (bus: Bus, message: Message) => void
+    syncMessage: (bus: Bus, message: Message) => void
     static name: string
 }
 export class BusPrivate {
     static name: string
 }
 export class Caps {
-    /* Fields of Gst.Caps */
+    /* Fields of Gst-1.0.Gst.Caps */
     miniObject: MiniObject
-    /* Methods of Gst.Caps */
+    /* Methods of Gst-1.0.Gst.Caps */
     append(caps2: Caps): void
     appendStructure(structure: Structure): void
     appendStructureFull(structure: Structure, features?: CapsFeatures | null): void
@@ -6595,15 +6302,17 @@ export class Caps {
     simplify(): Caps
     stealStructure(index: number): Structure | null
     subtract(subtrahend: Caps): Caps
+    toString(): string
     truncate(): Caps
     static name: string
+    /* Static methods and pseudo-constructors */
     static newAny(): Caps
     static newEmpty(): Caps
     static newEmptySimple(mediaType: string): Caps
     static fromString(string: string): Caps | null
 }
 export class CapsFeatures {
-    /* Methods of Gst.CapsFeatures */
+    /* Methods of Gst-1.0.Gst.CapsFeatures */
     add(feature: string): void
     addId(feature: GLib.Quark): void
     contains(feature: string): boolean
@@ -6618,34 +6327,36 @@ export class CapsFeatures {
     remove(feature: string): void
     removeId(feature: GLib.Quark): void
     setParentRefcount(refcount: number): boolean
+    toString(): string
     static name: string
+    /* Static methods and pseudo-constructors */
     static newAny(): CapsFeatures
     static newEmpty(): CapsFeatures
     static fromString(features: string): CapsFeatures | null
 }
 export abstract class ChildProxyInterface {
-    /* Fields of Gst.ChildProxyInterface */
+    /* Fields of Gst-1.0.Gst.ChildProxyInterface */
     parent: GObject.TypeInterface
-    getChildByName: any
-    getChildByIndex: any
-    getChildrenCount: any
-    childAdded: any
-    childRemoved: any
+    getChildByName: (parent: ChildProxy, name: string) => GObject.Object | null
+    getChildByIndex: (parent: ChildProxy, index: number) => GObject.Object | null
+    getChildrenCount: (parent: ChildProxy) => number
+    childAdded: (parent: ChildProxy, child: GObject.Object, name: string) => void
+    childRemoved: (parent: ChildProxy, child: GObject.Object, name: string) => void
     static name: string
 }
 export abstract class ClockClass {
-    /* Fields of Gst.ClockClass */
+    /* Fields of Gst-1.0.Gst.ClockClass */
     parentClass: ObjectClass
-    changeResolution: any
-    getResolution: any
-    getInternalTime: any
-    wait: any
-    waitAsync: any
-    unschedule: any
+    changeResolution: (clock: Clock, oldResolution: ClockTime, newResolution: ClockTime) => ClockTime
+    getResolution: (clock: Clock) => ClockTime
+    getInternalTime: (clock: Clock) => ClockTime
+    wait: (clock: Clock, entry: ClockEntry, jitter: ClockTimeDiff) => ClockReturn
+    waitAsync: (clock: Clock, entry: ClockEntry) => ClockReturn
+    unschedule: (clock: Clock, entry: ClockEntry) => void
     static name: string
 }
 export class ClockEntry {
-    /* Fields of Gst.ClockEntry */
+    /* Fields of Gst-1.0.Gst.ClockEntry */
     refcount: number
     clock: Clock
     type: ClockEntryType
@@ -6663,7 +6374,7 @@ export class ClockPrivate {
     static name: string
 }
 export class Context {
-    /* Methods of Gst.Context */
+    /* Methods of Gst-1.0.Gst.Context */
     getContextType(): string
     getStructure(): Structure
     hasContextType(contextType: string): boolean
@@ -6672,26 +6383,27 @@ export class Context {
     static name: string
     static new(contextType: string, persistent: boolean): Context
     constructor(contextType: string, persistent: boolean)
+    /* Static methods and pseudo-constructors */
     static new(contextType: string, persistent: boolean): Context
 }
 export abstract class ControlBindingClass {
-    /* Fields of Gst.ControlBindingClass */
+    /* Fields of Gst-1.0.Gst.ControlBindingClass */
     parentClass: ObjectClass
-    syncValues: any
-    getValue: any
-    getGValueArray: any
+    syncValues: (binding: ControlBinding, object: Object, timestamp: ClockTime, lastSync: ClockTime) => boolean
+    getValue: (binding: ControlBinding, timestamp: ClockTime) => any | null
+    getGValueArray: (binding: ControlBinding, timestamp: ClockTime, interval: ClockTime, values: any[]) => boolean
     static name: string
 }
 export class ControlBindingPrivate {
     static name: string
 }
 export abstract class ControlSourceClass {
-    /* Fields of Gst.ControlSourceClass */
+    /* Fields of Gst-1.0.Gst.ControlSourceClass */
     parentClass: ObjectClass
     static name: string
 }
 export class DateTime {
-    /* Methods of Gst.DateTime */
+    /* Methods of Gst-1.0.Gst.DateTime */
     getDay(): number
     getHour(): number
     getMicrosecond(): number
@@ -6712,9 +6424,10 @@ export class DateTime {
     static name: string
     static new(tzoffset: number, year: number, month: number, day: number, hour: number, minute: number, seconds: number): DateTime
     constructor(tzoffset: number, year: number, month: number, day: number, hour: number, minute: number, seconds: number)
+    /* Static methods and pseudo-constructors */
     static new(tzoffset: number, year: number, month: number, day: number, hour: number, minute: number, seconds: number): DateTime
-    static newFromGDateTime(dt: GLib.DateTime): DateTime | null
-    static newFromIso8601String(string: string): DateTime | null
+    static newFromGDateTime(dt: GLib.DateTime): DateTime
+    static newFromIso8601String(string: string): DateTime
     static newFromUnixEpochLocalTime(secs: number): DateTime
     static newFromUnixEpochUtc(secs: number): DateTime
     static newLocalTime(year: number, month: number, day: number, hour: number, minute: number, seconds: number): DateTime
@@ -6725,8 +6438,7 @@ export class DateTime {
     static newYmd(year: number, month: number, day: number): DateTime
 }
 export class DebugCategory {
-    /* Fields of Gst.DebugCategory */
-    /* Methods of Gst.DebugCategory */
+    /* Methods of Gst-1.0.Gst.DebugCategory */
     free(): void
     getColor(): number
     getDescription(): string
@@ -6737,19 +6449,19 @@ export class DebugCategory {
     static name: string
 }
 export class DebugMessage {
-    /* Methods of Gst.DebugMessage */
+    /* Methods of Gst-1.0.Gst.DebugMessage */
     get(): string | null
     static name: string
 }
 export abstract class DeviceClass {
-    /* Fields of Gst.DeviceClass */
+    /* Fields of Gst-1.0.Gst.DeviceClass */
     parentClass: ObjectClass
-    createElement: any
-    reconfigureElement: any
+    createElement: (device: Device, name?: string | null) => Element | null
+    reconfigureElement: (device: Device, element: Element) => boolean
     static name: string
 }
 export abstract class DeviceMonitorClass {
-    /* Fields of Gst.DeviceMonitorClass */
+    /* Fields of Gst-1.0.Gst.DeviceMonitorClass */
     parentClass: ObjectClass
     static name: string
 }
@@ -6760,17 +6472,17 @@ export class DevicePrivate {
     static name: string
 }
 export abstract class DeviceProviderClass {
-    /* Fields of Gst.DeviceProviderClass */
+    /* Fields of Gst-1.0.Gst.DeviceProviderClass */
     parentClass: ObjectClass
     factory: DeviceProviderFactory
-    start: any
-    stop: any
-    /* Methods of Gst.DeviceProviderClass */
-    addMetadata(key: string, value: string): void
-    addStaticMetadata(key: string, value: string): void
-    getMetadata(key: string): string | null
-    setMetadata(longname: string, classification: string, description: string, author: string): void
-    setStaticMetadata(longname: string, classification: string, description: string, author: string): void
+    start: (provider: DeviceProvider) => boolean
+    stop: (provider: DeviceProvider) => void
+    /* Methods of Gst-1.0.Gst.DeviceProviderClass */
+    addMetadata(klass: DeviceProvider | Function | GObject.Type, key: string, value: string): void
+    addStaticMetadata(klass: DeviceProvider | Function | GObject.Type, key: string, value: string): void
+    getMetadata(klass: DeviceProvider | Function | GObject.Type, key: string): string | null
+    setMetadata(klass: DeviceProvider | Function | GObject.Type, longname: string, classification: string, description: string, author: string): void
+    setStaticMetadata(klass: DeviceProvider | Function | GObject.Type, longname: string, classification: string, description: string, author: string): void
     static name: string
 }
 export abstract class DeviceProviderFactoryClass {
@@ -6783,52 +6495,52 @@ export abstract class DynamicTypeFactoryClass {
     static name: string
 }
 export abstract class ElementClass {
-    /* Fields of Gst.ElementClass */
+    /* Fields of Gst-1.0.Gst.ElementClass */
     parentClass: ObjectClass
     metadata: object
     elementfactory: ElementFactory
     padtemplates: object[]
     numpadtemplates: number
     padTemplCookie: number
-    padAdded: any
-    padRemoved: any
-    noMorePads: any
-    requestNewPad: any
-    releasePad: any
-    getState: any
-    setState: any
-    changeState: any
-    stateChanged: any
-    setBus: any
-    provideClock: any
-    setClock: any
-    sendEvent: any
-    query: any
-    postMessage: any
-    setContext: any
-    /* Methods of Gst.ElementClass */
-    addMetadata(key: string, value: string): void
-    addPadTemplate(templ: PadTemplate): void
-    addStaticMetadata(key: string, value: string): void
-    addStaticPadTemplate(staticTempl: StaticPadTemplate): void
-    addStaticPadTemplateWithGtype(staticTempl: StaticPadTemplate, padType: GObject.Type): void
-    getMetadata(key: string): string
-    getPadTemplate(name: string): PadTemplate | null
-    getPadTemplateList(): PadTemplate[]
-    setMetadata(longname: string, classification: string, description: string, author: string): void
-    setStaticMetadata(longname: string, classification: string, description: string, author: string): void
+    padAdded: (element: Element, pad: Pad) => void
+    padRemoved: (element: Element, pad: Pad) => void
+    noMorePads: (element: Element) => void
+    requestNewPad: (element: Element, templ: PadTemplate, name?: string | null, caps?: Caps | null) => Pad | null
+    releasePad: (element: Element, pad: Pad) => void
+    getState: (element: Element, timeout: ClockTime) => [ /* returnType */ StateChangeReturn, /* state */ State | null, /* pending */ State | null ]
+    setState: (element: Element, state: State) => StateChangeReturn
+    changeState: (element: Element, transition: StateChange) => StateChangeReturn
+    stateChanged: (element: Element, oldstate: State, newstate: State, pending: State) => void
+    setBus: (element: Element, bus?: Bus | null) => void
+    provideClock: (element: Element) => Clock | null
+    setClock: (element: Element, clock?: Clock | null) => boolean
+    sendEvent: (element: Element, event: Event) => boolean
+    query: (element: Element, query: Query) => boolean
+    postMessage: (element: Element, message: Message) => boolean
+    setContext: (element: Element, context: Context) => void
+    /* Methods of Gst-1.0.Gst.ElementClass */
+    addMetadata(klass: Element | Function | GObject.Type, key: string, value: string): void
+    addPadTemplate(klass: Element | Function | GObject.Type, templ: PadTemplate): void
+    addStaticMetadata(klass: Element | Function | GObject.Type, key: string, value: string): void
+    addStaticPadTemplate(klass: Element | Function | GObject.Type, staticTempl: StaticPadTemplate): void
+    addStaticPadTemplateWithGtype(klass: Element | Function | GObject.Type, staticTempl: StaticPadTemplate, padType: GObject.Type): void
+    getMetadata(klass: Element | Function | GObject.Type, key: string): string
+    getPadTemplate(element_class: Element | Function | GObject.Type, name: string): PadTemplate | null
+    getPadTemplateList(element_class: Element | Function | GObject.Type): PadTemplate[]
+    setMetadata(klass: Element | Function | GObject.Type, longname: string, classification: string, description: string, author: string): void
+    setStaticMetadata(klass: Element | Function | GObject.Type, longname: string, classification: string, description: string, author: string): void
     static name: string
 }
 export abstract class ElementFactoryClass {
     static name: string
 }
 export class Event {
-    /* Fields of Gst.Event */
+    /* Fields of Gst-1.0.Gst.Event */
     miniObject: MiniObject
     type: EventType
     timestamp: number
     seqnum: number
-    /* Methods of Gst.Event */
+    /* Methods of Gst-1.0.Gst.Event */
     copySegment(segment: Segment): void
     getRunningTimeOffset(): number
     getSeqnum(): number
@@ -6865,9 +6577,10 @@ export class Event {
     setStreamFlags(flags: StreamFlags): void
     writableStructure(): Structure
     static name: string
+    /* Static methods and pseudo-constructors */
     static newBufferSize(format: Format, minsize: number, maxsize: number, async: boolean): Event
-    static newCaps(caps: Caps): Event | null
-    static newCustom(type: EventType, structure: Structure): Event | null
+    static newCaps(caps: Caps): Event
+    static newCustom(type: EventType, structure: Structure): Event
     static newEos(): Event
     static newFlushStart(): Event
     static newFlushStop(resetTime: boolean): Event
@@ -6875,14 +6588,14 @@ export class Event {
     static newLatency(latency: ClockTime): Event
     static newNavigation(structure: Structure): Event
     static newProtection(systemId: string, data: Buffer, origin: string): Event
-    static newQos(type: QOSType, proportion: number, diff: ClockTimeDiff, timestamp: ClockTime): Event | null
+    static newQos(type: QOSType, proportion: number, diff: ClockTimeDiff, timestamp: ClockTime): Event
     static newReconfigure(): Event
-    static newSeek(rate: number, format: Format, flags: SeekFlags, startType: SeekType, start: number, stopType: SeekType, stop: number): Event | null
-    static newSegment(segment: Segment): Event | null
+    static newSeek(rate: number, format: Format, flags: SeekFlags, startType: SeekType, start: number, stopType: SeekType, stop: number): Event
+    static newSegment(segment: Segment): Event
     static newSegmentDone(format: Format, position: number): Event
     static newSelectStreams(streams: string[]): Event
     static newSinkMessage(name: string, msg: Message): Event
-    static newStep(format: Format, amount: number, rate: number, flush: boolean, intermediate: boolean): Event | null
+    static newStep(format: Format, amount: number, rate: number, flush: boolean, intermediate: boolean): Event
     static newStreamCollection(collection: StreamCollection): Event
     static newStreamGroupDone(groupId: number): Event
     static newStreamStart(streamId: string): Event
@@ -6891,7 +6604,7 @@ export class Event {
     static newTocSelect(uid: string): Event
 }
 export class FormatDefinition {
-    /* Fields of Gst.FormatDefinition */
+    /* Fields of Gst-1.0.Gst.FormatDefinition */
     value: Format
     nick: string
     description: string
@@ -6899,7 +6612,7 @@ export class FormatDefinition {
     static name: string
 }
 export abstract class GhostPadClass {
-    /* Fields of Gst.GhostPadClass */
+    /* Fields of Gst-1.0.Gst.GhostPadClass */
     parentClass: ProxyPadClass
     static name: string
 }
@@ -6907,7 +6620,7 @@ export class GhostPadPrivate {
     static name: string
 }
 export class Iterator {
-    /* Fields of Gst.Iterator */
+    /* Fields of Gst-1.0.Gst.Iterator */
     copy: IteratorCopyFunction
     next: IteratorNextFunction
     item: IteratorItemFunction
@@ -6919,27 +6632,28 @@ export class Iterator {
     cookie: number
     masterCookie: number
     size: number
-    /* Methods of Gst.Iterator */
+    /* Methods of Gst-1.0.Gst.Iterator */
     filter(func: GLib.CompareFunc, userData: any): Iterator
     findCustom(func: GLib.CompareFunc): [ /* returnType */ boolean, /* elem */ any ]
     fold(func: IteratorFoldFunction, ret: any): IteratorResult
     foreach(func: IteratorForeachFunction): IteratorResult
     push(other: Iterator): void
     static name: string
+    /* Static methods and pseudo-constructors */
     static newSingle(type: GObject.Type, object: any): Iterator
 }
 export class MapInfo {
-    /* Fields of Gst.MapInfo */
+    /* Fields of Gst-1.0.Gst.MapInfo */
     memory: Memory
     flags: MapFlags
-    data: any
+    data: any[]
     size: number
     maxsize: number
     userData: object[]
     static name: string
 }
 export class Memory {
-    /* Fields of Gst.Memory */
+    /* Fields of Gst-1.0.Gst.Memory */
     miniObject: MiniObject
     allocator: Allocator
     parent: Memory
@@ -6947,7 +6661,7 @@ export class Memory {
     align: number
     offset: number
     size: number
-    /* Methods of Gst.Memory */
+    /* Methods of Gst-1.0.Gst.Memory */
     copy(offset: number, size: number): Memory
     getSizes(): [ /* returnType */ number, /* offset */ number | null, /* maxsize */ number | null ]
     isSpan(mem2: Memory): [ /* returnType */ boolean, /* offset */ number ]
@@ -6958,20 +6672,21 @@ export class Memory {
     share(offset: number, size: number): Memory
     unmap(info: MapInfo): void
     static name: string
-    static newWrapped(flags: MemoryFlags, data: any, maxsize: number, offset: number, notify?: GLib.DestroyNotify | null): Memory | null
+    /* Static methods and pseudo-constructors */
+    static newWrapped(flags: MemoryFlags, data: any[], maxsize: number, offset: number, notify?: GLib.DestroyNotify | null): Memory
 }
 export class Message {
-    /* Fields of Gst.Message */
+    /* Fields of Gst-1.0.Gst.Message */
     miniObject: MiniObject
     type: MessageType
     timestamp: number
     src: Object
     seqnum: number
-    /* Methods of Gst.Message */
+    /* Methods of Gst-1.0.Gst.Message */
     addRedirectEntry(location: string, tagList?: TagList | null, entryStruct?: Structure | null): void
     getNumRedirectEntries(): number
     getSeqnum(): number
-    getStreamStatusObject(): any
+    getStreamStatusObject(): any | null
     getStructure(): Structure | null
     hasName(name: string): boolean
     parseAsyncDone(): /* runningTime */ ClockTime | null
@@ -6991,7 +6706,7 @@ export class Message {
     parseInfoDetails(): /* structure */ Structure
     parseNewClock(): /* clock */ Clock | null
     parseProgress(): [ /* type */ ProgressType | null, /* code */ string | null, /* text */ string | null ]
-    parsePropertyNotify(): [ /* object */ Object | null, /* propertyName */ string | null, /* propertyValue */ any ]
+    parsePropertyNotify(): [ /* object */ Object | null, /* propertyName */ string | null, /* propertyValue */ any | null ]
     parseQos(): [ /* live */ boolean | null, /* runningTime */ number | null, /* streamTime */ number | null, /* timestamp */ number | null, /* duration */ number | null ]
     parseQosStats(): [ /* format */ Format | null, /* processed */ number | null, /* dropped */ number | null ]
     parseQosValues(): [ /* jitter */ number | null, /* proportion */ number | null, /* quality */ number | null ]
@@ -7022,29 +6737,30 @@ export class Message {
     streamsSelectedGetStream(idx: number): Stream | null
     writableStructure(): Structure
     static name: string
-    static newApplication(src: Object | null, structure: Structure): Message | null
+    /* Static methods and pseudo-constructors */
+    static newApplication(src: Object | null, structure: Structure): Message
     static newAsyncDone(src: Object | null, runningTime: ClockTime): Message
     static newAsyncStart(src?: Object | null): Message
-    static newBuffering(src: Object | null, percent: number): Message | null
+    static newBuffering(src: Object | null, percent: number): Message
     static newClockLost(src: Object | null, clock: Clock): Message
     static newClockProvide(src: Object | null, clock: Clock, ready: boolean): Message
-    static newCustom(type: MessageType, src?: Object | null, structure?: Structure | null): Message | null
+    static newCustom(type: MessageType, src?: Object | null, structure?: Structure | null): Message
     static newDeviceAdded(src: Object, device: Device): Message
     static newDeviceChanged(src: Object, device: Device, changedDevice: Device): Message
     static newDeviceRemoved(src: Object, device: Device): Message
     static newDurationChanged(src?: Object | null): Message
-    static newElement(src: Object | null, structure: Structure): Message | null
+    static newElement(src: Object | null, structure: Structure): Message
     static newEos(src?: Object | null): Message
     static newError(src: Object | null, error: GLib.Error, debug: string): Message
-    static newErrorWithDetails(src: Object | null, error: GLib.Error, debug: string, details?: Structure | null): Message | null
+    static newErrorWithDetails(src: Object | null, error: GLib.Error, debug: string, details?: Structure | null): Message
     static newHaveContext(src: Object | null, context: Context): Message
     static newInfo(src: Object | null, error: GLib.Error, debug: string): Message
-    static newInfoWithDetails(src: Object | null, error: GLib.Error, debug: string, details?: Structure | null): Message | null
+    static newInfoWithDetails(src: Object | null, error: GLib.Error, debug: string, details?: Structure | null): Message
     static newLatency(src?: Object | null): Message
     static newNeedContext(src: Object | null, contextType: string): Message
     static newNewClock(src: Object | null, clock: Clock): Message
-    static newProgress(src: Object, type: ProgressType, code: string, text: string): Message | null
-    static newPropertyNotify(src: Object, propertyName: string, val?: any): Message
+    static newProgress(src: Object, type: ProgressType, code: string, text: string): Message
+    static newPropertyNotify(src: Object, propertyName: string, val?: any | null): Message
     static newQos(src: Object, live: boolean, runningTime: number, streamTime: number, timestamp: number, duration: number): Message
     static newRedirect(src: Object, location: string, tagList?: TagList | null, entryStruct?: Structure | null): Message
     static newRequestState(src: Object | null, state: State): Message
@@ -7063,16 +6779,17 @@ export class Message {
     static newTag(src: Object | null, tagList: TagList): Message
     static newToc(src: Object, toc: Toc, updated: boolean): Message
     static newWarning(src: Object | null, error: GLib.Error, debug: string): Message
-    static newWarningWithDetails(src: Object | null, error: GLib.Error, debug: string, details?: Structure | null): Message | null
+    static newWarningWithDetails(src: Object | null, error: GLib.Error, debug: string, details?: Structure | null): Message
 }
 export class Meta {
-    /* Fields of Gst.Meta */
+    /* Fields of Gst-1.0.Gst.Meta */
     flags: MetaFlags
     info: MetaInfo
-    /* Methods of Gst.Meta */
+    /* Methods of Gst-1.0.Gst.Meta */
     compareSeqnum(meta2: Meta): number
     getSeqnum(): number
     static name: string
+    /* Static methods and pseudo-constructors */
     static apiTypeGetTags(api: GObject.Type): string[]
     static apiTypeHasTag(api: GObject.Type, tag: GLib.Quark): boolean
     static apiTypeRegister(api: string, tags: string[]): GObject.Type
@@ -7080,7 +6797,7 @@ export class Meta {
     static register(api: GObject.Type, impl: string, size: number, initFunc: MetaInitFunction, freeFunc: MetaFreeFunction, transformFunc: MetaTransformFunction): MetaInfo | null
 }
 export class MetaInfo {
-    /* Fields of Gst.MetaInfo */
+    /* Fields of Gst-1.0.Gst.MetaInfo */
     api: GObject.Type
     type: GObject.Type
     size: number
@@ -7090,21 +6807,21 @@ export class MetaInfo {
     static name: string
 }
 export class MetaTransformCopy {
-    /* Fields of Gst.MetaTransformCopy */
+    /* Fields of Gst-1.0.Gst.MetaTransformCopy */
     region: boolean
     offset: number
     size: number
     static name: string
 }
 export class MiniObject {
-    /* Fields of Gst.MiniObject */
+    /* Fields of Gst-1.0.Gst.MiniObject */
     type: GObject.Type
     refcount: number
     lockstate: number
     flags: number
     dispose: MiniObjectDisposeFunction
     free: MiniObjectFreeFunction
-    /* Methods of Gst.MiniObject */
+    /* Methods of Gst-1.0.Gst.MiniObject */
     addParent(parent: MiniObject): void
     getQdata(quark: GLib.Quark): object | null
     isWritable(): boolean
@@ -7114,34 +6831,35 @@ export class MiniObject {
     stealQdata(quark: GLib.Quark): object | null
     unlock(flags: LockFlags): void
     static name: string
-    static replace(olddata?: MiniObject | null, newdata?: MiniObject | null): boolean
-    static take(olddata: MiniObject, newdata: MiniObject): boolean
+    /* Static methods and pseudo-constructors */
+    static replace(olddata?: MiniObject | null, newdata?: MiniObject | null): [ /* returnType */ boolean, /* olddata */ MiniObject | null ]
+    static take(olddata: MiniObject, newdata: MiniObject): [ /* returnType */ boolean, /* olddata */ MiniObject ]
 }
 export abstract class ObjectClass {
-    /* Fields of Gst.ObjectClass */
+    /* Fields of Gst-1.0.Gst.ObjectClass */
     parentClass: GObject.InitiallyUnownedClass
     pathStringSeparator: string
-    deepNotify: any
+    deepNotify: (object: Object, orig: Object, pspec: GObject.ParamSpec) => void
     static name: string
 }
 export abstract class PadClass {
-    /* Fields of Gst.PadClass */
+    /* Fields of Gst-1.0.Gst.PadClass */
     parentClass: ObjectClass
-    linked: any
-    unlinked: any
+    linked: (pad: Pad, peer: Pad) => void
+    unlinked: (pad: Pad, peer: Pad) => void
     static name: string
 }
 export class PadPrivate {
     static name: string
 }
 export class PadProbeInfo {
-    /* Fields of Gst.PadProbeInfo */
+    /* Fields of Gst-1.0.Gst.PadProbeInfo */
     type: PadProbeType
     id: number
     data: object
     offset: number
     size: number
-    /* Methods of Gst.PadProbeInfo */
+    /* Methods of Gst-1.0.Gst.PadProbeInfo */
     getBuffer(): Buffer | null
     getBufferList(): BufferList | null
     getEvent(): Event | null
@@ -7149,19 +6867,19 @@ export class PadProbeInfo {
     static name: string
 }
 export abstract class PadTemplateClass {
-    /* Fields of Gst.PadTemplateClass */
+    /* Fields of Gst-1.0.Gst.PadTemplateClass */
     parentClass: ObjectClass
-    padCreated: any
+    padCreated: (templ: PadTemplate, pad: Pad) => void
     static name: string
 }
 export class ParamSpecArray {
-    /* Fields of Gst.ParamSpecArray */
+    /* Fields of Gst-1.0.Gst.ParamSpecArray */
     parentInstance: GObject.ParamSpec
     elementSpec: GObject.ParamSpec
     static name: string
 }
 export class ParamSpecFraction {
-    /* Fields of Gst.ParamSpecFraction */
+    /* Fields of Gst-1.0.Gst.ParamSpecFraction */
     parentInstance: GObject.ParamSpec
     minNum: number
     minDen: number
@@ -7172,24 +6890,26 @@ export class ParamSpecFraction {
     static name: string
 }
 export class ParentBufferMeta {
-    /* Fields of Gst.ParentBufferMeta */
+    /* Fields of Gst-1.0.Gst.ParentBufferMeta */
     parent: Meta
     buffer: Buffer
     static name: string
+    /* Static methods and pseudo-constructors */
     static getInfo(): MetaInfo
 }
 export class ParseContext {
-    /* Methods of Gst.ParseContext */
+    /* Methods of Gst-1.0.Gst.ParseContext */
     copy(): ParseContext | null
     free(): void
     getMissingElements(): string[] | null
     static name: string
-    static new(): ParseContext | null
+    static new(): ParseContext
     constructor()
-    static new(): ParseContext | null
+    /* Static methods and pseudo-constructors */
+    static new(): ParseContext
 }
 export abstract class PipelineClass {
-    /* Fields of Gst.PipelineClass */
+    /* Fields of Gst-1.0.Gst.PipelineClass */
     parentClass: BinClass
     static name: string
 }
@@ -7200,7 +6920,7 @@ export abstract class PluginClass {
     static name: string
 }
 export class PluginDesc {
-    /* Fields of Gst.PluginDesc */
+    /* Fields of Gst-1.0.Gst.PluginDesc */
     majorVersion: number
     minorVersion: number
     name: string
@@ -7218,7 +6938,7 @@ export abstract class PluginFeatureClass {
     static name: string
 }
 export class Poll {
-    /* Methods of Gst.Poll */
+    /* Methods of Gst-1.0.Gst.Poll */
     addFd(fd: PollFD): boolean
     fdCanRead(fd: PollFD): boolean
     fdCanWrite(fd: PollFD): boolean
@@ -7241,29 +6961,29 @@ export class Poll {
     static name: string
 }
 export class PollFD {
-    /* Fields of Gst.PollFD */
+    /* Fields of Gst-1.0.Gst.PollFD */
     fd: number
-    /* Methods of Gst.PollFD */
+    /* Methods of Gst-1.0.Gst.PollFD */
     init(): void
     static name: string
 }
 export abstract class PresetInterface {
-    /* Fields of Gst.PresetInterface */
+    /* Fields of Gst-1.0.Gst.PresetInterface */
     parent: GObject.TypeInterface
-    getPresetNames: any
-    getPropertyNames: any
-    loadPreset: any
-    savePreset: any
-    renamePreset: any
-    deletePreset: any
-    setMeta: any
-    getMeta: any
+    getPresetNames: (preset: Preset) => string[]
+    getPropertyNames: (preset: Preset) => string[]
+    loadPreset: (preset: Preset, name: string) => boolean
+    savePreset: (preset: Preset, name: string) => boolean
+    renamePreset: (preset: Preset, oldName: string, newName: string) => boolean
+    deletePreset: (preset: Preset, name: string) => boolean
+    setMeta: (preset: Preset, name: string, tag: string, value?: string | null) => boolean
+    getMeta: (preset: Preset, name: string, tag: string) => [ /* returnType */ boolean, /* value */ string ]
     static name: string
 }
 export class Promise {
-    /* Fields of Gst.Promise */
+    /* Fields of Gst-1.0.Gst.Promise */
     parent: MiniObject
-    /* Methods of Gst.Promise */
+    /* Methods of Gst-1.0.Gst.Promise */
     expire(): void
     getReply(): Structure
     interrupt(): void
@@ -7272,18 +6992,20 @@ export class Promise {
     static name: string
     static new(): Promise
     constructor()
+    /* Static methods and pseudo-constructors */
     static new(): Promise
     static newWithChangeFunc(func: PromiseChangeFunc): Promise
 }
 export class ProtectionMeta {
-    /* Fields of Gst.ProtectionMeta */
+    /* Fields of Gst-1.0.Gst.ProtectionMeta */
     meta: Meta
     info: Structure
     static name: string
+    /* Static methods and pseudo-constructors */
     static getInfo(): MetaInfo
 }
 export abstract class ProxyPadClass {
-    /* Fields of Gst.ProxyPadClass */
+    /* Fields of Gst-1.0.Gst.ProxyPadClass */
     parentClass: PadClass
     static name: string
 }
@@ -7291,10 +7013,10 @@ export class ProxyPadPrivate {
     static name: string
 }
 export class Query {
-    /* Fields of Gst.Query */
+    /* Fields of Gst-1.0.Gst.Query */
     miniObject: MiniObject
     type: QueryType
-    /* Methods of Gst.Query */
+    /* Methods of Gst-1.0.Gst.Query */
     addAllocationMeta(api: GObject.Type, params?: Structure | null): void
     addAllocationParam(allocator?: Allocator | null, params?: AllocationParams | null): void
     addAllocationPool(pool: BufferPool | null, size: number, minBuffers: number, maxBuffers: number): void
@@ -7362,6 +7084,7 @@ export class Query {
     setUriRedirectionPermanent(permanent: boolean): void
     writableStructure(): Structure
     static name: string
+    /* Static methods and pseudo-constructors */
     static newAcceptCaps(caps: Caps): Query
     static newAllocation(caps: Caps, needPool: boolean): Query
     static newBitrate(): Query
@@ -7369,7 +7092,7 @@ export class Query {
     static newCaps(filter: Caps): Query
     static newContext(contextType: string): Query
     static newConvert(srcFormat: Format, value: number, destFormat: Format): Query
-    static newCustom(type: QueryType, structure?: Structure | null): Query | null
+    static newCustom(type: QueryType, structure?: Structure | null): Query
     static newDrain(): Query
     static newDuration(format: Format): Query
     static newFormats(): Query
@@ -7381,16 +7104,17 @@ export class Query {
     static newUri(): Query
 }
 export class ReferenceTimestampMeta {
-    /* Fields of Gst.ReferenceTimestampMeta */
+    /* Fields of Gst-1.0.Gst.ReferenceTimestampMeta */
     parent: Meta
     reference: Caps
     timestamp: ClockTime
     duration: ClockTime
     static name: string
+    /* Static methods and pseudo-constructors */
     static getInfo(): MetaInfo
 }
 export abstract class RegistryClass {
-    /* Fields of Gst.RegistryClass */
+    /* Fields of Gst-1.0.Gst.RegistryClass */
     parentClass: ObjectClass
     static name: string
 }
@@ -7398,7 +7122,7 @@ export class RegistryPrivate {
     static name: string
 }
 export class Sample {
-    /* Methods of Gst.Sample */
+    /* Methods of Gst-1.0.Gst.Sample */
     getBuffer(): Buffer | null
     getBufferList(): BufferList | null
     getCaps(): Caps | null
@@ -7412,10 +7136,11 @@ export class Sample {
     static name: string
     static new(buffer?: Buffer | null, caps?: Caps | null, segment?: Segment | null, info?: Structure | null): Sample
     constructor(buffer?: Buffer | null, caps?: Caps | null, segment?: Segment | null, info?: Structure | null)
+    /* Static methods and pseudo-constructors */
     static new(buffer?: Buffer | null, caps?: Caps | null, segment?: Segment | null, info?: Structure | null): Sample
 }
 export class Segment {
-    /* Fields of Gst.Segment */
+    /* Fields of Gst-1.0.Gst.Segment */
     flags: SegmentFlags
     rate: number
     appliedRate: number
@@ -7427,7 +7152,7 @@ export class Segment {
     time: number
     position: number
     duration: number
-    /* Methods of Gst.Segment */
+    /* Methods of Gst-1.0.Gst.Segment */
     clip(format: Format, start: number, stop: number): [ /* returnType */ boolean, /* clipStart */ number | null, /* clipStop */ number | null ]
     copy(): Segment
     copyInto(dest: Segment): void
@@ -7449,37 +7174,38 @@ export class Segment {
     static name: string
     static new(): Segment
     constructor()
+    /* Static methods and pseudo-constructors */
     static new(): Segment
 }
 export class StaticCaps {
-    /* Fields of Gst.StaticCaps */
+    /* Fields of Gst-1.0.Gst.StaticCaps */
     caps: Caps
     string: string
-    /* Methods of Gst.StaticCaps */
+    /* Methods of Gst-1.0.Gst.StaticCaps */
     cleanup(): void
     get(): Caps | null
     static name: string
 }
 export class StaticPadTemplate {
-    /* Fields of Gst.StaticPadTemplate */
+    /* Fields of Gst-1.0.Gst.StaticPadTemplate */
     nameTemplate: string
     direction: PadDirection
     presence: PadPresence
     staticCaps: StaticCaps
-    /* Methods of Gst.StaticPadTemplate */
+    /* Methods of Gst-1.0.Gst.StaticPadTemplate */
     get(): PadTemplate | null
     getCaps(): Caps
     static name: string
 }
 export abstract class StreamClass {
-    /* Fields of Gst.StreamClass */
+    /* Fields of Gst-1.0.Gst.StreamClass */
     parentClass: ObjectClass
     static name: string
 }
 export abstract class StreamCollectionClass {
-    /* Fields of Gst.StreamCollectionClass */
+    /* Fields of Gst-1.0.Gst.StreamCollectionClass */
     parentClass: ObjectClass
-    streamNotify: any
+    streamNotify: (collection: StreamCollection, stream: Stream, pspec: GObject.ParamSpec) => void
     static name: string
 }
 export class StreamCollectionPrivate {
@@ -7489,9 +7215,9 @@ export class StreamPrivate {
     static name: string
 }
 export class Structure {
-    /* Fields of Gst.Structure */
+    /* Fields of Gst-1.0.Gst.Structure */
     type: GObject.Type
-    /* Methods of Gst.Structure */
+    /* Methods of Gst-1.0.Gst.Structure */
     canIntersect(struct2: Structure): boolean
     copy(): Structure
     filterAndMapInPlace(func: StructureFilterMapFunc): void
@@ -7522,11 +7248,11 @@ export class Structure {
     getString(fieldname: string): string | null
     getUint(fieldname: string): [ /* returnType */ boolean, /* value */ number ]
     getUint64(fieldname: string): [ /* returnType */ boolean, /* value */ number ]
-    getValue(fieldname: string): any
+    getValue(fieldname: string): any | null
     hasField(fieldname: string): boolean
     hasFieldTyped(fieldname: string, type: GObject.Type): boolean
     hasName(name: string): boolean
-    idGetValue(field: GLib.Quark): any
+    idGetValue(field: GLib.Quark): any | null
     idHasField(field: GLib.Quark): boolean
     idHasFieldTyped(field: GLib.Quark, type: GObject.Type): boolean
     idSetValue(field: GLib.Quark, value: any): void
@@ -7545,14 +7271,16 @@ export class Structure {
     setParentRefcount(refcount: number): boolean
     setValue(fieldname: string, value: any): void
     takeValue(fieldname: string, value: any): void
+    toString(): string
     static name: string
+    /* Static methods and pseudo-constructors */
     static newEmpty(name: string): Structure
-    static newFromString(string: string): Structure | null
+    static newFromString(string: string): Structure
     static newIdEmpty(quark: GLib.Quark): Structure
     static fromString(string: string): [ /* returnType */ Structure | null, /* end */ string | null ]
 }
 export abstract class SystemClockClass {
-    /* Fields of Gst.SystemClockClass */
+    /* Fields of Gst-1.0.Gst.SystemClockClass */
     parentClass: ClockClass
     static name: string
 }
@@ -7560,9 +7288,9 @@ export class SystemClockPrivate {
     static name: string
 }
 export class TagList {
-    /* Fields of Gst.TagList */
+    /* Fields of Gst-1.0.Gst.TagList */
     miniObject: MiniObject
-    /* Methods of Gst.TagList */
+    /* Methods of Gst-1.0.Gst.TagList */
     addValue(mode: TagMergeMode, tag: string, value: any): void
     foreach(func: TagForeachFunc): void
     getBoolean(tag: string): [ /* returnType */ boolean, /* value */ boolean ]
@@ -7591,7 +7319,7 @@ export class TagList {
     getUint64(tag: string): [ /* returnType */ boolean, /* value */ number ]
     getUint64Index(tag: string, index: number): [ /* returnType */ boolean, /* value */ number ]
     getUintIndex(tag: string, index: number): [ /* returnType */ boolean, /* value */ number ]
-    getValueIndex(tag: string, index: number): any
+    getValueIndex(tag: string, index: number): any | null
     insert(from: TagList, mode: TagMergeMode): void
     isEmpty(): boolean
     isEqual(list2: TagList): boolean
@@ -7601,41 +7329,43 @@ export class TagList {
     peekStringIndex(tag: string, index: number): [ /* returnType */ boolean, /* value */ string ]
     removeTag(tag: string): void
     setScope(scope: TagScope): void
+    toString(): string | null
     static name: string
+    /* Static methods and pseudo-constructors */
     static newEmpty(): TagList
-    static newFromString(str: string): TagList | null
+    static newFromString(str: string): TagList
     static copyValue(list: TagList, tag: string): [ /* returnType */ boolean, /* dest */ any ]
 }
 export abstract class TagSetterInterface {
-    /* Fields of Gst.TagSetterInterface */
+    /* Fields of Gst-1.0.Gst.TagSetterInterface */
     gIface: GObject.TypeInterface
     static name: string
 }
 export abstract class TaskClass {
-    /* Fields of Gst.TaskClass */
+    /* Fields of Gst-1.0.Gst.TaskClass */
     parentClass: ObjectClass
     static name: string
 }
 export abstract class TaskPoolClass {
-    /* Fields of Gst.TaskPoolClass */
+    /* Fields of Gst-1.0.Gst.TaskPoolClass */
     parentClass: ObjectClass
-    prepare: any
-    cleanup: any
-    push: any
-    join: any
+    prepare: (pool: TaskPool) => void
+    cleanup: (pool: TaskPool) => void
+    push: (pool: TaskPool, func: TaskPoolFunction) => object | null
+    join: (pool: TaskPool, id?: object | null) => void
     static name: string
 }
 export class TaskPrivate {
     static name: string
 }
 export class TimedValue {
-    /* Fields of Gst.TimedValue */
+    /* Fields of Gst-1.0.Gst.TimedValue */
     timestamp: ClockTime
     value: number
     static name: string
 }
 export class Toc {
-    /* Methods of Gst.Toc */
+    /* Methods of Gst-1.0.Gst.Toc */
     appendEntry(entry: TocEntry): void
     dump(): void
     findEntry(uid: string): TocEntry | null
@@ -7647,10 +7377,11 @@ export class Toc {
     static name: string
     static new(scope: TocScope): Toc
     constructor(scope: TocScope)
+    /* Static methods and pseudo-constructors */
     static new(scope: TocScope): Toc
 }
 export class TocEntry {
-    /* Methods of Gst.TocEntry */
+    /* Methods of Gst-1.0.Gst.TocEntry */
     appendSubEntry(subentry: TocEntry): void
     getEntryType(): TocEntryType
     getLoop(): [ /* returnType */ boolean, /* loopType */ TocLoopType | null, /* repeatCount */ number | null ]
@@ -7669,15 +7400,16 @@ export class TocEntry {
     static name: string
     static new(type: TocEntryType, uid: string): TocEntry
     constructor(type: TocEntryType, uid: string)
+    /* Static methods and pseudo-constructors */
     static new(type: TocEntryType, uid: string): TocEntry
 }
 export abstract class TocSetterInterface {
-    /* Fields of Gst.TocSetterInterface */
+    /* Fields of Gst-1.0.Gst.TocSetterInterface */
     gIface: GObject.TypeInterface
     static name: string
 }
 export abstract class TracerClass {
-    /* Fields of Gst.TracerClass */
+    /* Fields of Gst-1.0.Gst.TracerClass */
     parentClass: ObjectClass
     static name: string
 }
@@ -7691,29 +7423,29 @@ export abstract class TracerRecordClass {
     static name: string
 }
 export class TypeFind {
-    /* Fields of Gst.TypeFind */
-    peek: any
-    suggest: any
+    /* Fields of Gst-1.0.Gst.TypeFind */
+    peek: (data: object, offset: number, size: number) => number
+    suggest: (data: object, probability: number, caps: Caps) => void
     data: object
-    getLength: any
-    /* Methods of Gst.TypeFind */
+    getLength: (data: object) => number
     static name: string
+    /* Static methods and pseudo-constructors */
     static register(plugin: Plugin | null, name: string, rank: number, func: TypeFindFunction, extensions: string | null, possibleCaps: Caps): boolean
 }
 export abstract class TypeFindFactoryClass {
     static name: string
 }
 export abstract class URIHandlerInterface {
-    /* Fields of Gst.URIHandlerInterface */
+    /* Fields of Gst-1.0.Gst.URIHandlerInterface */
     parent: GObject.TypeInterface
-    getType: any
-    getProtocols: any
-    getUri: any
-    setUri: any
+    getType: (type: GObject.Type) => URIType
+    getProtocols: (type: GObject.Type) => string[]
+    getUri: (handler: URIHandler) => string | null
+    setUri: (handler: URIHandler, uri: string) => boolean
     static name: string
 }
 export class Uri {
-    /* Methods of Gst.Uri */
+    /* Methods of Gst-1.0.Gst.Uri */
     appendPath(relativePath: string): boolean
     appendPathSegment(pathSegment: string): boolean
     equal(second: Uri): boolean
@@ -7750,9 +7482,11 @@ export class Uri {
     setQueryValue(queryKey: string, queryValue?: string | null): boolean
     setScheme(scheme: string): boolean
     setUserinfo(userinfo: string): boolean
+    toString(): string
     static name: string
     static new(scheme: string | null, userinfo: string | null, host: string | null, port: number, path?: string | null, query?: string | null, fragment?: string | null): Uri
     constructor(scheme: string | null, userinfo: string | null, host: string | null, port: number, path?: string | null, query?: string | null, fragment?: string | null)
+    /* Static methods and pseudo-constructors */
     static new(scheme: string | null, userinfo: string | null, host: string | null, port: number, path?: string | null, query?: string | null, fragment?: string | null): Uri
     static construct(protocol: string, location: string): string
     static fromString(uri: string): Uri | null
@@ -7765,15 +7499,14 @@ export class Uri {
     static protocolIsValid(protocol: string): boolean
 }
 export class ValueTable {
-    /* Fields of Gst.ValueTable */
+    /* Fields of Gst-1.0.Gst.ValueTable */
     type: GObject.Type
     compare: ValueCompareFunc
     serialize: ValueSerializeFunc
     deserialize: ValueDeserializeFunc
     static name: string
 }
-type ClockID = object
-type ClockTime = number
-type ClockTimeDiff = number
-type ElementFactoryListType = number
-}
+export type ClockID = object
+export type ClockTime = number
+export type ClockTimeDiff = number
+export type ElementFactoryListType = number

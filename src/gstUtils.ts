@@ -1,13 +1,13 @@
 import { setImmediate as resolveImmediate } from 'timers/promises';
 
-import * as gi from 'node-gtk';
-
 // For convenience
-export const GLib = gi.require('GLib', '2.0');
-export const GObject = gi.require('GObject', '2.0');
-export const Gst = gi.require('Gst', '1.0');
-export const GstWebRTC = gi.require('GstWebRTC', '1.0');
-export const GstSDP = gi.require('GstSdp', '1.0');
+import * as GLib from '../@types/node-gtk/GLib-2.0';
+import * as GObject from '../@types/node-gtk/GObject-2.0';
+import * as Gst from '../@types/node-gtk/Gst-1.0';
+import * as GstWebRTC from '../@types/node-gtk/GstWebRTC-1.0';
+import * as GstSDP from '../@types/node-gtk/GstSdp-1.0';
+
+export { GLib, GObject, Gst, GstWebRTC, GstSDP, };
 
 // Coutersy initialization
 Gst.init(null);
