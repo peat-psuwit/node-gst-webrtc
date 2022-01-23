@@ -4,6 +4,8 @@
   "description": "Implement WebRTC API using GStreamer via node-gtk",
   "main": "lib/index.js",
   "scripts": {
+    "build": "tsc",
+    "run-sample": "ts-node --ignore-diagnostics 7016",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ratchanan Srirattanamet <peat@peat-network.xyz>",
