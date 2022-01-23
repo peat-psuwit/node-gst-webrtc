@@ -25,6 +25,17 @@ export default class NgwTeeMultiplexer {
     this._tee = tee;
   }
 
+  changeSrcPad(newPad: Gst.Pad) {
+    let sinkPad = this._tee.getStaticPad('sink')!;
+    let oldPad = sinkPad.getPeer()!;
+
+    // It's expected that the old pad's element will be stopped soon.
+    oldPad.addProbe(Gst.PadProbeType.DATA_DOWNSTREAM, padProbe_alwaysDrop);
+    oldPad.unlink(sinkPad);
+
+    newPad.link(sinkPad);
+  }
+
   addPeer(sinkPad: Gst.Pad) {
     const srcPad = this._tee.getRequestPad('src_%u');
     if (!srcPad)

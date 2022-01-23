@@ -37,6 +37,8 @@ class NgwRTCRtpReceiver implements RTCRtpReceiver, NgwMediaStreamTrackInput
   private _gstReceiver: GstWebRTC.WebRTCRTPReceiver;
 
   private _mutedElement: Gst.Element | null;
+  private _decodeElement: Gst.Element | null = null;
+  private _decodePad: Gst.Pad | null = null;
   private _teeMux: NgwTeeMultiplexer;
 
   private _tracks = new Set<NgwMediaStreamTrack>();
@@ -56,12 +58,47 @@ class NgwRTCRtpReceiver implements RTCRtpReceiver, NgwMediaStreamTrackInput
     this._mutedElement = kind === 'audio' ? mutedAudioElement()
                                           : mutedVideoElement();
     pc.getPipeline().add(this._mutedElement);
-    this._mutedElement.syncStateWithParent();
 
     let srcPad = this._mutedElement.getStaticPad('src')!;
     this._teeMux = new NgwTeeMultiplexer(pc.getPipeline(), srcPad, `remote ${kind}`);
 
+    this._mutedElement.syncStateWithParent();
+
     this.track = new NgwMediaStreamTrack(this);
+  }
+
+  private _padAddedConnectId = -1;
+
+  // Called by PeerConnection, should be called exactly once.
+  _connectToPad(srcPad: Gst.Pad) {
+    this._srcPad = srcPad;
+
+    // TODO: proper error handling
+    this._decodeElement = Gst.ElementFactory.make('decodebin')!;
+    this.getPipeline().add(this._decodeElement);
+
+    let sinkPad = this._decodeElement.getStaticPad('sink')!;
+    srcPad.link(sinkPad);
+
+    this._padAddedConnectId = this._decodeElement.connect('pad-added', this._handlePadAdded);
+
+    this._decodeElement.syncStateWithParent();
+  }
+
+  private _handlePadAdded = (newPad: Gst.Pad) => {
+    if (newPad.direction !== Gst.PadDirection.SRC)
+      return;
+
+    this._decodePad = newPad;
+
+    this._mutedElement!.setState(Gst.State.NULL);
+
+    this._teeMux.changeSrcPad(newPad);
+
+    this.getPipeline().remove(this._mutedElement!);
+    this._mutedElement = null;
+
+    this._decodeElement!.disconnect(this._padAddedConnectId);
   }
 
   // RTPReceiver interface
