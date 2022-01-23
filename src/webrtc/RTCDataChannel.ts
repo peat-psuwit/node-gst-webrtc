@@ -103,7 +103,8 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
 
   private _handleMessageData = async (data: GLib.Bytes | null) => {
     if (this._binaryType == 'blob') {
-      throw new Error("We cannot creat a blob in NodeJS!");
+      console.warn("We cannot create a blob in NodeJS! Data will be silently dropped.");
+      return;
     }
 
     await resolveImmediate(); // Relief the PC thread.
@@ -135,7 +136,7 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
     // TS doesn't enforce runtime behavior
     switch (value) {
       case 'blob':
-        console.warn("Blob isn't a thing in NodeJS. We will throw if a binary data arrives.");
+        console.warn("Blob isn't a thing in NodeJS. We will silently drop data if a binary data arrives.");
         // Fall-through
       case 'arraybuffer':
         this._binaryType = value;
