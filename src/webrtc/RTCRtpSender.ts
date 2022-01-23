@@ -4,16 +4,14 @@ import NgwRTCPeerConnection from "./RTCPeerConnection";
 
 class NgwRTCRtpSender implements RTCRtpSender {
   private _pc: NgwRTCPeerConnection
-  private _srcPad: Gst.Pad;
+  private _srcPad: Gst.Pad | null = null;
   private _gstSender: GstWebRTC.WebRTCRTPSender;
 
   constructor(
     pc: NgwRTCPeerConnection,
-    sinkPad: Gst.Pad,
     gstSender: GstWebRTC.WebRTCRTPSender,
   ) {
     this._pc = pc;
-    this._srcPad = sinkPad;
     this._gstSender = gstSender;
   }
 

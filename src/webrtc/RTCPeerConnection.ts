@@ -10,13 +10,21 @@ import {
   withGstPromise
 } from '../gstUtils';
 
+import NgwMediaStream from '../media/MediaStream';
+
 import {
   NgwRTCDataChannelEvent,
   NgwRTCPeerConnectionIceEvent,
+  NgwRTCTrackEvent,
 } from './events';
 import NgwRTCDataChannel from './RTCDataChannel';
+
 import NgwRTCIceCandidate from './RTCIceCandidate';
 import NgwRTCSessionDescription from './RTCSessionDescription';
+
+import NgwRTCRtpReceiver from './RTCRtpReceiver';
+import NgwRTCRtpSender from './RTCRtpSender';
+import NgwRTCRtpTransceiver from './RTCRtpTransceiver';
 
 // Specify options actually used, and thus will have defaults.
 interface NgwRTCConfiguration extends RTCConfiguration {
@@ -82,8 +90,18 @@ class NgwRTCPeerConnection extends EventTarget implements RTCPeerConnection {
   // then WeakMap won't consider GC the wrapper.
   private _dataChannels: Map<GObject.Object, NgwRTCDataChannel> = new Map();
 
+  private _transceiver: Map<GstWebRTC.WebRTCRTPTransceiver, NgwRTCRtpTransceiver> = new Map();
+
   constructor(conf?: RTCConfiguration | null) {
     super();
+
+    {
+      const [ major, minor, micro ] = Gst.version();
+      if (major < 1 || (major === 1 && minor < 19)) {
+        throw new Error("node-gst-webrtc requires Gstreamer version 1.19 or higher. " +
+                        `(You have ${major}.${minor}.${micro})`);
+      }
+    }
 
     const pipeline = new Gst.Pipeline();
     pipeline.name = `NgwRTCPeerConnection${globalCounter}`;
@@ -102,7 +120,10 @@ class NgwRTCPeerConnection extends EventTarget implements RTCPeerConnection {
     this._glibConnectIds = [
       this._webrtcbin.connect('on-negotiation-needed', this._handleNegotiationNeeded),
       this._webrtcbin.connect('on-ice-candidate', this._handleIceCandidate),
+      this._webrtcbin.connect('on-new-transceiver', this._handleNewTransceiver),
       this._webrtcbin.connect('on-data-channel', this._handleDataChannel),
+
+      this._webrtcbin.connect('pad-added', this._handlePadAdded),
     ];
     // TODO: connect to more signals
 
@@ -234,6 +255,54 @@ class NgwRTCPeerConnection extends EventTarget implements RTCPeerConnection {
     await resolveImmediate(); // Relief the PC thread.
     const candidateObj = new NgwRTCIceCandidate({ sdpMLineIndex, candidate });
     this.dispatchEvent(new NgwRTCPeerConnectionIceEvent('icecandidate', { candidate: candidateObj }));
+  }
+
+  private _handleNewTransceiver = (gstTrans: GstWebRTC.WebRTCRTPTransceiver) => {
+    let jsKind: 'audio' | 'video';
+    switch (gstTrans.kind) {
+      case GstWebRTC.WebRTCKind.AUDIO:
+        jsKind = 'audio';
+        break;
+      case GstWebRTC.WebRTCKind.VIDEO:
+        jsKind = 'video';
+        break;
+      default:
+        console.warn(`Unknown kind not supported at the moment. (${gstTrans.toString()})`);
+        return;
+    }
+
+    let jsRecv = new NgwRTCRtpReceiver(jsKind, this, (<any>gstTrans).receiver);
+    let jsSend = new NgwRTCRtpSender(this, (<any>gstTrans).sender);
+    let jsTrans = new NgwRTCRtpTransceiver(gstTrans, jsSend, jsRecv);
+
+    this._transceiver.set(gstTrans, jsTrans);
+  }
+
+  private _handlePadAdded = async (pad: Gst.Pad) => {
+    if (pad.direction === Gst.PadDirection.SINK) {
+      console.warn(`Don't know what to do with sink pad yet. (${pad.toString()})`);
+      return;
+    }
+
+    // pad is GstWebRTCBinPad
+    let gstTrans: GstWebRTC.WebRTCRTPTransceiver = (<any>pad).transceiver;
+    let jsTrans = this._transceiver.get(gstTrans);
+    if (!jsTrans) {
+      console.warn(`Can't find corresponding JS obj for ${gstTrans.toString}`);
+      return;
+    }
+
+    jsTrans.receiver._connectToPad(pad);
+
+    await resolveImmediate();
+
+    this.dispatchEvent(new NgwRTCTrackEvent('track', {
+      receiver: jsTrans.receiver,
+      track: jsTrans.receiver.track,
+      // TODO: figure out track->stream relation
+      streams: [ new NgwMediaStream([jsTrans.receiver.track]) ],
+      transceiver: jsTrans,
+    }));
   }
 
   // libnice's document seems to say so.
