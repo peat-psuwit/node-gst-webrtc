@@ -211,7 +211,7 @@ class NgwRTCPeerConnection extends EventTarget implements RTCPeerConnection {
     }
   }
 
-  private _handleDataChannel = async (gstdatachannel: GObject.Object) => {
+  private _handleDataChannel = async (gstdatachannel: GstWebRTC.WebRTCDataChannel) => {
     // Here, we must create our JS wrapper first, otherwise we'll miss the
     // events from Gst side.
     let jsdatachannel = this._dataChannels.get(gstdatachannel);
@@ -470,7 +470,7 @@ class NgwRTCPeerConnection extends EventTarget implements RTCPeerConnection {
     return NgwRTCSessionDescription.fromGstDesc(sdp);
   }
 
-  private _createJsDataChannel(gstdatachannel: GObject.Object) {
+  private _createJsDataChannel(gstdatachannel: GstWebRTC.WebRTCDataChannel) {
     const jsdatachannel = new NgwRTCDataChannel(gstdatachannel);
     this._dataChannels.set(gstdatachannel, jsdatachannel);
 
@@ -564,7 +564,7 @@ class NgwRTCPeerConnection extends EventTarget implements RTCPeerConnection {
     }
 
     // FIXME: remove the cast when the emit's signature is fixed.
-    const gstdatachannel: GObject.Object | null = <any>this._webrtcbin.emit('create-data-channel', label, gstOpts);
+    const gstdatachannel: GstWebRTC.WebRTCDataChannel | null = <any>this._webrtcbin.emit('create-data-channel', label, gstOpts);
     if (!gstdatachannel) {
       // At this point, it's likely that the error are related to channel's id.
       // But webrtcbin reports error to warning log only, so there's no way we

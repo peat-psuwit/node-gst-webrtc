@@ -16,12 +16,11 @@ type TEvents = {
 };
 
 class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
-  // There's no GIR definition for GstWebRTCDataChannel, for some reason.
-  private _gstdatachannel: GObject.Object;
+  private _gstdatachannel: GstWebRTC.WebRTCDataChannel;
   private _binaryType: 'blob' | 'arraybuffer' = 'blob';
   private _glibConnectIds: number[];
 
-  constructor(gstdatachannel: GObject.Object) {
+  constructor(gstdatachannel: GstWebRTC.WebRTCDataChannel) {
     super();
 
     this._gstdatachannel = gstdatachannel;
@@ -92,7 +91,7 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
   }
 
   // MessageEvent is a bit complicated, so I have a helper function.
-  private _dispatchMessageEvent(data: string | ArrayBufferLike) {
+  private _dispatchMessageEvent(data: string | ArrayBufferLike | null) {
     this.dispatchEvent(new MessageEvent('message', {
       data: data,
       origin: "null", // Opaque origin
@@ -102,19 +101,23 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
     }));
   }
 
-  private _handleMessageData = async (data: GLib.Bytes) => {
+  private _handleMessageData = async (data: GLib.Bytes | null) => {
     if (this._binaryType == 'blob') {
       throw new Error("We cannot creat a blob in NodeJS!");
     }
 
     await resolveImmediate(); // Relief the PC thread.
 
+    if (!data) {
+      return this._dispatchMessageEvent(null);
+    }
+
     // FIXME: GLib.Bytes.getData() should return array of numbers
     const arrayView = Uint8Array.from(<number[]>data.getData());
     this._dispatchMessageEvent(arrayView.buffer);
   }
 
-  private _handleMessageString = async (data: string) => {
+  private _handleMessageString = async (data: string | null) => {
     await resolveImmediate(); // Relief the PC thread.
     this._dispatchMessageEvent(data);
   }
