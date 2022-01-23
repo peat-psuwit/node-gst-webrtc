@@ -25,7 +25,7 @@ async function rejectImmediate(reason: any): Promise<any> {
 // a way to change the changeFunc, so we have to create a change function that
 // doesn't capture the GstPromise itself in a closure to prevent circular reference.
 function getGstPromiseChangeFuncForResolveReject(
-  resolve: (s: Promise<Gst.Structure>) => void,
+  resolve: (s: Promise<Gst.Structure | null>) => void,
   reject: (reason: any) => void,
 ) {
   return function changeFunc (gstPromise: Gst.Promise) {
@@ -51,8 +51,8 @@ function getGstPromiseChangeFuncForResolveReject(
   }
 }
 
-export function withGstPromise(f: (p: Gst.Promise) => void): Promise<Gst.Structure> {
-  return new Promise<Gst.Structure>((resolve, reject) => {
+export function withGstPromise(f: (p: Gst.Promise) => void) {
+  return new Promise<Gst.Structure | null>((resolve, reject) => {
     const gstPromise = Gst.Promise.newWithChangeFunc(
       getGstPromiseChangeFuncForResolveReject(resolve, reject));
     f(gstPromise);

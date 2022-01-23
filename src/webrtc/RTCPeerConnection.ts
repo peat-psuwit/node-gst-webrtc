@@ -430,7 +430,7 @@ class NgwRTCPeerConnection extends EventTarget implements RTCPeerConnection {
       this._webrtcbin.emit('create-offer', opts, promise);
     });
 
-    const gvalue: GObject.Value = structure.getValue('offer');
+    const gvalue: GObject.Value = structure!.getValue('offer');
     const sdp: GstWebRTC.WebRTCSessionDescription = <any>gvalue.getBoxed();
     gvalue.unset();
 
@@ -463,7 +463,7 @@ class NgwRTCPeerConnection extends EventTarget implements RTCPeerConnection {
       this._webrtcbin.emit('create-answer', opts, promise);
     });
 
-    const gvalue: GObject.Value = structure.getValue('answer');
+    const gvalue: GObject.Value = structure!.getValue('answer');
     const sdp: GstWebRTC.WebRTCSessionDescription = <any>gvalue.getBoxed();
     gvalue.unset();
 
