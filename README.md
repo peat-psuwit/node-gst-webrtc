@@ -22,3 +22,10 @@ Current state
 - Can send, receive data using data channel.
 - Can receive media.
 - Cannot send media yet.
+
+Rolling TODO
+------------
+- Implement MediaStream media closure for RTPReceiver
+  - Remote side (listen for EOS)
+  - Local side (.stop() for MediaStreamTrack, stop() for source?)
+- Deals with memory leak in node-gtk (https://github.com/romgrk/node-gtk/issues/302)
