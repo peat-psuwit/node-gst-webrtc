@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "node-gtk": "github:romgrk/node-gtk#master",
-    "tslib": "^2.3.1"
+    "tslib": "^2.5.3"
   },
   "engines": {
     "node": ">= 16"
