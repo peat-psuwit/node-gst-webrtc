@@ -13,6 +13,7 @@ type TEvents = {
   "error": Event;
   "message": MessageEvent;
   "open": Event;
+  "closing": Event;
 };
 
 class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
@@ -323,6 +324,18 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
     if (value)
       this.addEventListener('open', <EventListener>value);
     this._onopen = value;
+  }
+
+  private _onclosing: ((this: RTCDataChannel, ev: Event) => any) | null = null;
+  get onclosing() {
+    return this._onclosing;
+  }
+  set onclosing (value) {
+    if (this._onclosing)
+      this.removeEventListener('closing', <EventListener>this._onclosing);
+    if (value)
+      this.addEventListener('closing', <EventListener>value);
+    this._onclosing = value;
   }
 
   // END generated event getters & setters

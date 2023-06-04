@@ -195,9 +195,6 @@ class NgwRTCPeerConnection extends EventTarget implements RTCPeerConnection {
           }
           case 'turn:':
           case 'turns:': {
-            if (server.credentialType && server.credentialType !== 'password') {
-              throw new TypeError(`Unsupported TURN server credential type ${server.credentialType}`);
-            }
             if (typeof server.username !== 'string' || typeof server.credential !== 'string') {
               throw new TypeError(`TURN server credential for ${url} is omitted.`);
             }
