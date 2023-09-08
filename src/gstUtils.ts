@@ -1,11 +1,11 @@
 import { setImmediate as resolveImmediate } from 'timers/promises';
 
 // For convenience
-import GLib from '../@types/node-glib-2.0';
-import GObject from '../@types/node-gobject-2.0';
-import Gst from '../@types/node-gst-1.0';
-import GstWebRTC from '../@types/node-gstwebrtc-1.0';
-import GstSDP from '../@types/node-gstsdp-1.0';
+import GLib from './@types/node-glib-2.0';
+import GObject from './@types/node-gobject-2.0';
+import Gst from './@types/node-gst-1.0';
+import GstWebRTC from './@types/node-gstwebrtc-1.0';
+import GstSDP from './@types/node-gstsdp-1.0';
 
 export { GLib, GObject, Gst, GstWebRTC, GstSDP, };
 
