@@ -107,7 +107,7 @@ class NgwRTCPeerConnection extends EventTarget implements RTCPeerConnection {
     pipeline.name = `NgwRTCPeerConnection${globalCounter}`;
     globalCounter++;
 
-    const bin = Gst.ElementFactory.make('webrtcbin');
+    const bin = Gst.ElementFactory.make('webrtcbin', `${pipeline.name}_webrtcbin`);
     if (!bin) {
       throw new Error('webrtcbin is not installed!');
     }

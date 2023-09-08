@@ -1,11 +1,11 @@
 import { setImmediate as resolveImmediate } from 'timers/promises';
 
 // For convenience
-import * as GLib from '../@types/node-gtk/GLib-2.0';
-import * as GObject from '../@types/node-gtk/GObject-2.0';
-import * as Gst from '../@types/node-gtk/Gst-1.0';
-import * as GstWebRTC from '../@types/node-gtk/GstWebRTC-1.0';
-import * as GstSDP from '../@types/node-gtk/GstSdp-1.0';
+import GLib from '../@types/node-glib-2.0';
+import GObject from '../@types/node-gobject-2.0';
+import Gst from '../@types/node-gst-1.0';
+import GstWebRTC from '../@types/node-gstwebrtc-1.0';
+import GstSDP from '../@types/node-gstsdp-1.0';
 
 export { GLib, GObject, Gst, GstWebRTC, GstSDP, };
 
@@ -43,7 +43,7 @@ function getGstPromiseChangeFuncForResolveReject(
           let error = <GLib.Error>errorV.getBoxed();
           errorV.unset();
 
-          resolve(rejectImmediate(new Error(error.message)));
+          resolve(rejectImmediate(new Error(error.message || undefined)));
         } else {
           resolve(resolveImmediate(reply));
         }

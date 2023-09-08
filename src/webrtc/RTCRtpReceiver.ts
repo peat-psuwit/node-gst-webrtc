@@ -8,7 +8,7 @@ import { Gst, GstWebRTC } from '../gstUtils';
 import NgwRTCPeerConnection from './RTCPeerConnection';
 
 function mutedAudioElement() {
-  let element = Gst.ElementFactory.make('audiotestsrc');
+  let element = Gst.ElementFactory.make('audiotestsrc', null);
   if (!element)
     throw new Error('Fail to create audiotestsrc?');
 
@@ -19,7 +19,7 @@ function mutedAudioElement() {
 }
 
 function mutedVideoElement() {
-  let element = Gst.ElementFactory.make('videotestsrc');
+  let element = Gst.ElementFactory.make('videotestsrc', null);
   if (!element)
     throw new Error('Fail to create videotestsrc?');
 
@@ -74,7 +74,7 @@ class NgwRTCRtpReceiver implements RTCRtpReceiver, NgwMediaStreamTrackInput
     this._srcPad = srcPad;
 
     // TODO: proper error handling
-    this._decodeElement = Gst.ElementFactory.make('decodebin')!;
+    this._decodeElement = Gst.ElementFactory.make('decodebin', null)!;
     this.getPipeline().add(this._decodeElement);
 
     let sinkPad = this._decodeElement.getStaticPad('sink')!;

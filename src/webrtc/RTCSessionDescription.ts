@@ -41,7 +41,8 @@ class NgwRTCSessionDescription implements RTCSessionDescription {
 
   static fromGstDesc(desc: GstWebRTC.WebRTCSessionDescription) {
     return new NgwRTCSessionDescription({
-      sdp: desc.sdp.asText(),
+      // https://github.com/gjsify/ts-for-gir/issues/108
+      sdp: desc.sdp.asText()!,
       type: NgwRTCSessionDescription.sdpTypeToString(desc.type),
     });
   }

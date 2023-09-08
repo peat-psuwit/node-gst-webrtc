@@ -19,7 +19,8 @@ export default class NgwMediaStream
   constructor(streamOrTracks?: NgwMediaStream | NgwMediaStreamTrack[], id?: string) {
     super();
 
-    this.id = id || GLib.uuidStringRandom();
+    // https://github.com/gjsify/ts-for-gir/issues/108
+    this.id = id || GLib.uuidStringRandom()!;
 
     if (!streamOrTracks) {
       this._tracks = new Map();

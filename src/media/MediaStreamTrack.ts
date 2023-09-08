@@ -27,7 +27,8 @@ export default class NgwMediaStreamTrack
   private _queue: Gst.Element;
   private _proxyMux: NgwProxyMultiplexer;
 
-  readonly id = GLib.uuidStringRandom();
+  // https://github.com/gjsify/ts-for-gir/issues/108
+  readonly id = GLib.uuidStringRandom()!;
   private _name = `MediaStreamTrack_${this.id.substr(0, 8)}`;
 
   constructor(input: NgwMediaStreamTrackInput);

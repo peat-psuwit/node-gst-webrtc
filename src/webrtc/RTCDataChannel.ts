@@ -85,7 +85,7 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
     // bring in DOMException for an RTCError, so we just lie about the
     // type here.
 
-    let rtcError: any = new Error(error.message);
+    let rtcError: any = new Error(error.message || undefined);
     rtcError.errorDetail = "data-channel-failure";
 
     this.dispatchEvent(new NgwRTCErrorEvent('error', { error: rtcError }));
@@ -114,8 +114,7 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
       return this._dispatchMessageEvent(null);
     }
 
-    // FIXME: GLib.Bytes.getData() should return array of numbers
-    const arrayView = Uint8Array.from(<number[]>data.getData());
+    const arrayView = Uint8Array.from(data.getData() || []);
     this._dispatchMessageEvent(arrayView.buffer);
   }
 
