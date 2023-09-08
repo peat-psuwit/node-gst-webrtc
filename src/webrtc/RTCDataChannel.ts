@@ -1,4 +1,4 @@
-import { Buffer } from 'buffer';
+import { Buffer, Blob as NodeBlob } from 'buffer';
 import { setImmediate as resolveImmediate } from 'timers/promises';
 
 import {
@@ -92,7 +92,7 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
   }
 
   // MessageEvent is a bit complicated, so I have a helper function.
-  private _dispatchMessageEvent(data: string | ArrayBufferLike | null) {
+  private _dispatchMessageEvent(data: string | ArrayBufferLike | NodeBlob | null) {
     this.dispatchEvent(new MessageEvent('message', {
       data: data,
       origin: "null", // Opaque origin
@@ -103,11 +103,6 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
   }
 
   private _handleMessageData = async (data: GLib.Bytes | null) => {
-    if (this._binaryType == 'blob') {
-      console.warn("We cannot create a blob in NodeJS! Data will be silently dropped.");
-      return;
-    }
-
     await resolveImmediate(); // Relief the PC thread.
 
     if (!data) {
@@ -115,7 +110,8 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
     }
 
     const arrayView = Uint8Array.from(data.getData() || []);
-    this._dispatchMessageEvent(arrayView.buffer);
+    const blobOrBuffer = this._binaryType == 'blob' ? new NodeBlob([arrayView]) : arrayView.buffer;
+    this._dispatchMessageEvent(blobOrBuffer);
   }
 
   private _handleMessageString = async (data: string | null) => {
@@ -136,8 +132,6 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
     // TS doesn't enforce runtime behavior
     switch (value) {
       case 'blob':
-        console.warn("Blob isn't a thing in NodeJS. We will silently drop data if a binary data arrives.");
-        // Fall-through
       case 'arraybuffer':
         this._binaryType = value;
         break;
@@ -233,7 +227,7 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
     }
   }
 
-  send(data: string | Blob | ArrayBuffer | ArrayBufferView) {
+  async send(data: string | Blob | NodeBlob | ArrayBuffer | ArrayBufferView) {
     this._cacheBufferedAmount();
 
     if (typeof data === 'string') {
@@ -244,7 +238,9 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
 
     let arrayBuffer: ArrayBuffer;
 
-    if (ArrayBuffer.isView(data)) {
+    if (data instanceof NodeBlob) {
+      arrayBuffer = await data.arrayBuffer();
+    } else if (ArrayBuffer.isView(data)) {
       arrayBuffer = data.buffer;
     } else if (data instanceof ArrayBuffer) {
       arrayBuffer = data;
