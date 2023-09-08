@@ -11,7 +11,7 @@
   "author": "Ratchanan Srirattanamet <peat@peat-network.xyz>",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^16.18.34",
+    "@types/node": "^18.17.14",
     "lodash": "^4.17.21",
     "socket.io-client": "^4.6.2",
     "ts-node": "^10.9.1",
