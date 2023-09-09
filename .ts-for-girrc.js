@@ -3,7 +3,7 @@ const uniq = require('lodash/uniq');
 
 const GstBuildDir = process.env['GST_BUILD_DIR'];
 
-let girDirs = ['/usr/share/gir-1.0'];
+let girDirs = ['/usr/share/gir-1.0', `${__dirname}/lib-native`];
 
 if (GstBuildDir) {
   // Various Girs are spread accross build directories. Use `find` to
@@ -15,7 +15,7 @@ if (GstBuildDir) {
     { encoding: 'utf8' }).stdout.split('\n');
 
   // Specify the discovered directories first.
-  girDirs = [...uniq(dirs), '/usr/share/gir-1.0']
+  girDirs = [...uniq(dirs), ...girDirs];
 }
 
 module.exports = {
@@ -23,8 +23,13 @@ module.exports = {
   print: false,
   verbose: true,
   environments: ['node'],
-  outdir: '@types',
-  modules: ['Gst-1.0', 'GstWebRTC-1.0'],
+  outdir: 'src/@types',
+  modules: [
+    'Gst-1.0',
+    'GstWebRTC-1.0',
+    'GIRepository-2.0',
+    'NgwNative-0.0',
+  ],
   buildType: 'lib',
   ignore: [],
   girDirectories: girDirs,

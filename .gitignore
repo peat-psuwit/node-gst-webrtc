@@ -1,2 +1,5 @@
 /node_modules/
 /lib/
+/lib-native/
+/src-native/compile_commands.json
+/src-native/.cache/

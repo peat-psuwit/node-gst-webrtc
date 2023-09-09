@@ -1,3 +1,5 @@
+import "./prependPath";
+
 import RTCDataChannel from './webrtc/RTCDataChannel';
 import RTCIceCandidate from './webrtc/RTCIceCandidate';
 import RTCPeerConnection from './webrtc/RTCPeerConnection';
