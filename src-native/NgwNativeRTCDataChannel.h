@@ -2,7 +2,9 @@
 
 #include <glib-object.h>
 
+#ifndef GST_USE_UNSTABLE_API
 #define GST_USE_UNSTABLE_API
+#endif
 #include <gst/webrtc/webrtc_fwd.h>
 
 #include "NgwNativeCommon.h"
