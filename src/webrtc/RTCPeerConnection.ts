@@ -452,9 +452,6 @@ class NgwRTCPeerConnection extends EventTarget implements RTCPeerConnection {
     setTimeout(() => {
       this._pipeline.setState(Gst.State.NULL);
 
-      for (let [, ch] of this._dataChannels) {
-        ch._disconnectGlibSignals();
-      }
       this._dataChannels.clear();
 
       // node-gtk doesn't handle cyclic reference well, so we have to break

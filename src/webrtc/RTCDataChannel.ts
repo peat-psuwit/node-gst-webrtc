@@ -1,6 +1,9 @@
 import { Buffer, Blob as NodeBlob } from 'buffer';
 import { setImmediate as resolveImmediate } from 'timers/promises';
 
+import gi from '../@types/node-gtk';
+import NgwNative from '../@types/node-ngwnative-0.0';
+
 import {
   GLib, GObject, GstWebRTC,
 } from '../gstUtils';
@@ -16,23 +19,53 @@ type TEvents = {
   "closing": Event;
 };
 
+class RTCDataChannelNativeDelegate extends NgwNative.RTCDataChannel {
+  private _self: NgwRTCDataChannel;
+
+  constructor(gstdatachannel: GstWebRTC.WebRTCDataChannel, self: NgwRTCDataChannel) {
+    // FIXME: node-gtk doesn't do name mangling on construct props.
+    super(<any>{ "gst-data-channel" : gstdatachannel });
+
+    this._self = self;
+  }
+
+  handleBufferedAmountLow(): void {
+    this._self._handleBufferedAmountLow();
+  }
+
+  handleClose(): void {
+    this._self._handleClose();
+  }
+
+  handleError(error: GLib.Error): void {
+    this._self._handleError(error);
+  }
+
+  handleMessageData(bytes: any): void {
+    this._self._handleMessageData(bytes);
+  }
+
+  handleMessageString(string: string | null): void {
+    this._self._handleMessageString(string);
+  }
+
+  handleOpen(): void {
+    this._self._handleOpen();
+  }
+}
+
+gi.registerClass(RTCDataChannelNativeDelegate);
+
 class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
   private _gstdatachannel: GstWebRTC.WebRTCDataChannel;
+  private _nativedelegate: RTCDataChannelNativeDelegate;
   private _binaryType: 'blob' | 'arraybuffer' = 'blob';
-  private _glibConnectIds: number[];
 
   constructor(gstdatachannel: GstWebRTC.WebRTCDataChannel) {
     super();
 
     this._gstdatachannel = gstdatachannel;
-    this._glibConnectIds = [
-      gstdatachannel.connect('on-buffered-amount-low', this._handleBufferedAmountLow),
-      gstdatachannel.connect('on-close', this._handleClose),
-      gstdatachannel.connect('on-error', this._handleError),
-      gstdatachannel.connect('on-message-data', this._handleMessageData),
-      gstdatachannel.connect('on-message-string', this._handleMessageString),
-      gstdatachannel.connect('on-open', this._handleOpen),
-    ]
+    this._nativedelegate = new RTCDataChannelNativeDelegate(gstdatachannel, this);
   }
 
   /*
@@ -55,30 +88,21 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
     this.dispatchEvent(new Event('bufferedamountlow'));
   }
 
-  private _handleBufferedAmountLow = () => {
+  /** @internal */
+  _handleBufferedAmountLow () {
     if (!this._hasPendingBufferedAmountLow) {
       this._hasPendingBufferedAmountLow = true;
       setTimeout(this._emitBufferedAmountLow, 0 /* ms */);
     }
   }
 
-  _disconnectGlibSignals() {
-    for (let id of this._glibConnectIds) {
-      this._gstdatachannel.disconnect(id);
-    }
-  }
-
-  private _handleClose = async () => {
-    await resolveImmediate(); // Relief the PC thread.
-
+  /** @internal */
+  _handleClose () {
     this.dispatchEvent(new Event('close'));
-
-    this._disconnectGlibSignals();
   }
 
-  private _handleError = async (error: GLib.Error) => {
-    await resolveImmediate(); // Relief the PC thread.
-
+  /** @internal */
+  _handleError (error: GLib.Error) {
     // Well, we receive errors in terms of GError, which can report a variety
     // of errors. I don't have a good way to translate this to proper RTCError,
     // so let's just dispatch a generic error. Also, we don't really want to
@@ -102,9 +126,8 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
     }));
   }
 
-  private _handleMessageData = async (data: GLib.Bytes | null) => {
-    await resolveImmediate(); // Relief the PC thread.
-
+  /** @internal */
+  _handleMessageData (data: GLib.Bytes | null) {
     if (!data) {
       return this._dispatchMessageEvent(null);
     }
@@ -114,13 +137,13 @@ class NgwRTCDataChannel extends EventTarget implements RTCDataChannel {
     this._dispatchMessageEvent(blobOrBuffer);
   }
 
-  private _handleMessageString = async (data: string | null) => {
-    await resolveImmediate(); // Relief the PC thread.
+  /** @internal */
+  _handleMessageString (data: string | null) {
     this._dispatchMessageEvent(data);
   }
 
-  private _handleOpen = async () => {
-    await resolveImmediate(); // Relief the PC thread.
+  /** @internal */
+  _handleOpen () {
     this.dispatchEvent(new Event('open'));
   }
 
