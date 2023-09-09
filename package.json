@@ -4,7 +4,9 @@
   "description": "Implement WebRTC API using GStreamer via node-gtk",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc",
+    "build:native": "cd src-native/ && meson setup ../lib-native/ && cd ../lib-native/ && meson compile",
+    "build:ts": "tsc",
+    "build": "npm run build:native && npm run build:ts",
     "run-sample": "ts-node --ignore-diagnostics 7016",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
