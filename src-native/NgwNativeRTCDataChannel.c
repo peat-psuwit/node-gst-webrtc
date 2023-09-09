@@ -105,12 +105,41 @@ static void ngw_native_rtc_data_channel_get_property(
   }
 }
 
+static void on_buffered_amount_low_callback(
+  GstWebRTCDataChannel * datachannel G_GNUC_UNUSED,
+  gpointer user_data);
+static void on_close_callback(
+  GstWebRTCDataChannel * datachannel G_GNUC_UNUSED,
+  gpointer user_data);
+static void on_error_callback(
+  GstWebRTCDataChannel * datachannel G_GNUC_UNUSED,
+  GError * error,
+  gpointer user_data);
+static void on_message_data_callback (
+  GstWebRTCDataChannel * datachannel G_GNUC_UNUSED,
+  GBytes * bytes,
+  gpointer user_data);
+static void on_message_string_callback (
+  GstWebRTCDataChannel * datachannel G_GNUC_UNUSED,
+  gchar * string,
+  gpointer user_data);
+static void on_open_callback(
+  GstWebRTCDataChannel * datachannel G_GNUC_UNUSED,
+  gpointer user_data);
+
 static void ngw_native_rtc_data_channel_constructed(GObject * object)
 {
   NgwNativeRTCDataChannel * self = NGW_NATIVE_RTC_DATA_CHANNEL(object);
   NgwNativeRTCDataChannelPrivate * priv = ngw_native_rtc_data_channel_get_instance_private(self);
 
-  // TODO: wire up signals
+  g_object_connect(priv->gstdatachannel,
+    "signal::on-buffered-amount-low", on_buffered_amount_low_callback, self,
+    "signal::on-close", on_close_callback, self,
+    "signal::on-error", on_error_callback, self,
+    "signal::on-message-data", on_message_data_callback, self,
+    "signal::on-message-string", on_message_string_callback, self,
+    "signal::on-open", on_open_callback, self,
+    NULL);
 
   G_OBJECT_CLASS(ngw_native_rtc_data_channel_parent_class)->constructed(object);
 }
@@ -120,6 +149,7 @@ static void ngw_native_rtc_data_channel_dispose(GObject * object)
   NgwNativeRTCDataChannel * self = NGW_NATIVE_RTC_DATA_CHANNEL(object);
   NgwNativeRTCDataChannelPrivate * priv = ngw_native_rtc_data_channel_get_instance_private(self);
 
+  g_signal_handlers_disconnect_by_data(priv->gstdatachannel, self);
   g_clear_object(&priv->gstdatachannel);
 }
 
