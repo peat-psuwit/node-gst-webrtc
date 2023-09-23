@@ -86,10 +86,6 @@ interface RTCDataChannel {
     readonly gstDataChannel: GstWebRTC.WebRTCDataChannel
     __gtype__: number
 
-    // Own fields of NgwNative-0.0.NgwNative.RTCDataChannel
-
-    parentInstance: GObject.Object
-
     // Own signals of NgwNative-0.0.NgwNative.RTCDataChannel
 
     connect(sigName: "on-buffered-amount-low", callback: RTCDataChannel.OnBufferedAmountLowSignalCallback): number

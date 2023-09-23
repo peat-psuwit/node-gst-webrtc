@@ -6,11 +6,13 @@
 
 #include "NgwNativeRTCDataChannel.h"
 
-typedef struct {
-  GstWebRTCDataChannel *gstdatachannel;
-} NgwNativeRTCDataChannelPrivate;
+struct _NgwNativeRTCDataChannel {
+  GObject parent_object;
 
-G_DEFINE_TYPE_WITH_PRIVATE(
+  GstWebRTCDataChannel *gstdatachannel;
+};
+
+G_DEFINE_TYPE(
   NgwNativeRTCDataChannel,
   ngw_native_rtc_data_channel,
   G_TYPE_OBJECT)
@@ -115,9 +117,7 @@ static void ngw_native_rtc_data_channel_class_init(
 static void ngw_native_rtc_data_channel_init(
   NgwNativeRTCDataChannel * self)
 {
-  NgwNativeRTCDataChannelPrivate * priv = ngw_native_rtc_data_channel_get_instance_private(self);
-
-  priv->gstdatachannel = NULL;
+  self->gstdatachannel = NULL;
 }
 
 static void ngw_native_rtc_data_channel_set_property(
@@ -127,14 +127,13 @@ static void ngw_native_rtc_data_channel_set_property(
   GParamSpec   *pspec)
 {
   NgwNativeRTCDataChannel * self = NGW_NATIVE_RTC_DATA_CHANNEL(object);
-  NgwNativeRTCDataChannelPrivate * priv = ngw_native_rtc_data_channel_get_instance_private(self);
 
   switch (property_id) {
     case PROP_GSTDATACHANNEL:
-      if (priv->gstdatachannel) // ???
-        g_object_unref(priv->gstdatachannel);
+      if (self->gstdatachannel) // ???
+        g_object_unref(self->gstdatachannel);
 
-      priv->gstdatachannel = g_value_dup_object(value);
+      self->gstdatachannel = g_value_dup_object(value);
       break;
 
     default:
@@ -150,11 +149,10 @@ static void ngw_native_rtc_data_channel_get_property(
   GParamSpec *pspec)
 {
   NgwNativeRTCDataChannel * self = NGW_NATIVE_RTC_DATA_CHANNEL(object);
-  NgwNativeRTCDataChannelPrivate * priv = ngw_native_rtc_data_channel_get_instance_private(self);
 
   switch (property_id) {
     case PROP_GSTDATACHANNEL:
-      g_value_set_object(value, priv->gstdatachannel);
+      g_value_set_object(value, self->gstdatachannel);
       break;
 
     default:
@@ -188,9 +186,8 @@ static void on_open_callback(
 static void ngw_native_rtc_data_channel_constructed(GObject * object)
 {
   NgwNativeRTCDataChannel * self = NGW_NATIVE_RTC_DATA_CHANNEL(object);
-  NgwNativeRTCDataChannelPrivate * priv = ngw_native_rtc_data_channel_get_instance_private(self);
 
-  g_object_connect(priv->gstdatachannel,
+  g_object_connect(self->gstdatachannel,
     "signal::on-buffered-amount-low", on_buffered_amount_low_callback, self,
     "signal::on-close", on_close_callback, self,
     "signal::on-error", on_error_callback, self,
@@ -205,10 +202,9 @@ static void ngw_native_rtc_data_channel_constructed(GObject * object)
 static void ngw_native_rtc_data_channel_dispose(GObject * object)
 {
   NgwNativeRTCDataChannel * self = NGW_NATIVE_RTC_DATA_CHANNEL(object);
-  NgwNativeRTCDataChannelPrivate * priv = ngw_native_rtc_data_channel_get_instance_private(self);
 
-  g_signal_handlers_disconnect_by_data(priv->gstdatachannel, self);
-  g_clear_object(&priv->gstdatachannel);
+  g_signal_handlers_disconnect_by_data(self->gstdatachannel, self);
+  g_clear_object(&self->gstdatachannel);
 }
 
 static int ngw_native_rtc_data_channel_on_buffered_amount_low(gpointer user_data)
