@@ -23,17 +23,6 @@ NGWNATIVE_PUBLIC G_DECLARE_DERIVABLE_TYPE(
 
 struct _NgwNativeRTCDataChannelClass {
   GObjectClass parent_class;
-
-  /* TODO: introspection for vfuncs? */
-  void (* handle_buffered_amount_low) (NgwNativeRTCDataChannel * self);
-  void (* handle_close) (NgwNativeRTCDataChannel * self);
-  void (* handle_error) (NgwNativeRTCDataChannel * self,
-                         GError * error);
-  void (* handle_message_data) (NgwNativeRTCDataChannel * self,
-                                GBytes * bytes);
-  void (* handle_message_string) (NgwNativeRTCDataChannel * self,
-                                 const char * string);
-  void (* handle_open) (NgwNativeRTCDataChannel * self);
 };
 
 NGWNATIVE_PUBLIC

@@ -8,7 +8,6 @@
 
 typedef struct {
   GstWebRTCDataChannel *gstdatachannel;
-  // TODO
 } NgwNativeRTCDataChannelPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE(
@@ -16,10 +15,23 @@ G_DEFINE_TYPE_WITH_PRIVATE(
   ngw_native_rtc_data_channel,
   G_TYPE_OBJECT)
 
+enum
+{
+  SIGNAL_ON_OPEN,
+  SIGNAL_ON_CLOSE,
+  SIGNAL_ON_ERROR,
+  SIGNAL_ON_MESSAGE_DATA,
+  SIGNAL_ON_MESSAGE_STRING,
+  SIGNAL_ON_BUFFERED_AMOUNT_LOW,
+  LAST_SIGNAL,
+};
+
 enum {
   PROP_GSTDATACHANNEL = 1,
   N_PROPERTIES
 };
+
+static guint datachannel_signals[LAST_SIGNAL] = { 0 };
 
 static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 
@@ -48,11 +60,56 @@ static void ngw_native_rtc_data_channel_class_init(
                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
   g_object_class_install_properties(object_class, N_PROPERTIES, obj_properties);
 
-  klass->handle_close = NULL;
-  klass->handle_error = NULL;
-  klass->handle_message_data = NULL;
-  klass->handle_message_string = NULL;
-  klass->handle_open = NULL;
+  /**
+   * NgwNativeRTCDataChannel::on-open:
+   * @object: the #NgwNativeRTCDataChannel
+   */
+  datachannel_signals[SIGNAL_ON_OPEN] =
+      g_signal_new ("on-open", G_TYPE_FROM_CLASS (klass),
+      G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL, G_TYPE_NONE, 0);
+
+  /**
+   * NgwNativeRTCDataChannel::on-close:
+   * @object: the #NgwNativeRTCDataChannel
+   */
+  datachannel_signals[SIGNAL_ON_CLOSE] =
+      g_signal_new ("on-close", G_TYPE_FROM_CLASS (klass),
+      G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL, G_TYPE_NONE, 0);
+
+  /**
+   * NgwNativeRTCDataChannel::on-error:
+   * @object: the #NgwNativeRTCDataChannel
+   * @error: the #GError thrown
+   */
+  datachannel_signals[SIGNAL_ON_ERROR] =
+      g_signal_new ("on-error", G_TYPE_FROM_CLASS (klass),
+      G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL, G_TYPE_NONE, 1, G_TYPE_ERROR);
+
+  /**
+   * NgwNativeRTCDataChannel::on-message-data:
+   * @object: the #NgwNativeRTCDataChannel
+   * @data: (nullable): a #GBytes of the data received
+   */
+  datachannel_signals[SIGNAL_ON_MESSAGE_DATA] =
+      g_signal_new ("on-message-data", G_TYPE_FROM_CLASS (klass),
+      G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL, G_TYPE_NONE, 1, G_TYPE_BYTES);
+
+  /**
+   * NgwNativeRTCDataChannel::on-message-string:
+   * @object: the #NgwNativeRTCDataChannel
+   * @data: (nullable): the data received as a string
+   */
+  datachannel_signals[SIGNAL_ON_MESSAGE_STRING] =
+      g_signal_new ("on-message-string", G_TYPE_FROM_CLASS (klass),
+      G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL, G_TYPE_NONE, 1, G_TYPE_STRING);
+
+  /**
+   * NgwNativeRTCDataChannel::on-buffered-amount-low:
+   * @object: the #NgwNativeRTCDataChannel
+   */
+  datachannel_signals[SIGNAL_ON_BUFFERED_AMOUNT_LOW] =
+      g_signal_new ("on-buffered-amount-low", G_TYPE_FROM_CLASS (klass),
+      G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL, G_TYPE_NONE, 0);
 }
 
 static void ngw_native_rtc_data_channel_init(
@@ -157,14 +214,8 @@ static void ngw_native_rtc_data_channel_dispose(GObject * object)
 static int ngw_native_rtc_data_channel_on_buffered_amount_low(gpointer user_data)
 {
   NgwNativeRTCDataChannel * self = NGW_NATIVE_RTC_DATA_CHANNEL(user_data);
-  NgwNativeRTCDataChannelClass * klass = NGW_NATIVE_RTC_DATA_CHANNEL_GET_CLASS(self);
 
-  if (klass->handle_buffered_amount_low)
-    klass->handle_buffered_amount_low(self);
-  else
-    g_warning(
-      "NgwNativeRTCDataChannel[%p]: handle_buffered_amount_low() not implemented",
-      (void *) self);
+  g_signal_emit(self, datachannel_signals[SIGNAL_ON_BUFFERED_AMOUNT_LOW], 0);
 
   g_object_unref(self);
   return G_SOURCE_REMOVE;
@@ -184,14 +235,8 @@ static void on_buffered_amount_low_callback(
 static int ngw_native_rtc_data_channel_on_close(gpointer user_data)
 {
   NgwNativeRTCDataChannel * self = NGW_NATIVE_RTC_DATA_CHANNEL(user_data);
-  NgwNativeRTCDataChannelClass * klass = NGW_NATIVE_RTC_DATA_CHANNEL_GET_CLASS(self);
 
-  if (klass->handle_close)
-    klass->handle_close(self);
-  else
-    g_warning(
-      "NgwNativeRTCDataChannel[%p]: handle_close() not implemented",
-      (void *) self);
+  g_signal_emit(self, datachannel_signals[SIGNAL_ON_CLOSE], 0, NULL);
 
   g_object_unref(self);
   return G_SOURCE_REMOVE;
@@ -217,15 +262,8 @@ static int ngw_native_rtc_data_channel_on_error(gpointer user_data)
 {
   struct OnErrorData * data = user_data;
 
-  NgwNativeRTCDataChannelClass * klass =
-    NGW_NATIVE_RTC_DATA_CHANNEL_GET_CLASS(data->self);
-
-  if (klass->handle_error)
-    klass->handle_error(data->self, data->error);
-  else
-    g_warning(
-      "NgwNativeRTCDataChannel[%p]: handle_error() not implemented",
-      (void *) data->self);
+  g_signal_emit(data->self,
+      datachannel_signals[SIGNAL_ON_ERROR], 0, data->error);
 
   g_error_free(data->error);
   g_object_unref(data->self);
@@ -259,15 +297,8 @@ static int ngw_native_rtc_data_channel_on_message_data(gpointer user_data)
 {
   struct OnMessageDataData * data = user_data;  
 
-  NgwNativeRTCDataChannelClass * klass =
-    NGW_NATIVE_RTC_DATA_CHANNEL_GET_CLASS(data->self);
-
-  if (klass->handle_message_data)
-    klass->handle_message_data(data->self, data->bytes);
-  else
-    g_warning(
-      "NgwNativeRTCDataChannel[%p]: handle_message_data() not implemented",
-      (void *) data->self);
+  g_signal_emit(data->self,
+      datachannel_signals[SIGNAL_ON_MESSAGE_DATA], 0, data->bytes);
 
   g_bytes_unref(data->bytes);
   g_object_unref(data->self);
@@ -301,15 +332,8 @@ static int ngw_native_rtc_data_channel_on_message_string(gpointer user_data)
 {
   struct OnMessageStringData * data = user_data;
 
-  NgwNativeRTCDataChannelClass * klass =
-    NGW_NATIVE_RTC_DATA_CHANNEL_GET_CLASS(data->self);
-
-  if (klass->handle_message_string)
-    klass->handle_message_string(data->self, data->string);
-  else
-    g_warning(
-      "NgwNativeRTCDataChannel[%p]: handle_message_string() not implemented",
-      (void *) data->self);
+  g_signal_emit(data->self,
+      datachannel_signals[SIGNAL_ON_MESSAGE_STRING], 0, data->string);
 
   g_free(data->string);
   g_object_unref(data->self);
@@ -337,14 +361,8 @@ static void on_message_string_callback (
 static int ngw_native_rtc_data_channel_on_open(gpointer user_data)
 {
   NgwNativeRTCDataChannel * self = NGW_NATIVE_RTC_DATA_CHANNEL(user_data);
-  NgwNativeRTCDataChannelClass * klass = NGW_NATIVE_RTC_DATA_CHANNEL_GET_CLASS(self);
 
-  if (klass->handle_open)
-    klass->handle_open(self);
-  else
-    g_warning(
-      "NgwNativeRTCDataChannel[%p]: handle_open() not implemented",
-      (void *) self);
+  g_signal_emit (self, datachannel_signals[SIGNAL_ON_OPEN], 0, NULL);
 
   g_object_unref(self);
   return G_SOURCE_REMOVE;

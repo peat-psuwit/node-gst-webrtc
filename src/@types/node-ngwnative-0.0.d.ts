@@ -23,6 +23,51 @@ export namespace NgwNative {
 
 module RTCDataChannel {
 
+    // Signal callback interfaces
+
+    /**
+     * Signal callback interface for `on-buffered-amount-low`
+     */
+    interface OnBufferedAmountLowSignalCallback {
+        (): void
+    }
+
+    /**
+     * Signal callback interface for `on-close`
+     */
+    interface OnCloseSignalCallback {
+        (): void
+    }
+
+    /**
+     * Signal callback interface for `on-error`
+     */
+    interface OnErrorSignalCallback {
+        (error: GLib.Error): void
+    }
+
+    /**
+     * Signal callback interface for `on-message-data`
+     */
+    interface OnMessageDataSignalCallback {
+        (data: any | null): void
+    }
+
+    /**
+     * Signal callback interface for `on-message-string`
+     */
+    interface OnMessageStringSignalCallback {
+        (data: string | null): void
+    }
+
+    /**
+     * Signal callback interface for `on-open`
+     */
+    interface OnOpenSignalCallback {
+        (): void
+    }
+
+
     // Constructor properties interface
 
     interface ConstructorProperties extends GObject.Object.ConstructorProperties {
@@ -45,14 +90,38 @@ interface RTCDataChannel {
 
     parentInstance: GObject.Object
 
-    // Own virtual methods of NgwNative-0.0.NgwNative.RTCDataChannel
+    // Own signals of NgwNative-0.0.NgwNative.RTCDataChannel
 
-    handleBufferedAmountLow(): void
-    handleClose(): void
-    handleError(error: GLib.Error): void
-    handleMessageData(bytes: any): void
-    handleMessageString(string: string | null): void
-    handleOpen(): void
+    connect(sigName: "on-buffered-amount-low", callback: RTCDataChannel.OnBufferedAmountLowSignalCallback): number
+    on(sigName: "on-buffered-amount-low", callback: RTCDataChannel.OnBufferedAmountLowSignalCallback, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "on-buffered-amount-low", callback: RTCDataChannel.OnBufferedAmountLowSignalCallback, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "on-buffered-amount-low", callback: RTCDataChannel.OnBufferedAmountLowSignalCallback): NodeJS.EventEmitter
+    emit(sigName: "on-buffered-amount-low", ...args: any[]): void
+    connect(sigName: "on-close", callback: RTCDataChannel.OnCloseSignalCallback): number
+    on(sigName: "on-close", callback: RTCDataChannel.OnCloseSignalCallback, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "on-close", callback: RTCDataChannel.OnCloseSignalCallback, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "on-close", callback: RTCDataChannel.OnCloseSignalCallback): NodeJS.EventEmitter
+    emit(sigName: "on-close", ...args: any[]): void
+    connect(sigName: "on-error", callback: RTCDataChannel.OnErrorSignalCallback): number
+    on(sigName: "on-error", callback: RTCDataChannel.OnErrorSignalCallback, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "on-error", callback: RTCDataChannel.OnErrorSignalCallback, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "on-error", callback: RTCDataChannel.OnErrorSignalCallback): NodeJS.EventEmitter
+    emit(sigName: "on-error", ...args: any[]): void
+    connect(sigName: "on-message-data", callback: RTCDataChannel.OnMessageDataSignalCallback): number
+    on(sigName: "on-message-data", callback: RTCDataChannel.OnMessageDataSignalCallback, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "on-message-data", callback: RTCDataChannel.OnMessageDataSignalCallback, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "on-message-data", callback: RTCDataChannel.OnMessageDataSignalCallback): NodeJS.EventEmitter
+    emit(sigName: "on-message-data", ...args: any[]): void
+    connect(sigName: "on-message-string", callback: RTCDataChannel.OnMessageStringSignalCallback): number
+    on(sigName: "on-message-string", callback: RTCDataChannel.OnMessageStringSignalCallback, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "on-message-string", callback: RTCDataChannel.OnMessageStringSignalCallback, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "on-message-string", callback: RTCDataChannel.OnMessageStringSignalCallback): NodeJS.EventEmitter
+    emit(sigName: "on-message-string", ...args: any[]): void
+    connect(sigName: "on-open", callback: RTCDataChannel.OnOpenSignalCallback): number
+    on(sigName: "on-open", callback: RTCDataChannel.OnOpenSignalCallback, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "on-open", callback: RTCDataChannel.OnOpenSignalCallback, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "on-open", callback: RTCDataChannel.OnOpenSignalCallback): NodeJS.EventEmitter
+    emit(sigName: "on-open", ...args: any[]): void
 
     // Class property signals of NgwNative-0.0.NgwNative.RTCDataChannel
 
@@ -93,12 +162,6 @@ interface RTCDataChannelClass {
     // Own fields of NgwNative-0.0.NgwNative.RTCDataChannelClass
 
     parentClass: GObject.ObjectClass
-    handleBufferedAmountLow: (self: RTCDataChannel) => void
-    handleClose: (self: RTCDataChannel) => void
-    handleError: (self: RTCDataChannel, error: GLib.Error) => void
-    handleMessageData: (self: RTCDataChannel, bytes: any) => void
-    handleMessageString: (self: RTCDataChannel, string: string | null) => void
-    handleOpen: (self: RTCDataChannel) => void
 }
 
 abstract class RTCDataChannelClass {
