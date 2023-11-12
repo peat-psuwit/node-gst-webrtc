@@ -21,6 +21,72 @@ import type GModule from './node-gmodule-2.0.js';
 
 export namespace NgwNative {
 
+module Promise {
+
+    // Signal callback interfaces
+
+    /**
+     * Signal callback interface for `on-changed`
+     */
+    interface OnChangedSignalCallback {
+        (): void
+    }
+
+
+    // Constructor properties interface
+
+    interface ConstructorProperties extends GObject.Object.ConstructorProperties {
+    }
+
+}
+
+interface Promise {
+
+    // Own properties of NgwNative-0.0.NgwNative.Promise
+
+    __gtype__: number
+
+    // Owm methods of NgwNative-0.0.NgwNative.Promise
+
+    getGstPromise(): Gst.Promise
+
+    // Own signals of NgwNative-0.0.NgwNative.Promise
+
+    connect(sigName: "on-changed", callback: Promise.OnChangedSignalCallback): number
+    on(sigName: "on-changed", callback: Promise.OnChangedSignalCallback, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "on-changed", callback: Promise.OnChangedSignalCallback, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "on-changed", callback: Promise.OnChangedSignalCallback): NodeJS.EventEmitter
+    emit(sigName: "on-changed", ...args: any[]): void
+
+    // Class property signals of NgwNative-0.0.NgwNative.Promise
+
+    connect(sigName: "notify::__gtype__", callback: (...args: any[]) => void): number
+    on(sigName: "notify::__gtype__", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: "notify::__gtype__", callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: "notify::__gtype__", callback: (...args: any[]) => void): NodeJS.EventEmitter
+    emit(sigName: "notify::__gtype__", ...args: any[]): void
+    connect(sigName: string, callback: (...args: any[]) => void): number
+    on(sigName: string, callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    once(sigName: string, callback: (...args: any[]) => void, after?: boolean): NodeJS.EventEmitter
+    off(sigName: string, callback: (...args: any[]) => void): NodeJS.EventEmitter
+    emit(sigName: string, ...args: any[]): void
+    disconnect(id: number): void
+}
+
+class Promise extends GObject.Object {
+
+    // Own properties of NgwNative-0.0.NgwNative.Promise
+
+    static name: string
+
+    // Constructors of NgwNative-0.0.NgwNative.Promise
+
+    constructor(config?: Promise.ConstructorProperties) 
+    constructor() 
+    static new(): Promise
+    _init(config?: Promise.ConstructorProperties): void
+}
+
 module RTCDataChannel {
 
     // Signal callback interfaces
@@ -151,6 +217,20 @@ class RTCDataChannel extends GObject.Object {
     constructor(gstdatachannel: GstWebRTC.WebRTCDataChannel) 
     static new(gstdatachannel: GstWebRTC.WebRTCDataChannel): RTCDataChannel
     _init(config?: RTCDataChannel.ConstructorProperties): void
+}
+
+interface PromiseClass {
+
+    // Own fields of NgwNative-0.0.NgwNative.PromiseClass
+
+    parentClass: GObject.ObjectClass
+}
+
+abstract class PromiseClass {
+
+    // Own properties of NgwNative-0.0.NgwNative.PromiseClass
+
+    static name: string
 }
 
 interface RTCDataChannelClass {

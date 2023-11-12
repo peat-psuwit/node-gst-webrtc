@@ -7,10 +7,12 @@ project('NgwNative', 'c',
 lib_args = ['-DBUILDING_NGWNATIVE']
 
 src_files = [
+  'NgwNativePromise.c',
   'NgwNativeRTCDataChannel.c'
 ]
 
 header_files = [
+  'NgwNativePromise.h',
   'NgwNativeRTCDataChannel.h'
 ]
 
